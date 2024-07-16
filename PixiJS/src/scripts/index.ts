@@ -4,7 +4,7 @@ import Stats from 'stats.js';
 
 //CORE
 import { SuperApp } from '@src/scripts/library/core/SuperApp';
-import { InstructionsText } from '@src/scripts/library/core/InstructionsText';
+import { SuperText } from '@src/scripts/library/core/SuperText';
 import { SuperTilemap } from '@src/scripts/library/core/SuperTilemap';
 
 //GAME
@@ -13,6 +13,8 @@ import { SuperTilemap } from '@src/scripts/library/core/SuperTilemap';
 
 //TEMP
 import { LogoSuperSprite } from '@src/scripts/LogoSuperSprite';
+import { InstructionsSuperText } from './library/treasureHunter2D/InstructionsSuperText';
+import { ScoreSuperText } from './library/treasureHunter2D/ScoreSuperText';
 
 
 /////////////////////////////
@@ -25,14 +27,18 @@ PIXI.AbstractRenderer.defaultOptions.resolution = window.devicePixelRatio || 1; 
 /////////////////////////////
 // Project Configuration
 /////////////////////////////
-const LOGO_IMAGE_URL: string = 'assets/images/pixijs-logo-32x32.png';
-const TILE_MAP_DATA: string = 'assets/tilemaps/TreasureHunter2D.tmj';
+const superAppData = {
+  LOGO_IMAGE_URL: 'assets/images/pixijs-logo-32x32.png',
+  TILE_MAP_DATA: 'assets/tilemaps/TreasureHunter2D.tmj',
+  UI_MARGIN_X: 10,
+  UI_MARGIN_Y: 10,
+};
 
 
 /////////////////////////////
 // Create App
 /////////////////////////////
-const superAppConst = new SuperApp(1920, 1080, 'pixi-application-canvas');
+const superAppConst = new SuperApp('pixi-application-canvas', 1920, 1080, superAppData);
 let myLogoSuperSprite: LogoSuperSprite;
 
 
@@ -41,7 +47,7 @@ let myLogoSuperSprite: LogoSuperSprite;
 /////////////////////////////
 const stats = new Stats();
 stats.showPanel(0);
-stats.dom.className = 'stats-panel2';
+stats.dom.className = 'stats-panel';
 document.body.appendChild(stats.dom);
 
 
@@ -62,7 +68,7 @@ async function onInitializeCompleted(superApp: SuperApp) {
   // Create Tilemap
   /////////////////////////////
   const superTilemap =
-    new SuperTilemap(superApp, TILE_MAP_DATA);
+    new SuperTilemap(superApp, superAppData.TILE_MAP_DATA);
   superApp.addToStage(superTilemap);
 
 
@@ -76,20 +82,23 @@ async function onInitializeCompleted(superApp: SuperApp) {
 
 
   /////////////////////////////
-  // Create Instruction Text
+  // Create Text
   /////////////////////////////
-  const instructionsText = new InstructionsText('Click Sprite For Filters');
-  instructionsText.x = 2;
-  instructionsText.y = stats.dom.clientHeight - 15;
+  const instructionsText: InstructionsSuperText =
+    new InstructionsSuperText(superApp, 'Arrows/WASD To Move', 30, "left");
   superApp.addToStage(instructionsText);
+
+  const scoreText: ScoreSuperText =
+    new ScoreSuperText(superApp, 'Treasure 0/3', 30, "right");
+  superApp.addToStage(scoreText);
 
 
   /////////////////////////////
   // Load an image asset
   /////////////////////////////
-  PIXI.Assets.load([LOGO_IMAGE_URL]).then(() => {
+  PIXI.Assets.load([superAppData.LOGO_IMAGE_URL]).then(() => {
 
-    const myTexture = PIXI.Texture.from(LOGO_IMAGE_URL);
+    const myTexture = PIXI.Texture.from(superAppData.LOGO_IMAGE_URL);
     myLogoSuperSprite = new LogoSuperSprite(superApp, myTexture);
     superApp.addToStage(myLogoSuperSprite);
 

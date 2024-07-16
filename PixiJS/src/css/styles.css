@@ -39,7 +39,8 @@ canvas {
 ///////////////////////////*/
 .stats-panel {
   position: fixed !important;
-  top: 0px !important;
+  top: unset !important;
+  bottom: 10px !important;
   left: 0px !important;
   z-index: 1000 !important;
   cursor: pointer;

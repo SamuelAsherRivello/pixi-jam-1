@@ -26,51 +26,62 @@ export class SuperTilemap extends SuperContainer {
 
   // Event Handlers -------------------------------
   public override async onAddedToStage() {
-    console.log('TileMapContainer.onAddedToStage');
 
     const response = await fetch(this.tileMapDataUrl);
     const tilemapData = await response.json();
 
-    // Infer the image URL from the tilemap data
-    const tileMapImageUrl = tilemapData.tilesets[0].image.replace('../', 'assets/');
+    // Load all tileset images
+    const tilesetPromises = tilemapData.tilesets.map((tileset: any) => {
+      const imageUrl = tileset.image.replace('../', 'assets/');
+      return PIXI.Assets.load(imageUrl).then(() => {
+        return { ...tileset, texture: PIXI.Texture.from(imageUrl) };
+      });
+    });
 
-    PIXI.Assets.load([tileMapImageUrl]).then(() => {
-      const tilesetTexture = PIXI.Texture.from(tileMapImageUrl);
-      const tileWidth = tilemapData.tilewidth;
-      const tileHeight = tilemapData.tileheight;
+    const tilesets = await Promise.all(tilesetPromises);
 
-      const layer = tilemapData.layers[0];
+    // Iterate over each layer
+    for (const layer of tilemapData.layers) {
+      if (layer.type !== 'tilelayer') continue;
+
       for (let y = 0; y < layer.height; y++) {
         for (let x = 0; x < layer.width; x++) {
           const tileIndex = layer.data[y * layer.width + x];
           if (tileIndex > 0) {
-            const tilesPerRow = tilemapData.tilesets[0].columns;
-            const tileX = ((tileIndex - 1) % tilesPerRow) * tileWidth;
-            const tileY = Math.floor((tileIndex - 1) / tilesPerRow) * tileHeight;
+            const tileset = this.getTilesetForTile(tileIndex, tilesets);
+            if (tileset) {
+              const localTileIndex = tileIndex - tileset.firstgid;
+              const tileX = (localTileIndex % tileset.columns) * tileset.tilewidth;
+              const tileY = Math.floor(localTileIndex / tileset.columns) * tileset.tileheight;
 
-            const rectangle = new PIXI.Rectangle(tileX, tileY, tileWidth, tileHeight);
-            const tileTexture = new PIXI.Texture(
-              {
-                source: tilesetTexture.source,
-                frame: rectangle
-              }
-            );
-
-            const sprite = new PIXI.Sprite(tileTexture);
-            sprite.x = x * tileWidth;
-            sprite.y = y * tileHeight;
-            this.addChild(sprite);
+              const rectangle = new PIXI.Rectangle(tileX, tileY, tileset.tilewidth, tileset.tileheight);
+              const tileTexture = new PIXI.Texture(
+                {
+                  source: tileset.texture.source,
+                  frame: rectangle
+                }
+              );
+              const sprite = new PIXI.Sprite(tileTexture);
+              sprite.x = x * tileset.tilewidth;
+              sprite.y = y * tileset.tileheight;
+              this.addChild(sprite);
+            }
           }
         }
       }
-    }).catch((error) => {
-      console.error(`PIXI.Assets.load() failed. error = ${error}`);
-    });
+    }
+  }
+
+  private getTilesetForTile(tileIndex: number, tilesets: any[]): any {
+    for (let i = tilesets.length - 1; i >= 0; i--) {
+      if (tileIndex >= tilesets[i].firstgid) {
+        return tilesets[i];
+      }
+    }
+    return null;
   }
 
   public override onRemovedFromStage(): void {
-    console.log('TileMapContainer.onRemovedFromStage');
-
     // Remove all children from the container
     while (this.children.length > 0) {
       const child = this.removeChildAt(0);
@@ -80,11 +91,11 @@ export class SuperTilemap extends SuperContainer {
     }
   }
 
-  protected override onResize(superApp: SuperApp): void {
+  public override onResize(superApp: SuperApp): void {
     // Handle resizing logic
   }
 
-  protected override onTick(ticker: PIXI.Ticker): void {
+  public override onTick(ticker: PIXI.Ticker): void {
     // Handle tick updates
   }
 }

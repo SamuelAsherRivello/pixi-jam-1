@@ -51,7 +51,7 @@ export class FlowerSuperSprite extends SuperSprite {
     this.filters = [this.filterList[this.filterListIndex]];
   }
 
-  protected onResize(superApp: SuperApp): void {
+  public onResize(superApp: SuperApp): void {
 
     if (!this.isAddedToStage || this.texture.width === 0 || this.texture.height === 0) {
       return;
@@ -77,7 +77,7 @@ export class FlowerSuperSprite extends SuperSprite {
     this.scale.set(originalScaleX, originalScaleY);
   }
 
-  protected override onTick(ticker: PIXI.Ticker): void {
+  public override onTick(ticker: PIXI.Ticker): void {
 
     // Rotate the sprite
     this.rotation += 0.005 * ticker.deltaTime;

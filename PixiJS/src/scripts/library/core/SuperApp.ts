@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js';
 import { EventEmitter } from 'events';
 import { SuperSprite } from './SuperSprite';
 import { SuperContainer } from './SuperContainer';
+import { SuperText } from './SuperText';
 
 /**
  * Wrapper class for initializing and managing a PixiJS application.
@@ -16,16 +17,19 @@ export class SuperApp extends EventEmitter {
   // Fields ---------------------------------------
   public app: PIXI.Application;
   private _canvasId: string;
+  public data: { [key: string]: any };;
 
   // Initialization -------------------------------
   constructor(
+    canvasId: string = 'pixi-application-canvas',
     private width: number = 1920,
     private height: number = 1080,
-    canvasId: string = 'pixi-application-canvas'
+    data: { [key: string]: any }
   ) {
     super();
     this._canvasId = canvasId;
     this.app = new PIXI.Application();
+    this.data = data;
   }
 
   /**
@@ -56,44 +60,35 @@ export class SuperApp extends EventEmitter {
 
 
   // Overloaded method
-  public addToStage(sprite: PIXI.Container, parent?: PIXI.Sprite): any
-  public addToStage(sprite: PIXI.Sprite, parent?: PIXI.Sprite): any
-  public addToStage(sprite: SuperSprite, parent?: PIXI.Sprite): any {
-
+  public addToStage(obj: PIXI.Container | PIXI.Sprite | SuperSprite | SuperText, parent?: PIXI.Sprite): any {
     if (parent == null) {
-      this.app.stage.addChild(sprite);
+      this.app.stage.addChild(obj);
+    } else {
+      parent.addChild(obj);
     }
-    else {
-      parent.addChild(sprite);
-    }
-    if ((sprite instanceof SuperSprite)) {
-      sprite.onAddedToStage();
-    }
-    if (sprite instanceof SuperContainer) {
-      sprite.onAddedToStage();
+
+    if (obj instanceof SuperSprite || obj instanceof SuperContainer || obj instanceof SuperText) {
+      obj.onAddedToStage();
     }
 
     this.resize();
   };
 
-  // Overloaded method
-  public removeFromStage(sprite: PIXI.Container, parent?: PIXI.Sprite): any
-  public removeFromStage(sprite: PIXI.Sprite, parent?: PIXI.Sprite): any
-  public removeFromStage(sprite: SuperSprite, parent?: PIXI.Sprite): any {
+  public removeFromStage(obj: PIXI.Container | PIXI.Sprite | SuperSprite | SuperText, parent?: PIXI.Sprite): any {
 
     if (parent == null) {
-      this.app.stage.removeChild(sprite);
+      this.app.stage.removeChild(obj);
     }
     else {
-      parent.removeChild(sprite);
+      parent.removeChild(obj);
     }
 
-    if (sprite instanceof SuperSprite) {
-      sprite.onRemovedFromStage();
+    if (obj instanceof SuperSprite || obj instanceof SuperContainer || obj instanceof SuperText) {
+      obj.onRemovedFromStage();
     }
 
     this.resize();
-  };
+  }
 
 
   public resize = () => {

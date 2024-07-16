@@ -39,11 +39,11 @@ export class SuperSprite extends PIXI.Sprite {
     // Empty implementation to be overridden
   }
 
-  protected onResize(superApp: SuperApp): void {
+  public onResize(superApp: SuperApp): void {
     // Empty implementation to be overridden
   }
 
-  protected onTick(ticker: PIXI.Ticker): void {
-    // Empty implementation, to be overridden by subclasses
+  public onTick(ticker: PIXI.Ticker): void {
+    // Empty implementation to be overridden
   }
 }
