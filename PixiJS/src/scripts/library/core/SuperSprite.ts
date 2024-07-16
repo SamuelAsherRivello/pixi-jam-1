@@ -31,11 +31,11 @@ export class SuperSprite extends PIXI.Sprite {
   }
 
   // Event Handlers -------------------------------
-  public onAddedToStage() {
+  public onAdded() {
     // Empty implementation to be overridden
   }
 
-  public onRemovedFromStage() {
+  public onRemoved() {
     // Empty implementation to be overridden
   }
 

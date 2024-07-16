@@ -19,6 +19,7 @@ export class SuperText extends PIXI.Text {
             fontFamily: 'Arial',
             fontSize: fontSize,
             fill: '#ffffff',
+
             align: align
         });
 
@@ -39,6 +40,7 @@ export class SuperText extends PIXI.Text {
 
         // Resize
         this._superApp.addListener(SuperApp.EVENT_RESIZE, this.onResize.bind(this));
+        this.onResize(this._superApp);
 
     }
 
@@ -48,11 +50,11 @@ export class SuperText extends PIXI.Text {
     }
 
     // Event Handlers -------------------------------
-    public onAddedToStage() {
+    public onAdded() {
         // Empty implementation to be overridden
     }
 
-    public onRemovedFromStage() {
+    public onRemoved() {
         // Empty implementation to be overridden
     }
 

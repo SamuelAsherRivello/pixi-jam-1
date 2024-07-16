@@ -5,16 +5,16 @@ import { SuperSprite } from '@src/scripts/library/core/SuperSprite';
 /**
  * Custom Sprite class that handles resizing and positioning
  */
-export class FlowerSuperSprite extends SuperSprite {
+export class ExampleSuperSprite extends SuperSprite {
   private filterList: PIXI.Filter[];
   private filterListIndex: number;
 
   // Initialization -------------------------------
-  constructor(superApp: SuperApp, texture: PIXI.Texture) {
+  constructor(superApp: SuperApp, texture?: PIXI.Texture) {
     super(superApp, texture);
 
     // Give it a name for pretty debugging
-    this.label = (FlowerSuperSprite).name;
+    this.label = (ExampleSuperSprite).name;
 
     // Rotate from center-point
     this.anchor.set(0.5);

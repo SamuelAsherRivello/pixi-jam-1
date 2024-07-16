@@ -10,7 +10,12 @@ export class ScoreSuperText extends SuperText {
     // Event Handlers -------------------------------
     public override onResize(superApp: SuperApp): void {
 
-        this.x = superApp.app.screen.width - this.width - superApp.data.UI_MARGIN_X;
-        this.y = superApp.data.UI_MARGIN_Y;
+        //UPDATE POSITION
+        this.x = superApp.app.screen.width - this.width - superApp.data.SCREEN_UI_MARGIN_X;
+        this.y = superApp.data.SCREEN_UI_MARGIN_Y;
+
+        //HACK: UPDATE SIZE
+        this.style.fontSize = 15 + 7 / superApp.app.renderer.resolution
+
     }
 }

@@ -6,15 +6,12 @@ import Stats from 'stats.js';
 import { SuperApp } from '@src/scripts/library/core/SuperApp';
 import { SuperTilemap } from '@src/scripts/library/core/SuperTilemap';
 
-//GAME
-//import { Blah } from '@src/scripts/library/treasureHunter2D/blah';
-
-
 //TEMP
-import { LogoSuperSprite } from '@src/scripts/LogoSuperSprite';
-import { InstructionsSuperText } from './library/treasureHunter2D/InstructionsSuperText';
-import { ScoreSuperText } from './library/treasureHunter2D/ScoreSuperText';
+import { ExampleSuperSprite } from '@src/scripts/ExampleSuperSprite';
 
+//TREASURE HUNTER GAME
+import { InstructionsSuperText } from '@src/scripts/library/treasureHunter2D/InstructionsSuperText';
+import { ScoreSuperText } from '@src/scripts/library/treasureHunter2D/ScoreSuperText';
 
 
 /////////////////////////////
@@ -30,16 +27,18 @@ PIXI.AbstractRenderer.defaultOptions.resolution = window.devicePixelRatio || 1; 
 const superAppData = {
   LOGO_IMAGE_URL: 'assets/images/pixijs-logo-32x32.png',
   TILE_MAP_DATA: 'assets/tilemaps/TreasureHunter2D.tmj',
-  UI_MARGIN_X: 10,
-  UI_MARGIN_Y: 10,
+  SCREEN_UI_MARGIN_X: 10,
+  SCREEN_UI_MARGIN_Y: 10,
 };
+
+let tempPlayer: PIXI.Graphics;
+let tempWorldOrigin: PIXI.Graphics;
 
 
 /////////////////////////////
 // Create App
 /////////////////////////////
 const superAppConst = new SuperApp('pixi-application-canvas', 1920, 1080, superAppData);
-let myLogoSuperSprite: LogoSuperSprite;
 
 
 /////////////////////////////
@@ -67,25 +66,56 @@ async function onInitializeCompleted(superApp: SuperApp) {
   /////////////////////////////
   // Create Tilemap
   /////////////////////////////
-  const superTilemap =
-    new SuperTilemap(superApp, superAppData.TILE_MAP_DATA);
-  superApp.addToStage(superTilemap);
+  const superTilemap = new SuperTilemap(superApp, superAppData.TILE_MAP_DATA);
+  await superTilemap.init();
+  superApp.addToViewport(superTilemap);
+  superTilemap.x = superApp.getScreenCenterpoint().x - superTilemap.width / 2;
+  superTilemap.y = superApp.getScreenCenterpoint().y - superTilemap.height / 2;
+
+  /////////////////////////////
+  // Temp: World centerpoint
+  /////////////////////////////
+  tempWorldOrigin = new PIXI.Graphics()
+    .rect(0, 0, 32, 32)
+    .fill(0xffffff);
+  tempWorldOrigin.x = superApp.getScreenCenterpoint().x;
+  tempWorldOrigin.y = superApp.getScreenCenterpoint().y;
+  superApp.addToViewport(tempWorldOrigin);
 
 
   /////////////////////////////
-  // Update Systems Every Frame
+  // Temp: Placeholder for player
   /////////////////////////////
-  superApp.app.ticker.add((ticker) => {
-    stats.begin();
-    stats.end();
+  tempPlayer = new PIXI.Graphics()
+    .rect(0, 0, 32, 32)
+    .fill(0x0000ff);
+  tempPlayer.x = superApp.getScreenCenterpoint().x;
+  tempPlayer.y = superApp.getScreenCenterpoint().y;
+  superApp.addToViewport(tempPlayer);
+
+
+  /////////////////////////////
+  // Setup Camera
+  /////////////////////////////
+  superApp.viewport.follow(tempPlayer, {
+    speed: .25,
+    acceleration: .001,
+    radius: 20
   });
+
+  // Optional: Input for camera
+  // superApp.viewport
+  //   .drag()
+  //   .pinch()
+  //   .wheel()
+  //   .decelerate();
 
 
   /////////////////////////////
   // Create Text
   /////////////////////////////
   const instructionsText: InstructionsSuperText =
-    new InstructionsSuperText(superApp, 'Arrows/WASD To Move', 30, "left");
+    new InstructionsSuperText(superApp, 'Arrows/WASD To Move' + superApp.app.renderer.resolution, 30, "left");
   superApp.addToStage(instructionsText);
 
   const scoreText: ScoreSuperText =
@@ -94,23 +124,18 @@ async function onInitializeCompleted(superApp: SuperApp) {
 
 
   /////////////////////////////
-  // Load an image asset
+  // Update Systems Every Frame
   /////////////////////////////
-  PIXI.Assets.load([superAppData.LOGO_IMAGE_URL]).then(() => {
+  superApp.app.ticker.add((ticker) => {
 
-    const myTexture = PIXI.Texture.from(superAppData.LOGO_IMAGE_URL);
-    myLogoSuperSprite = new LogoSuperSprite(superApp, myTexture);
-    superApp.addToStage(myLogoSuperSprite);
-
-  }).catch((error) => {
-
-    /////////////////////////////
-    // Handle any errors 
-    /////////////////////////////
-    console.error(`PIXI.Assets.load() failed. error = ${error}`);
+    stats.begin();
+    tempPlayer.x -= .1;
+    stats.end();
   });
 
+
 }
+
 
 /////////////////////////////
 // Handle App Error

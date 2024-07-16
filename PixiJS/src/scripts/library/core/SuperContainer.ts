@@ -31,11 +31,11 @@ export class SuperContainer extends PIXI.Container {
   }
 
   // Event Handlers -------------------------------
-  public onAddedToStage() {
+  public onAdded() {
     // Empty implementation to be overridden
   }
 
-  public onRemovedFromStage() {
+  public onRemoved() {
     // Empty implementation to be overridden
   }
 

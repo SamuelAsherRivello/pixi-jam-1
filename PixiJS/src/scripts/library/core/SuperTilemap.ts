@@ -6,6 +6,7 @@ import { SuperContainer } from './SuperContainer';
  * Custom Sprite class that handles resizing and positioning
  */
 export class SuperTilemap extends SuperContainer {
+
   private tileMapDataUrl: string;
 
   // Initialization -------------------------------
@@ -27,9 +28,7 @@ export class SuperTilemap extends SuperContainer {
     this.isRenderGroup = true;
   }
 
-  // Event Handlers -------------------------------
-  public override async onAddedToStage() {
-
+  public async init() {
     const response = await fetch(this.tileMapDataUrl);
     const tilemapData = await response.json();
 
@@ -47,9 +46,9 @@ export class SuperTilemap extends SuperContainer {
     for (const layer of tilemapData.layers) {
       if (layer.type !== 'tilelayer') continue;
 
-      for (let y = 0; y < layer.height; y++) {
-        for (let x = 0; x < layer.width; x++) {
-          const tileIndex = layer.data[y * layer.width + x];
+      for (let row = 0; row < layer.height; row++) {
+        for (let column = 0; column < layer.width; column++) {
+          const tileIndex = layer.data[row * layer.width + column];
           if (tileIndex > 0) {
             const tileset = this.getTilesetForTile(tileIndex, tilesets);
             if (tileset) {
@@ -64,15 +63,25 @@ export class SuperTilemap extends SuperContainer {
                   frame: rectangle
                 }
               );
+
+              //Name it "Tile (00,00)"
               const sprite = new PIXI.Sprite(tileTexture);
-              sprite.x = x * tileset.tilewidth;
-              sprite.y = y * tileset.tileheight;
+              sprite.label = `Tile (${row.toString().padStart(2, '0')},${column.toString().padStart(2, '0')})`;
+
+              sprite.x = column * tileset.tilewidth;
+              sprite.y = row * tileset.tileheight;
               this.addChild(sprite);
             }
           }
         }
       }
     }
+  }
+
+  // Event Handlers -------------------------------
+  public override async onAdded() {
+
+
   }
 
   private getTilesetForTile(tileIndex: number, tilesets: any[]): any {
@@ -84,7 +93,7 @@ export class SuperTilemap extends SuperContainer {
     return null;
   }
 
-  public override onRemovedFromStage(): void {
+  public override onRemoved(): void {
     // Remove all children from the container
     while (this.children.length > 0) {
       const child = this.removeChildAt(0);

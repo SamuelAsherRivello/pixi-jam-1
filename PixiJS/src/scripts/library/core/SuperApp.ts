@@ -1,4 +1,6 @@
 import * as PIXI from 'pixi.js';
+import { Viewport } from 'pixi-viewport';
+//
 import { EventEmitter } from 'events';
 import { SuperSprite } from './SuperSprite';
 import { SuperContainer } from './SuperContainer';
@@ -9,6 +11,7 @@ import { SuperText } from './SuperText';
  */
 export class SuperApp extends EventEmitter {
 
+
   // Constants ------------------------------------
   public static readonly EVENT_INITIALIZE_COMPLETE: string = 'initializeComplete';
   public static readonly EVENT_INITIALIZE_ERROR: string = 'initializeError';
@@ -16,20 +19,33 @@ export class SuperApp extends EventEmitter {
 
   // Fields ---------------------------------------
   public app: PIXI.Application;
+  public viewport!: Viewport;
+  public data: { [key: string]: any };
+  //
+  private widthInitial: number;
+  private heightInitial: number;
+
   private _canvasId: string;
-  public data: { [key: string]: any };;
 
   // Initialization -------------------------------
   constructor(
     canvasId: string = 'pixi-application-canvas',
-    private width: number = 1920,
-    private height: number = 1080,
+    widthInitial: number = 1920,
+    heightInitial: number = 1080,
     data: { [key: string]: any }
   ) {
+
+    /////////////////////////////
+    // Setup
+    /////////////////////////////
     super();
     this._canvasId = canvasId;
+    //
     this.app = new PIXI.Application();
+    this.widthInitial = widthInitial;
+    this.heightInitial = heightInitial;
     this.data = data;
+
   }
 
   /**
@@ -38,29 +54,49 @@ export class SuperApp extends EventEmitter {
   async init() {
     try {
       await this.app.init({
-        width: this.width,
-        height: this.height,
+        width: this.widthInitial,
+        height: this.heightInitial,
         backgroundColor: 0x1099bb,
         resizeTo: window,
         canvas: document.getElementById(this._canvasId) as HTMLCanvasElement,
       });
 
-      console.log(`PIXI.Application.init() v${PIXI.VERSION} success!`);
-      console.log(`Render1 : PIXI.Application.renderer.init() ${this.GetRendererTypeAsString(this.app.renderer.type)} success!`);
+      console.log(`PIXI.Application.init() success! PixiJS v${PIXI.VERSION} with ${this.GetRendererTypeAsString(this.app.renderer.type)} `);
 
-      const renderer = new PIXI.WebGPURenderer();
-      await renderer.init();
-      console.log(`Render2 : PIXI.Renderer.init() ${this.GetRendererTypeAsString(renderer.type)} success!`);
 
+      /////////////////////////////
+      // Create Viewport
+      /////////////////////////////
+      this.viewport = new Viewport({
+        screenWidth: this.app.screen.width,
+        screenHeight: this.app.screen.height,
+        worldWidth: 3000,   //not sure
+        worldHeight: 3000,  //not sure
+
+        // the interaction module is important for wheel to work properly 
+        // when renderer.view is placed or scaled
+        events: this.app.renderer.events
+      });
+
+      this.viewport.center = this.getScreenCenterpoint();
+
+      this.app.ticker.add((ticker) => {
+        this.viewport.update(ticker.deltaMS);
+      });
+
+      this.addToStage(this.viewport);
+      this.viewport.label = "Viewport"; //TODO: Why "Et Viewport"?
+
+      /////////////////////////////
       this.emit(SuperApp.EVENT_INITIALIZE_COMPLETE, this);
 
       this.setupResizeHandling();
     } catch (error) {
-      console.error(`PIXI.Application.init() v${PIXI.VERSION} failed. error = ${error}`);
+      console.log(`PIXI.Application.init() failed! PixiJS v${PIXI.VERSION} with ${this.GetRendererTypeAsString(this.app.renderer.type)} `);
+
       this.emit(SuperApp.EVENT_INITIALIZE_ERROR, error);
     }
   }
-
 
 
   // Methods ------------------------------
@@ -74,8 +110,33 @@ export class SuperApp extends EventEmitter {
     return rendererType
   }
 
-  // Overloaded method
+  // Add to camera-controlled scene tree
+  public addToViewport(obj: PIXI.Container | PIXI.Sprite | SuperSprite | SuperText): any {
+
+    this.viewport.addChild(obj);
+
+    if (obj instanceof SuperSprite || obj instanceof SuperContainer || obj instanceof SuperText) {
+      obj.onAdded();
+    }
+
+    this.resize();
+  }
+
+  // Remove from camera-controlled scene tree
+  public removeFromViewport(obj: PIXI.Container | PIXI.Sprite | SuperSprite | SuperText): any {
+
+    this.viewport.removeChild(obj);
+
+    if (obj instanceof SuperSprite || obj instanceof SuperContainer || obj instanceof SuperText) {
+      obj.onRemoved();
+    }
+
+    this.resize();
+  }
+
+  // Add to basic scene tree
   public addToStage(obj: PIXI.Container | PIXI.Sprite | SuperSprite | SuperText, parent?: PIXI.Sprite): any {
+
     if (parent == null) {
       this.app.stage.addChild(obj);
     } else {
@@ -83,12 +144,14 @@ export class SuperApp extends EventEmitter {
     }
 
     if (obj instanceof SuperSprite || obj instanceof SuperContainer || obj instanceof SuperText) {
-      obj.onAddedToStage();
+      obj.onAdded();
     }
 
     this.resize();
   };
 
+
+  // Remove from basic scene tree
   public removeFromStage(obj: PIXI.Container | PIXI.Sprite | SuperSprite | SuperText, parent?: PIXI.Sprite): any {
 
     if (parent == null) {
@@ -99,7 +162,7 @@ export class SuperApp extends EventEmitter {
     }
 
     if (obj instanceof SuperSprite || obj instanceof SuperContainer || obj instanceof SuperText) {
-      obj.onRemovedFromStage();
+      obj.onRemoved();
     }
 
     this.resize();
@@ -126,8 +189,20 @@ export class SuperApp extends EventEmitter {
     this.resize(); // Initial resize
   }
 
+  public getScreenScaleCurrent(): PIXI.Point {
+
+    return new PIXI.Point(
+      this.app.screen.width / this.widthInitial,
+      this.app.screen.height / this.heightInitial
+    );
+  }
+
+  getScreenCenterpoint() {
+
+    return new PIXI.Point(
+      this.app.screen.width / 2,
+      this.app.screen.height / 2)
+  }
 
   // Event Handlers -------------------------------
-
-
 }
