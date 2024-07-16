@@ -23,7 +23,7 @@
     "last.exportedFilePath": "D:/Documents/Projects/VC/PixiJS/pixi-jam-1/PixiJS/assets/tilemaps",
     "last.imagePath": "D:/Documents/Projects/VC/PixiJS/pixi-jam-1/PixiJS/assets/images/Cainos/Pixel Art Top Down - Basic/Texture",
     "map.height": 50,
-    "map.lastUsedExportFilter": "JavaScript map files (*.js)",
+    "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
     "map.lastUsedFormat": "tmx",
     "map.width": 50,
     "openFiles": [

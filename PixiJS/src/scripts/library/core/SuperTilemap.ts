@@ -1,23 +1,21 @@
 import * as PIXI from 'pixi.js';
 import { SuperApp } from '@src/scripts/library/core/SuperApp';
-import { SuperContainer } from '../core/SuperContainer';
+import { SuperContainer } from './SuperContainer';
 
 /**
  * Custom Sprite class that handles resizing and positioning
  */
-export class TileMapContainer extends SuperContainer {
-  private tileMapDataUrl: any;
-  private tileMapImageUrl: string;
+export class SuperTilemap extends SuperContainer {
+  private tileMapDataUrl: string;
 
   // Initialization -------------------------------
-  constructor(superApp: SuperApp, tileMapDataUrl: any, tileMapImageUrl: string) {
+  constructor(superApp: SuperApp, tileMapDataUrl: string) {
     super(superApp);
 
     this.tileMapDataUrl = tileMapDataUrl;
-    this.tileMapImageUrl = tileMapImageUrl;
 
     // Give it a name for pretty debugging
-    this.label = (TileMapContainer).name;
+    this.label = (SuperTilemap).name;
 
     // Set Position
     this.position.set(0, 0);
@@ -28,12 +26,16 @@ export class TileMapContainer extends SuperContainer {
 
   // Event Handlers -------------------------------
   public override async onAddedToStage() {
+    console.log('TileMapContainer.onAddedToStage');
 
     const response = await fetch(this.tileMapDataUrl);
     const tilemapData = await response.json();
 
-    PIXI.Assets.load([this.tileMapImageUrl]).then(() => {
-      const tilesetTexture = PIXI.Texture.from(this.tileMapImageUrl);
+    // Infer the image URL from the tilemap data
+    const tileMapImageUrl = tilemapData.tilesets[0].image.replace('../', 'assets/');
+
+    PIXI.Assets.load([tileMapImageUrl]).then(() => {
+      const tilesetTexture = PIXI.Texture.from(tileMapImageUrl);
       const tileWidth = tilemapData.tilewidth;
       const tileHeight = tilemapData.tileheight;
 
@@ -43,9 +45,17 @@ export class TileMapContainer extends SuperContainer {
           const tileIndex = layer.data[y * layer.width + x];
           if (tileIndex > 0) {
             const tilesPerRow = tilemapData.tilesets[0].columns;
+            const tileX = ((tileIndex - 1) % tilesPerRow) * tileWidth;
+            const tileY = Math.floor((tileIndex - 1) / tilesPerRow) * tileHeight;
+
+            const rectangle = new PIXI.Rectangle(tileX, tileY, tileWidth, tileHeight);
             const tileTexture = new PIXI.Texture(
-              tilesetTexture
+              {
+                source: tilesetTexture.source,
+                frame: rectangle
+              }
             );
+
             const sprite = new PIXI.Sprite(tileTexture);
             sprite.x = x * tileWidth;
             sprite.y = y * tileHeight;

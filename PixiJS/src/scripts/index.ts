@@ -1,9 +1,19 @@
+//PIXI
 import * as PIXI from 'pixi.js';
-import { SuperApp } from '@src/scripts/library/core/SuperApp';
-import { FlowerSuperSprite } from '@src/scripts/FlowerSuperSprite';
-import { InstructionsText } from '@src/scripts/library/core/InstructionsText';
-import { TileMapContainer } from '@src/scripts/library/treasureHunter2D/TileMapContainer';
 import Stats from 'stats.js';
+
+//CORE
+import { SuperApp } from '@src/scripts/library/core/SuperApp';
+import { InstructionsText } from '@src/scripts/library/core/InstructionsText';
+import { SuperTilemap } from '@src/scripts/library/core/SuperTilemap';
+
+//GAME
+//import { Blah } from '@src/scripts/library/treasureHunter2D/blah';
+
+
+//TEMP
+import { LogoSuperSprite } from '@src/scripts/LogoSuperSprite';
+
 
 /////////////////////////////
 // PIXI Configuration
@@ -15,16 +25,15 @@ PIXI.AbstractRenderer.defaultOptions.resolution = window.devicePixelRatio || 1; 
 /////////////////////////////
 // Project Configuration
 /////////////////////////////
-const FLOWER_IMAGE_URL: string = 'assets/images/pixijs-flower-400x400.png';
+const LOGO_IMAGE_URL: string = 'assets/images/pixijs-logo-32x32.png';
 const TILE_MAP_DATA: string = 'assets/tilemaps/TreasureHunter2D.tmj';
-const TILESET_IMAGE_URL: string = 'assets/images/Cainos/Pixel Art Top Down - Basic/Texture/TX Tileset Grass.png';
 
 
 /////////////////////////////
 // Create App
 /////////////////////////////
 const superAppConst = new SuperApp(1920, 1080, 'pixi-application-canvas');
-let myFlowerSuperSprite: FlowerSuperSprite;
+let myLogoSuperSprite: LogoSuperSprite;
 
 
 /////////////////////////////
@@ -52,9 +61,9 @@ async function onInitializeCompleted(superApp: SuperApp) {
   /////////////////////////////
   // Create Tilemap
   /////////////////////////////
-  const tileMapContainer =
-    new TileMapContainer(superApp, TILE_MAP_DATA, TILESET_IMAGE_URL);
-  superApp.addToStage(tileMapContainer);
+  const superTilemap =
+    new SuperTilemap(superApp, TILE_MAP_DATA);
+  superApp.addToStage(superTilemap);
 
 
   /////////////////////////////
@@ -78,13 +87,14 @@ async function onInitializeCompleted(superApp: SuperApp) {
   /////////////////////////////
   // Load an image asset
   /////////////////////////////
-  PIXI.Assets.load([FLOWER_IMAGE_URL]).then(() => {
+  PIXI.Assets.load([LOGO_IMAGE_URL]).then(() => {
 
-    const myTexture = PIXI.Texture.from(FLOWER_IMAGE_URL);
-    myFlowerSuperSprite = new FlowerSuperSprite(superApp, myTexture);
-    superApp.addToStage(myFlowerSuperSprite);
+    const myTexture = PIXI.Texture.from(LOGO_IMAGE_URL);
+    myLogoSuperSprite = new LogoSuperSprite(superApp, myTexture);
+    superApp.addToStage(myLogoSuperSprite);
 
   }).catch((error) => {
+
     /////////////////////////////
     // Handle any errors 
     /////////////////////////////
