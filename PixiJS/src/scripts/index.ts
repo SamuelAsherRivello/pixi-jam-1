@@ -77,7 +77,7 @@ async function onInitializeCompleted(superApp: SuperApp) {
   /////////////////////////////
   tempWorldOrigin = new PIXI.Graphics()
     .rect(0, 0, 32, 32)
-    .fill(0xffffff);
+    .fill(0xcfcfcf);
   tempWorldOrigin.x = superApp.getScreenCenterpoint().x;
   tempWorldOrigin.y = superApp.getScreenCenterpoint().y;
   superApp.addToViewport(tempWorldOrigin);

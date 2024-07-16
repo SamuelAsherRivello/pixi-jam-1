@@ -6,7 +6,6 @@ import { SuperContainer } from './SuperContainer';
  * Custom Sprite class that handles resizing and positioning
  */
 export class SuperTilemap extends SuperContainer {
-
   private tileMapDataUrl: string;
 
   // Initialization -------------------------------
@@ -44,44 +43,76 @@ export class SuperTilemap extends SuperContainer {
 
     // Iterate over each layer
     for (const layer of tilemapData.layers) {
-      if (layer.type !== 'tilelayer') continue;
+      if (layer.type === 'tilelayer') {
+        this.processTileLayer(layer, tilesets);
+      } else if (layer.type === 'objectgroup') {
+        this.processObjectLayer(layer, tilesets);
+      }
+    }
+  }
 
-      for (let row = 0; row < layer.height; row++) {
-        for (let column = 0; column < layer.width; column++) {
-          const tileIndex = layer.data[row * layer.width + column];
-          if (tileIndex > 0) {
-            const tileset = this.getTilesetForTile(tileIndex, tilesets);
-            if (tileset) {
-              const localTileIndex = tileIndex - tileset.firstgid;
-              const tileX = (localTileIndex % tileset.columns) * tileset.tilewidth;
-              const tileY = Math.floor(localTileIndex / tileset.columns) * tileset.tileheight;
+  private processTileLayer(layer: any, tilesets: any[]) {
+    for (let row = 0; row < layer.height; row++) {
+      for (let column = 0; column < layer.width; column++) {
+        const tileIndex = layer.data[row * layer.width + column];
+        if (tileIndex > 0) {
+          const tileset = this.getTilesetForTile(tileIndex, tilesets);
+          if (tileset) {
+            const localTileIndex = tileIndex - tileset.firstgid;
+            const tileX = (localTileIndex % tileset.columns) * tileset.tilewidth;
+            const tileY = Math.floor(localTileIndex / tileset.columns) * tileset.tileheight;
 
-              const rectangle = new PIXI.Rectangle(tileX, tileY, tileset.tilewidth, tileset.tileheight);
-              const tileTexture = new PIXI.Texture(
-                {
-                  source: tileset.texture.source,
-                  frame: rectangle
-                }
-              );
+            const rectangle = new PIXI.Rectangle(tileX, tileY, tileset.tilewidth, tileset.tileheight);
+            const tileTexture = new PIXI.Texture(
+              {
+                source: tileset.texture.source,
+                frame: rectangle
+              }
+            );
 
-              //Name it "Tile (00,00)"
-              const sprite = new PIXI.Sprite(tileTexture);
-              sprite.label = `Tile (${row.toString().padStart(2, '0')},${column.toString().padStart(2, '0')})`;
+            // Name it "Tile (00,00)"
+            const sprite = new PIXI.Sprite(tileTexture);
+            sprite.label = `Tile (${row.toString().padStart(2, '0')},${column.toString().padStart(2, '0')})`;
 
-              sprite.x = column * tileset.tilewidth;
-              sprite.y = row * tileset.tileheight;
-              this.addChild(sprite);
-            }
+            sprite.x = column * tileset.tilewidth;
+            sprite.y = row * tileset.tileheight;
+            this.addChild(sprite);
           }
         }
       }
     }
   }
 
+  private processObjectLayer(layer: any, tilesets: any[]) {
+    for (const object of layer.objects) {
+      const tileset = this.getTilesetForTile(object.gid, tilesets);
+      if (tileset) {
+        const localTileIndex = object.gid - tileset.firstgid;
+        const tileX = (localTileIndex % tileset.columns) * tileset.tilewidth;
+        const tileY = Math.floor(localTileIndex / tileset.columns) * tileset.tileheight;
+
+        const rectangle = new PIXI.Rectangle(tileX, tileY, tileset.tilewidth, tileset.tileheight);
+        const tileTexture = new PIXI.Texture(
+          {
+            source: tileset.texture.source,
+            frame: rectangle
+          }
+        );
+
+        const sprite = new PIXI.Sprite(tileTexture);
+        sprite.label = `Object (${object.id})`;
+
+        sprite.x = object.x;
+        sprite.y = object.y - tileset.tileheight; // Adjust for Tiled's coordinate system
+
+        this.addChild(sprite);
+      }
+    }
+  }
+
   // Event Handlers -------------------------------
   public override async onAdded() {
-
-
+    await this.init();
   }
 
   private getTilesetForTile(tileIndex: number, tilesets: any[]): any {
