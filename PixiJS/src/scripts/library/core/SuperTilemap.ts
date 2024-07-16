@@ -22,6 +22,9 @@ export class SuperTilemap extends SuperContainer {
 
     // Set scale, 1 = 100% of texture size
     this.scale.set(1);
+
+    // this will make moving this container GPU powered
+    this.isRenderGroup = true;
   }
 
   // Event Handlers -------------------------------

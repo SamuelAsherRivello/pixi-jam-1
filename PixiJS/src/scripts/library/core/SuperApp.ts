@@ -45,8 +45,13 @@ export class SuperApp extends EventEmitter {
         canvas: document.getElementById(this._canvasId) as HTMLCanvasElement,
       });
 
-
       console.log(`PIXI.Application.init() v${PIXI.VERSION} success!`);
+      console.log(`Render1 : PIXI.Application.renderer.init() ${this.GetRendererTypeAsString(this.app.renderer.type)} success!`);
+
+      const renderer = new PIXI.WebGPURenderer();
+      await renderer.init();
+      console.log(`Render2 : PIXI.Renderer.init() ${this.GetRendererTypeAsString(renderer.type)} success!`);
+
       this.emit(SuperApp.EVENT_INITIALIZE_COMPLETE, this);
 
       this.setupResizeHandling();
@@ -56,8 +61,18 @@ export class SuperApp extends EventEmitter {
     }
   }
 
-  // Methods ------------------------------
 
+
+  // Methods ------------------------------
+  private GetRendererTypeAsString(type: number) {
+    let rendererType: string = "Unknown";
+    if (this.app.renderer.type === PIXI.RendererType.WEBGL) {
+      rendererType = 'WebGL';
+    } else if (this.app.renderer.type === PIXI.RendererType.WEBGPU) {
+      rendererType = 'WebGPU';
+    }
+    return rendererType
+  }
 
   // Overloaded method
   public addToStage(obj: PIXI.Container | PIXI.Sprite | SuperSprite | SuperText, parent?: PIXI.Sprite): any {

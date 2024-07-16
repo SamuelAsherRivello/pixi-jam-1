@@ -16,6 +16,7 @@ import { InstructionsSuperText } from './library/treasureHunter2D/InstructionsSu
 import { ScoreSuperText } from './library/treasureHunter2D/ScoreSuperText';
 
 
+
 /////////////////////////////
 // PIXI Configuration
 /////////////////////////////
