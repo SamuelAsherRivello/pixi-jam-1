@@ -1,8 +1,9 @@
 import * as PIXI from 'pixi.js';
 import { SuperApp } from '@src/scripts/library/core/SuperApp';
-import { FlowerSuperSprite } from './FlowerSuperSprite';
+import { FlowerSuperSprite } from '@src/scripts/FlowerSuperSprite';
+import { InstructionsText } from '@src/scripts/library/core/InstructionsText';
+import { TileMapContainer } from '@src/scripts/library/treasureHunter2D/TileMapContainer';
 import Stats from 'stats.js';
-import { InstructionsText } from './library/core/InstructionsText';
 
 /////////////////////////////
 // PIXI Configuration
@@ -10,10 +11,13 @@ import { InstructionsText } from './library/core/InstructionsText';
 PIXI.AbstractRenderer.defaultOptions.roundPixels = true; // Crisp pixels
 PIXI.AbstractRenderer.defaultOptions.resolution = window.devicePixelRatio || 1; // Crisp pixels
 
+
 /////////////////////////////
 // Project Configuration
 /////////////////////////////
 const FLOWER_IMAGE_URL: string = 'assets/images/pixijs-flower-400x400.png';
+const TILE_MAP_DATA: string = 'assets/tilemaps/TreasureHunter2D.tmj';
+const TILESET_IMAGE_URL: string = 'assets/images/Cainos/Pixel Art Top Down - Basic/Texture/TX Tileset Grass.png';
 
 
 /////////////////////////////
@@ -38,10 +42,19 @@ document.body.appendChild(stats.dom);
 /////////////////////////////
 (globalThis as any).__PIXI_APP__ = superAppConst.app;
 
+
 /////////////////////////////
 // Handle App Initialize
 /////////////////////////////
-function onInitializeCompleted(superApp: SuperApp) {
+async function onInitializeCompleted(superApp: SuperApp) {
+
+
+  /////////////////////////////
+  // Create Tilemap
+  /////////////////////////////
+  const tileMapContainer =
+    new TileMapContainer(superApp, TILE_MAP_DATA, TILESET_IMAGE_URL);
+  superApp.addToStage(tileMapContainer);
 
 
   /////////////////////////////
@@ -52,6 +65,7 @@ function onInitializeCompleted(superApp: SuperApp) {
     stats.end();
   });
 
+
   /////////////////////////////
   // Create Instruction Text
   /////////////////////////////
@@ -60,19 +74,23 @@ function onInitializeCompleted(superApp: SuperApp) {
   instructionsText.y = stats.dom.clientHeight - 15;
   superApp.addToStage(instructionsText);
 
+
   /////////////////////////////
   // Load an image asset
   /////////////////////////////
   PIXI.Assets.load([FLOWER_IMAGE_URL]).then(() => {
+
     const myTexture = PIXI.Texture.from(FLOWER_IMAGE_URL);
     myFlowerSuperSprite = new FlowerSuperSprite(superApp, myTexture);
     superApp.addToStage(myFlowerSuperSprite);
+
   }).catch((error) => {
     /////////////////////////////
     // Handle any errors 
     /////////////////////////////
     console.error(`PIXI.Assets.load() failed. error = ${error}`);
   });
+
 }
 
 /////////////////////////////
@@ -82,11 +100,13 @@ function onInitializeError(error: Error) {
   console.error(`PIXI.Application.init() failed. error = ${error}`);
 }
 
+
 /////////////////////////////
 // Initialize App
 /////////////////////////////
 superAppConst.addListener(SuperApp.EVENT_INITIALIZE_COMPLETE, onInitializeCompleted);
 superAppConst.addListener(SuperApp.EVENT_INITIALIZE_ERROR, onInitializeError);
+
 
 (async () => {
   await superAppConst.init();

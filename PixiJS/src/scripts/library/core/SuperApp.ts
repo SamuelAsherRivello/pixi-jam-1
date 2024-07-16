@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { EventEmitter } from 'events';
 import { SuperSprite } from './SuperSprite';
+import { SuperContainer } from './SuperContainer';
 
 /**
  * Wrapper class for initializing and managing a PixiJS application.
@@ -65,7 +66,10 @@ export class SuperApp extends EventEmitter {
     else {
       parent.addChild(sprite);
     }
-    if (sprite instanceof SuperSprite) {
+    if ((sprite instanceof SuperSprite)) {
+      sprite.onAddedToStage();
+    }
+    if (sprite instanceof SuperContainer) {
       sprite.onAddedToStage();
     }
 

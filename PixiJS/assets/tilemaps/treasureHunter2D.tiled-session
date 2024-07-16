@@ -1,12 +1,39 @@
 {
-    "activeFile": "",
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "TreasureAdventureMap.tmx",
     "expandedProjectPaths": [
     ],
     "fileStates": {
+        "GrassTileset.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "TreasureAdventureMap.tmx": {
+            "scale": 0.31765625,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 801.1805213969503,
+                "y": 801.1805213969504
+            }
+        }
     },
+    "last.exportedFilePath": "D:/Documents/Projects/VC/PixiJS/pixi-jam-1/PixiJS/assets/tilemaps",
+    "last.imagePath": "D:/Documents/Projects/VC/PixiJS/pixi-jam-1/PixiJS/assets/images/Cainos/Pixel Art Top Down - Basic/Texture",
+    "map.height": 50,
+    "map.lastUsedExportFilter": "JavaScript map files (*.js)",
+    "map.lastUsedFormat": "tmx",
+    "map.width": 50,
     "openFiles": [
+        "GrassTileset.tsx",
+        "TreasureAdventureMap.tmx"
     ],
     "project": "treasureHunter2D.tiled-project",
     "recentFiles": [
-    ]
+        "GrassTileset.tsx",
+        "TreasureAdventureMap.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx"
 }
