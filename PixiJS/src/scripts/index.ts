@@ -4,7 +4,6 @@ import Stats from 'stats.js';
 
 //CORE
 import { SuperApp } from '@src/scripts/library/core/SuperApp';
-import { SuperText } from '@src/scripts/library/core/SuperText';
 import { SuperTilemap } from '@src/scripts/library/core/SuperTilemap';
 
 //GAME
