@@ -77,8 +77,10 @@ export class FlowerSuperSprite extends SuperSprite {
     this.scale.set(originalScaleX, originalScaleY);
   }
 
-  protected onTick(ticker: PIXI.Ticker): void {
+  protected override onTick(ticker: PIXI.Ticker): void {
+
     // Rotate the sprite
     this.rotation += 0.005 * ticker.deltaTime;
   }
+
 }
