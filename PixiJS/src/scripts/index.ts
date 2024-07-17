@@ -9,6 +9,7 @@ import { SuperTilemap } from '@src/scripts/library/core/super/SuperTilemap';
 //TREASURE HUNTER GAME
 import { InstructionsSuperText } from '@src/scripts/library/treasureHunter2D/InstructionsSuperText';
 import { ScoreSuperText } from '@src/scripts/library/treasureHunter2D/ScoreSuperText';
+import { Player } from '@src/scripts/library/treasureHunter2D/Player';
 
 
 /////////////////////////////
@@ -24,10 +25,12 @@ PIXI.AbstractRenderer.defaultOptions.resolution = window.devicePixelRatio || 1; 
 const superAppData: any = {
   LOGO_IMAGE_URL: 'assets/images/pixijs-logo-32x32.png',
   TILE_MAP_DATA: 'assets/tilemaps/TreasureHunter2D.tmj',
+  PLAYER_SPRITE_URL: 'assets/images/player-default-sprite.png',
   SCREEN_UI_MARGIN_X: 10,
   SCREEN_UI_MARGIN_Y: 10,
 };
 
+let player: Player;
 let tempPlayer: PIXI.Graphics;
 let tempWorldOrigin: PIXI.Graphics;
 
@@ -92,6 +95,18 @@ async function onInitializeCompleted(superApp: SuperApp) {
   /////////////////////////////
   // TODO: Replace with player sprite
   /////////////////////////////
+  PIXI.Assets.load([superAppData.PLAYER_SPRITE_URL]).then(() => {
+    const myTexture = PIXI.Texture.from(superAppData.PLAYER_SPRITE_URL);
+    player = new Player(superApp, myTexture);
+    superApp.addToViewport(player);
+
+  }).catch((error) => {
+    /////////////////////////////
+    // Handle any errors 
+    /////////////////////////////
+    console.error(`PIXI.Assets.load() failed. error = ${error}`);
+  });
+
   tempPlayer = new PIXI.Graphics()
     .rect(0, 0, 32, 32)
     .fill({

@@ -22,7 +22,6 @@ export class SuperSprite extends PIXI.Sprite {
 
     // Resize
     this._superApp.addListener(SuperApp.EVENT_RESIZE, this.onResize.bind(this));
-
   }
 
   // Initialization -------------------------------

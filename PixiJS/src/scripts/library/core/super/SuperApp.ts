@@ -15,7 +15,47 @@ export interface SuperAppConfiguration {
   data: { [key: string]: any };
 }
 
+class KeyState {
+  constructor() {
+    this.isDown = false;
+  }
 
+  public isDown: boolean;
+}
+
+class Input {
+  private _keyStateDictionary: Map<string, KeyState>;
+
+  constructor() {
+    this._keyStateDictionary = new Map();    
+  }
+
+  private getKeyStateByKey(key: string): KeyState {
+    let keyState: KeyState | undefined = this._keyStateDictionary.get(key);
+    if (keyState == undefined) {
+      let newKeyState: KeyState = new KeyState();
+      this._keyStateDictionary.set(key, newKeyState);
+      return newKeyState;
+    }
+
+    return keyState;
+  }
+
+  public onKeyDown(keyboardEvent: KeyboardEvent) {
+    let keyState: KeyState = this.getKeyStateByKey(keyboardEvent.key);
+    keyState.isDown = true;
+  }
+
+  public onKeyUp(keyboardEvent: KeyboardEvent) {
+    let keyState: KeyState = this.getKeyStateByKey(keyboardEvent.key);
+    keyState.isDown = false;
+  }
+
+  public isKeyDown(key: string) {
+    let keyState: KeyState = this.getKeyStateByKey(key);
+    return keyState.isDown;
+  }
+}
 
 /**
  * Wrapper class for initializing and managing a PixiJS application.
@@ -33,9 +73,14 @@ export class SuperApp extends EventEmitter {
     return this._configuration;
   }
 
+  public get input(): Input {
+    return this._input;
+  }
+
   // Fields ---------------------------------------
   public app: PIXI.Application;
   public viewport!: Viewport;
+  private _input: Input;
   private _configuration: SuperAppConfiguration;
   //
   private _canvasId: string;
@@ -54,7 +99,7 @@ export class SuperApp extends EventEmitter {
     //
     this.app = new PIXI.Application();
     this._configuration = configuration;;
-
+    this._input = new Input();
   }
 
   /**
@@ -100,6 +145,7 @@ export class SuperApp extends EventEmitter {
       this.emit(SuperApp.EVENT_INITIALIZE_COMPLETE, this);
 
       this.setupResizeHandling();
+      this.setupKeyboardHandling();
     } catch (error) {
       console.log(`PIXI.Application.init() failed! PixiJS v${PIXI.VERSION} with ${this.GetRendererTypeAsString(this.app.renderer.type)} `);
 
@@ -204,6 +250,19 @@ export class SuperApp extends EventEmitter {
       this.app.screen.width / this.configuration.widthInitial,
       this.app.screen.height / this.configuration.heightInitial
     );
+  }
+
+  public keyDown = (keyboardEvent: KeyboardEvent) => {
+    this._input.onKeyDown(keyboardEvent);
+  }
+
+  public keyUp = (keyboardEvent: KeyboardEvent) => {
+    this._input.onKeyUp(keyboardEvent);
+  }
+
+  private setupKeyboardHandling() {
+    window.addEventListener('keydown', this.keyDown);
+    window.addEventListener('keyup', this.keyUp);
   }
 
   getScreenCenterpoint() {
