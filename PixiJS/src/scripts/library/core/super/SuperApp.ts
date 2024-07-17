@@ -7,12 +7,18 @@ import { SuperContainer } from './SuperContainer';
 import { SuperText } from './SuperText';
 
 /**
- * Configuruation
+ * Configuration
  */
 export interface SuperAppConfiguration {
   widthInitial: number;
   heightInitial: number;
   data: { [key: string]: any };
+}
+
+const SuperAppConfigurationDefault: SuperAppConfiguration = {
+  widthInitial: 1920,
+  heightInitial: 1080,
+  data: {}
 }
 
 class KeyState {
@@ -88,7 +94,7 @@ export class SuperApp extends EventEmitter {
   // Initialization -------------------------------
   constructor(
     canvasId: string = 'pixi-application-canvas',
-    configuration: SuperAppConfiguration = { widthInitial: 1920, heightInitial: 1080, data: {} }
+    configuration?: Partial<SuperAppConfiguration>
   ) {
 
     /////////////////////////////
@@ -98,7 +104,7 @@ export class SuperApp extends EventEmitter {
     this._canvasId = canvasId;
     //
     this.app = new PIXI.Application();
-    this._configuration = configuration;;
+    this._configuration = { ...SuperAppConfigurationDefault, ...configuration };
     this._input = new Input();
 
     // Every SuperSprite instance listens to SuperApp

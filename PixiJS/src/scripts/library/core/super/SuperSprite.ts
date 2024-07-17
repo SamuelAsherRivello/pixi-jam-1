@@ -2,44 +2,107 @@ import * as PIXI from 'pixi.js';
 import { SuperApp } from './SuperApp';
 
 /**
+ * Configuration
+ */
+export interface SuperSpriteConfiguration {
+  textureUrl: string;
+  isCollidable: boolean;
+  isTickable: boolean;
+  isResizable: boolean;
+}
+
+const SuperSpriteConfigurationDefault: SuperSpriteConfiguration = {
+  textureUrl: '',
+  isCollidable: true,
+  isTickable: true,
+  isResizable: true
+}
+
+/**
  * Subclass PIXI.Sprite if you want basic sprite functionality.
  * 
  * Subclass SuperSprite if you ALSO want onResize and onTick events
  */
 export class SuperSprite extends PIXI.Sprite {
 
-  // Fields ---------------------------------------
-  protected _superApp: SuperApp;
-  private _isDestroyed: boolean = false;
-
-  // Initialization -------------------------------
-  constructor(superApp: SuperApp, texture?: PIXI.Texture) {
-    super(texture);
-
-    this._superApp = superApp;
-
-    // Tick
-    superApp.app.ticker.add(this.onTickInternal.bind(this));
-
-    // Resize
-    this._superApp.addListener(SuperApp.EVENT_RESIZE, this.onResizeInternal.bind(this));
+  // Properties -----------------------------------
+  public get configuration(): SuperSpriteConfiguration {
+    return this._configuration;
   }
 
-  // Initialization -------------------------------
+  public get isCollidable(): boolean {
+    return this._isCollidable;
+  }
+
+  public get isInitialized(): boolean {
+    return this._isInitialized;
+  }
+
   public isAddedToStage(): boolean {
     return this.parent !== null;
   }
 
+  // Fields ---------------------------------------
+  private _isDestroyed: boolean = false;
+  private _configuration: SuperSpriteConfiguration;
+  private _isInitialized: boolean = false;
+  protected _isCollidable: boolean = true;
+  protected _superApp: SuperApp;
+
+
+  // Initialization -------------------------------
+  constructor(superApp: SuperApp,
+    configuration?: Partial<SuperSpriteConfiguration>) {
+
+    super();
+
+    this._configuration = { ...SuperSpriteConfigurationDefault, ...configuration };
+    this._superApp = superApp;
+
+    // Tick
+    if (this.configuration.isTickable) {
+      this._superApp.app.ticker.add(this.onTickInternal.bind(this));
+    }
+
+    // Resize
+    if (this.configuration.isResizable) {
+      this._superApp.addListener(SuperApp.EVENT_RESIZE, this.onResizeInternal.bind(this));
+    }
+
+    // Initialize
+    this.initializeAsync();
+  }
+
+  // Initialization -------------------------------
+  public async initializeAsync() {
+
+    if (this._isInitialized) {
+      return;
+    }
+
+    if (this.configuration.textureUrl.length) {
+
+      await PIXI.Assets.load([this.configuration.textureUrl]);
+      this.texture = PIXI.Texture.from(this.configuration.textureUrl as string);
+    }
+
+    this._isInitialized = true;
+  }
+
+
   // Override PIXI.Sprite's destroy method
   public override destroy(options?: PIXI.DestroyOptions | boolean): void {
+
     if (this._isDestroyed) return;
 
     // Clean up
-    this._superApp.app.ticker.remove(this.onTickInternal.bind(this));
-    this._superApp.removeListener(SuperApp.EVENT_RESIZE, this.onResizeInternal.bind(this));
-
+    if (this.configuration.isTickable) {
+      this._superApp.app.ticker.remove(this.onTickInternal.bind(this));
+    }
+    if (this.configuration.isResizable) {
+      this._superApp.removeListener(SuperApp.EVENT_RESIZE, this.onResizeInternal.bind(this));
+    }
     this._isDestroyed = true;
-
     super.destroy(options);
   }
 

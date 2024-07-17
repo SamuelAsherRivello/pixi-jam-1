@@ -1,18 +1,44 @@
 import * as PIXI from 'pixi.js';
 import { SuperApp } from '@src/scripts/library/core/super/SuperApp';
-import { SuperSprite } from '@src/scripts/library/core/super/SuperSprite';
+import { SuperSprite, SuperSpriteConfiguration } from '@src/scripts/library/core/super/SuperSprite';
 
+/**
+ * Represents a coin in the game.
+ * 
+ */
 export class Player extends SuperSprite {
-    constructor(superApp: SuperApp, texture: PIXI.Texture) {
-        super(superApp, texture);
+
+
+    // Properties -----------------------------------
+
+
+    // Fields ---------------------------------------
+
+
+    // Initialization -------------------------------
+    constructor(superApp: SuperApp, superSpriteConfiguration?: Partial<SuperSpriteConfiguration>) {
+
+        super(superApp, superSpriteConfiguration);
+
+        // Redeclare anything from super 
+        // that you want differently here
         this.label = (Player).name;
         this.anchor.set(0.0, 0.0);
-        this.position.set(300, 200);
-        this.scale.set(1);
-        this.eventMode = 'static';
-        this.cursor = 'pointer';
+
     }
 
+
+    public override async initializeAsync() {
+
+        // Super
+        super.initializeAsync();
+
+        // Local
+        //Do any additional initialization here
+
+    }
+
+    // Methods --------------------------------------
     public override onTick(ticker: PIXI.Ticker): void {
 
         super.onTick(ticker);
@@ -37,10 +63,5 @@ export class Player extends SuperSprite {
         this.position.y += moveVector.y * ticker.deltaTime * movementSpeed;
     }
 
-    public override onCollision(superSprites: SuperSprite[]): void {
-
-        superSprites.forEach((superSprite) => {
-            console.log(`${this.label} is colliding with ${superSprite.label}`);
-        });
-    }
+    // Event Handlers -------------------------------
 }

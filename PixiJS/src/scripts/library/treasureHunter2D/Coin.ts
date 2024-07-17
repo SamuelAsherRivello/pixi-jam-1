@@ -1,6 +1,5 @@
-import * as PIXI from 'pixi.js';
 import { SuperApp } from '@src/scripts/library/core/super/SuperApp';
-import { SuperSprite } from '@src/scripts/library/core/super/SuperSprite';
+import { SuperSprite, SuperSpriteConfiguration } from '@src/scripts/library/core/super/SuperSprite';
 import { Player } from './Player';
 import { Actions, Interpolations } from 'pixi-actions';
 
@@ -15,31 +14,31 @@ export class Coin extends SuperSprite {
 
 
     // Fields ---------------------------------------
-    private _textureUrl: string;
-    private isCollidable: boolean = true;
+
 
     // Initialization -------------------------------
-    constructor(superApp: SuperApp, textureUrl: string) {
-        super(superApp);
+    constructor(superApp: SuperApp, superSpriteConfiguration?: Partial<SuperSpriteConfiguration>) {
+
+        super(superApp, superSpriteConfiguration);
+
+        // Redeclare anything from super 
+        // that you want differently here
         this.label = (Coin).name;
-        this.anchor.set(0.5);
-        this.position.set(300, 200);
-        this.scale.set(1);
-        this._textureUrl = textureUrl;
-        this.init();
+
+    }
+
+
+    public override async initializeAsync() {
+
+        // Super
+        super.initializeAsync();
+
+        // Local
+        //Do any additional initialization here
+
     }
 
     // Methods --------------------------------------
-
-    /**
-     * Initializes the coin by loading its texture.
-     */
-    private async init() {
-        await PIXI.Assets.load([this._textureUrl]);
-        const coinTexture = PIXI.Texture.from(this._textureUrl);
-        this.texture = coinTexture;
-    }
-
     private FloatUp() {
         let action = Actions.sequence(
 
@@ -84,7 +83,7 @@ export class Coin extends SuperSprite {
             if (superSprite instanceof Player) {
                 console.log(`${this.label} is colliding with ${superSprite.label}`);
 
-                this.isCollidable = false;
+                this._isCollidable = false;
                 this.FloatUp();
 
             }

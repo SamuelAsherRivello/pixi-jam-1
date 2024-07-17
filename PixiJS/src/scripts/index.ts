@@ -101,7 +101,7 @@ async function onInitializeCompleted(superApp: SuperApp) {
   // Create Coin
   /////////////////////////////
   for (let i = 0; i < superAppData.COINS_MAX; i++) {
-    coin = new Coin(superApp, superAppData.COIN_SPRITE_URL);
+    coin = new Coin(superApp, { textureUrl: superAppData.COIN_SPRITE_URL as string });
     coin.x = superApp.getScreenCenterpoint().x + 100 + 32 * i * 2;
     coin.y = superApp.getScreenCenterpoint().y;
     superApp.addToViewport(coin);
@@ -111,9 +111,7 @@ async function onInitializeCompleted(superApp: SuperApp) {
   /////////////////////////////
   // Create Player
   /////////////////////////////
-  await PIXI.Assets.load([superAppData.PLAYER_SPRITE_URL]);
-  const playerTexture = PIXI.Texture.from(superAppData.PLAYER_SPRITE_URL);
-  player = new Player(superApp, playerTexture);
+  player = new Player(superApp, { textureUrl: superAppData.PLAYER_SPRITE_URL as string });
   player.x = superApp.getScreenCenterpoint().x;
   player.y = superApp.getScreenCenterpoint().y;
   superApp.addToViewport(player);
@@ -150,7 +148,7 @@ async function onInitializeCompleted(superApp: SuperApp) {
   const scoreText: ScoreSuperText =
     new ScoreSuperText(
       superApp,
-      `Coins ${superApp.configuration.data.COINS_COLLECTED}/${superApp.configuration.data.COINS_MAX}`,
+      `Coins ${superApp.configuration.data?.COINS_COLLECTED}/${superApp.configuration.data?.COINS_MAX}`,
       30,
       "right");
   superApp.addToStage(scoreText);
