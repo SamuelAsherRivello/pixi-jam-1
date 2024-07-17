@@ -27,7 +27,7 @@ class Input {
   private _keyStateDictionary: Map<string, KeyState>;
 
   constructor() {
-    this._keyStateDictionary = new Map();    
+    this._keyStateDictionary = new Map();
   }
 
   private getKeyStateByKey(key: string): KeyState {

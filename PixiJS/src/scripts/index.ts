@@ -10,6 +10,7 @@ import { SuperTilemap } from '@src/scripts/library/core/super/SuperTilemap';
 import { InstructionsSuperText } from '@src/scripts/library/treasureHunter2D/InstructionsSuperText';
 import { ScoreSuperText } from '@src/scripts/library/treasureHunter2D/ScoreSuperText';
 import { Player } from '@src/scripts/library/treasureHunter2D/Player';
+import { Coin } from './library/treasureHunter2D/Coin';
 
 
 /////////////////////////////
@@ -26,11 +27,13 @@ const superAppData: any = {
   LOGO_IMAGE_URL: 'assets/images/pixijs-logo-32x32.png',
   TILE_MAP_DATA: 'assets/tilemaps/TreasureHunter2D.tmj',
   PLAYER_SPRITE_URL: 'assets/images/player-default-sprite.png',
+  COIN_SPRITE_URL: 'assets/images/OpenGameArt/Coin.png',
   SCREEN_UI_MARGIN_X: 10,
   SCREEN_UI_MARGIN_Y: 10,
 };
 
 let player: Player;
+let coin: Coin;
 let tempWorldOrigin: PIXI.Graphics;
 
 
@@ -92,14 +95,24 @@ async function onInitializeCompleted(superApp: SuperApp) {
 
 
   /////////////////////////////
+  // Create Coin
+  /////////////////////////////
+  coin = new Coin(superApp, superAppData.COIN_SPRITE_URL);
+  coin.x = superApp.getScreenCenterpoint().x + 50;
+  coin.y = superApp.getScreenCenterpoint().y;
+  superApp.addToViewport(coin);
+
+
+  /////////////////////////////
   // Create Player
   /////////////////////////////
   await PIXI.Assets.load([superAppData.PLAYER_SPRITE_URL]);
-  const myTexture = PIXI.Texture.from(superAppData.PLAYER_SPRITE_URL);
-  player = new Player(superApp, myTexture);
+  const playerTexture = PIXI.Texture.from(superAppData.PLAYER_SPRITE_URL);
+  player = new Player(superApp, playerTexture);
   player.x = superApp.getScreenCenterpoint().x;
   player.y = superApp.getScreenCenterpoint().y;
-  superApp.addToStage(player);
+  superApp.addToViewport(player);
+
 
   /////////////////////////////
   // Setup Camera

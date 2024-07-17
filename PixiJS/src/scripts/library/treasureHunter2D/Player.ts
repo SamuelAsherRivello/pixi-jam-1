@@ -14,8 +14,11 @@ export class Player extends SuperSprite {
     }
 
     public override onTick(ticker: PIXI.Ticker): void {
+
+        super.onTick(ticker);
+
         let moveVector: PIXI.Point = new PIXI.Point(0, 0);
-        
+
         if (this._superApp.input.isKeyDown('a')) {
             moveVector.x += -1;
         }
@@ -32,5 +35,12 @@ export class Player extends SuperSprite {
         const movementSpeed = 3.0;
         this.position.x += moveVector.x * ticker.deltaTime * movementSpeed;
         this.position.y += moveVector.y * ticker.deltaTime * movementSpeed;
+    }
+
+    public override onCollision(superSprites: SuperSprite[]): void {
+
+        superSprites.forEach((superSprite) => {
+            console.log(`${this.label} is colliding with ${superSprite.label}`);
+        });
     }
 }
