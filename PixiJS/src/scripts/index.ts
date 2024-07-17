@@ -31,7 +31,6 @@ const superAppData: any = {
 };
 
 let player: Player;
-let tempPlayer: PIXI.Graphics;
 let tempWorldOrigin: PIXI.Graphics;
 
 
@@ -93,37 +92,21 @@ async function onInitializeCompleted(superApp: SuperApp) {
 
 
   /////////////////////////////
-  // TODO: Replace with player sprite
+  // Create Player
   /////////////////////////////
-  PIXI.Assets.load([superAppData.PLAYER_SPRITE_URL]).then(() => {
-    const myTexture = PIXI.Texture.from(superAppData.PLAYER_SPRITE_URL);
-    player = new Player(superApp, myTexture);
-    superApp.addToViewport(player);
-
-  }).catch((error) => {
-    /////////////////////////////
-    // Handle any errors 
-    /////////////////////////////
-    console.error(`PIXI.Assets.load() failed. error = ${error}`);
-  });
-
-  tempPlayer = new PIXI.Graphics()
-    .rect(0, 0, 32, 32)
-    .fill({
-      color: 0x0000ff,
-      alpha: 0.5
-    });
-  tempPlayer.x = superApp.getScreenCenterpoint().x;
-  tempPlayer.y = superApp.getScreenCenterpoint().y;
-  superApp.addToViewport(tempPlayer);
-
+  await PIXI.Assets.load([superAppData.PLAYER_SPRITE_URL]);
+  const myTexture = PIXI.Texture.from(superAppData.PLAYER_SPRITE_URL);
+  player = new Player(superApp, myTexture);
+  player.x = superApp.getScreenCenterpoint().x;
+  player.y = superApp.getScreenCenterpoint().y;
+  superApp.addToStage(player);
 
   /////////////////////////////
   // Setup Camera
   /////////////////////////////
-  superApp.viewport.follow(tempPlayer, {
-    speed: .25,
-    acceleration: .001,
+  superApp.viewport.follow(player, {
+    speed: 1,
+    acceleration: .01,
     radius: 20
   });
 
@@ -146,14 +129,12 @@ async function onInitializeCompleted(superApp: SuperApp) {
     new ScoreSuperText(superApp, 'Treasure 0/3', 30, "right");
   superApp.addToStage(scoreText);
 
-
   /////////////////////////////
   // Update Systems Every Frame
   /////////////////////////////
   superApp.app.ticker.add((ticker) => {
 
     stats.begin();
-    tempPlayer.x -= .1;
     stats.end();
   });
 
