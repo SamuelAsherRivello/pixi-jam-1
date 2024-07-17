@@ -100,6 +100,10 @@ export class SuperApp extends EventEmitter {
     this.app = new PIXI.Application();
     this._configuration = configuration;;
     this._input = new Input();
+
+    // Every SuperSprite instance listens to SuperApp
+    // So this number must be >= to the number of SuperSprite instances
+    this.setMaxListeners(100);
   }
 
   /**

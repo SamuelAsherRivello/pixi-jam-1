@@ -10,6 +10,7 @@ export class SuperSprite extends PIXI.Sprite {
 
   // Fields ---------------------------------------
   protected _superApp: SuperApp;
+  private _isDestroyed: boolean = false;
 
   // Initialization -------------------------------
   constructor(superApp: SuperApp, texture?: PIXI.Texture) {
@@ -18,15 +19,28 @@ export class SuperSprite extends PIXI.Sprite {
     this._superApp = superApp;
 
     // Tick
-    superApp.app.ticker.add(this.onTick.bind(this));
+    superApp.app.ticker.add(this.onTickInternal.bind(this));
 
     // Resize
-    this._superApp.addListener(SuperApp.EVENT_RESIZE, this.onResize.bind(this));
+    this._superApp.addListener(SuperApp.EVENT_RESIZE, this.onResizeInternal.bind(this));
   }
 
   // Initialization -------------------------------
   public isAddedToStage(): boolean {
     return this.parent !== null;
+  }
+
+  // Override PIXI.Sprite's destroy method
+  public override destroy(options?: PIXI.DestroyOptions | boolean): void {
+    if (this._isDestroyed) return;
+
+    // Clean up
+    this._superApp.app.ticker.remove(this.onTickInternal.bind(this));
+    this._superApp.removeListener(SuperApp.EVENT_RESIZE, this.onResizeInternal.bind(this));
+
+    this._isDestroyed = true;
+
+    super.destroy(options);
   }
 
   // Event Handlers -------------------------------
@@ -41,7 +55,6 @@ export class SuperSprite extends PIXI.Sprite {
   public onResize(superApp: SuperApp): void {
     // Empty implementation to be overridden
   }
-
 
   public onTick(ticker: PIXI.Ticker): void {
     // Empty implementation to be overridden
@@ -62,6 +75,17 @@ export class SuperSprite extends PIXI.Sprite {
     // Empty implementation to be overridden
   }
 
+  // Internal methods to handle event callbacks and check for destruction
+  private onTickInternal(ticker: PIXI.Ticker): void {
+    if (this._isDestroyed) return;
+    this.onTick(ticker);
+  }
+
+  private onResizeInternal(superApp: SuperApp): void {
+    if (this._isDestroyed) return;
+    this.onResize(superApp);
+  }
+
   // Collision Detection
   private isCollidingWith(other: SuperSprite): boolean {
     const bounds1 = this.getBounds();
@@ -74,7 +98,6 @@ export class SuperSprite extends PIXI.Sprite {
       bounds1.y + bounds2.height > bounds2.y
     );
   }
-
 
   private getCollidingSprites(children: PIXI.ContainerChild[]): SuperSprite[] {
     return children.filter((child) => {

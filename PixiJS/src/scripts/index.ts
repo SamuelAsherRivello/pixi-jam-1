@@ -28,6 +28,8 @@ const superAppData: any = {
   TILE_MAP_DATA: 'assets/tilemaps/TreasureHunter2D.tmj',
   PLAYER_SPRITE_URL: 'assets/images/player-default-sprite.png',
   COIN_SPRITE_URL: 'assets/images/OpenGameArt/Coin.png',
+  COINS_COLLECTED: 0,
+  COINS_MAX: 10,
   SCREEN_UI_MARGIN_X: 10,
   SCREEN_UI_MARGIN_Y: 10,
 };
@@ -97,10 +99,12 @@ async function onInitializeCompleted(superApp: SuperApp) {
   /////////////////////////////
   // Create Coin
   /////////////////////////////
-  coin = new Coin(superApp, superAppData.COIN_SPRITE_URL);
-  coin.x = superApp.getScreenCenterpoint().x + 50;
-  coin.y = superApp.getScreenCenterpoint().y;
-  superApp.addToViewport(coin);
+  for (let i = 0; i < superAppData.COINS_MAX; i++) {
+    coin = new Coin(superApp, superAppData.COIN_SPRITE_URL);
+    coin.x = superApp.getScreenCenterpoint().x + 100 + 32 * i * 2;
+    coin.y = superApp.getScreenCenterpoint().y;
+    superApp.addToViewport(coin);
+  }
 
 
   /////////////////////////////
@@ -135,11 +139,19 @@ async function onInitializeCompleted(superApp: SuperApp) {
   // Create Text
   /////////////////////////////
   const instructionsText: InstructionsSuperText =
-    new InstructionsSuperText(superApp, 'Arrows/WASD To Move' + superApp.app.renderer.resolution, 30, "left");
+    new InstructionsSuperText(
+      superApp,
+      'Arrows/WASD To Move' + superApp.app.renderer.resolution,
+      30,
+      "left");
   superApp.addToStage(instructionsText);
 
   const scoreText: ScoreSuperText =
-    new ScoreSuperText(superApp, 'Treasure 0/3', 30, "right");
+    new ScoreSuperText(
+      superApp,
+      `Coins ${superApp.configuration.data.COINS_COLLECTED}/${superApp.configuration.data.COINS_MAX}`,
+      30,
+      "right");
   superApp.addToStage(scoreText);
 
   /////////////////////////////

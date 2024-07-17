@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { SuperApp } from '@src/scripts/library/core/super/SuperApp';
 import { SuperSprite } from '@src/scripts/library/core/super/SuperSprite';
+import { Player } from './Player';
 
 /**
  * Represents a coin in the game.
@@ -44,7 +45,11 @@ export class Coin extends SuperSprite {
 
     public override onCollision(superSprites: SuperSprite[]): void {
         superSprites.forEach((superSprite) => {
-            console.log(`${this.label} is colliding with ${superSprite.label}`);
+            if (superSprite instanceof Player) {
+                console.log(`${this.label} is colliding with ${superSprite.label}`);
+
+                this.destroy();
+            }
         });
     }
 }
