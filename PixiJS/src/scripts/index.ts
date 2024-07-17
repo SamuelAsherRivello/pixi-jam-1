@@ -1,6 +1,7 @@
 //PIXI
 import * as PIXI from 'pixi.js';
 import Stats from 'stats.js';
+import { Actions, Interpolations } from 'pixi-actions';
 
 //CORE
 import { SuperApp, SuperAppConfiguration } from '@src/scripts/library/core/super/SuperApp';
@@ -160,6 +161,7 @@ async function onInitializeCompleted(superApp: SuperApp) {
   superApp.app.ticker.add((ticker) => {
 
     stats.begin();
+    Actions.tick(ticker.deltaTime);
     stats.end();
   });
 
