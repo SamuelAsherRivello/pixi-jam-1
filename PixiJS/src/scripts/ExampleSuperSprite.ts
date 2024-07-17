@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
-import { SuperApp } from '@src/scripts/library/core/SuperApp';
-import { SuperSprite } from '@src/scripts/library/core/SuperSprite';
+import { SuperApp } from '@src/scripts/library/core/super/SuperApp';
+import { SuperSprite } from '@src/scripts/library/core/super/SuperSprite';
 
 /**
  * Custom Sprite class that handles resizing and positioning

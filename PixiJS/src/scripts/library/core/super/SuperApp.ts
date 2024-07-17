@@ -7,6 +7,17 @@ import { SuperContainer } from './SuperContainer';
 import { SuperText } from './SuperText';
 
 /**
+ * Configuruation
+ */
+export interface SuperAppConfiguration {
+  widthInitial: number;
+  heightInitial: number;
+  data: { [key: string]: any };
+}
+
+
+
+/**
  * Wrapper class for initializing and managing a PixiJS application.
  */
 export class SuperApp extends EventEmitter {
@@ -17,22 +28,22 @@ export class SuperApp extends EventEmitter {
   public static readonly EVENT_INITIALIZE_ERROR: string = 'initializeError';
   public static readonly EVENT_RESIZE: string = 'resize';
 
+  // Properties -----------------------------------
+  public get configuration(): SuperAppConfiguration {
+    return this._configuration;
+  }
+
   // Fields ---------------------------------------
   public app: PIXI.Application;
   public viewport!: Viewport;
-  public data: { [key: string]: any };
+  private _configuration: SuperAppConfiguration;
   //
-  private widthInitial: number;
-  private heightInitial: number;
-
   private _canvasId: string;
 
   // Initialization -------------------------------
   constructor(
     canvasId: string = 'pixi-application-canvas',
-    widthInitial: number = 1920,
-    heightInitial: number = 1080,
-    data: { [key: string]: any }
+    configuration: SuperAppConfiguration = { widthInitial: 1920, heightInitial: 1080, data: {} }
   ) {
 
     /////////////////////////////
@@ -42,9 +53,7 @@ export class SuperApp extends EventEmitter {
     this._canvasId = canvasId;
     //
     this.app = new PIXI.Application();
-    this.widthInitial = widthInitial;
-    this.heightInitial = heightInitial;
-    this.data = data;
+    this._configuration = configuration;;
 
   }
 
@@ -54,8 +63,8 @@ export class SuperApp extends EventEmitter {
   async init() {
     try {
       await this.app.init({
-        width: this.widthInitial,
-        height: this.heightInitial,
+        width: this.configuration.widthInitial,
+        height: this.configuration.heightInitial,
         backgroundColor: 0x1099bb,
         resizeTo: window,
         canvas: document.getElementById(this._canvasId) as HTMLCanvasElement,
@@ -192,8 +201,8 @@ export class SuperApp extends EventEmitter {
   public getScreenScaleCurrent(): PIXI.Point {
 
     return new PIXI.Point(
-      this.app.screen.width / this.widthInitial,
-      this.app.screen.height / this.heightInitial
+      this.app.screen.width / this.configuration.widthInitial,
+      this.app.screen.height / this.configuration.heightInitial
     );
   }
 

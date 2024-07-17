@@ -3,11 +3,8 @@ import * as PIXI from 'pixi.js';
 import Stats from 'stats.js';
 
 //CORE
-import { SuperApp } from '@src/scripts/library/core/SuperApp';
-import { SuperTilemap } from '@src/scripts/library/core/SuperTilemap';
-
-//TEMP
-import { ExampleSuperSprite } from '@src/scripts/ExampleSuperSprite';
+import { SuperApp, SuperAppConfiguration } from '@src/scripts/library/core/super/SuperApp';
+import { SuperTilemap } from '@src/scripts/library/core/super/SuperTilemap';
 
 //TREASURE HUNTER GAME
 import { InstructionsSuperText } from '@src/scripts/library/treasureHunter2D/InstructionsSuperText';
@@ -24,7 +21,7 @@ PIXI.AbstractRenderer.defaultOptions.resolution = window.devicePixelRatio || 1; 
 /////////////////////////////
 // Project Configuration
 /////////////////////////////
-const superAppData = {
+const superAppData: any = {
   LOGO_IMAGE_URL: 'assets/images/pixijs-logo-32x32.png',
   TILE_MAP_DATA: 'assets/tilemaps/TreasureHunter2D.tmj',
   SCREEN_UI_MARGIN_X: 10,
@@ -38,7 +35,12 @@ let tempWorldOrigin: PIXI.Graphics;
 /////////////////////////////
 // Create App
 /////////////////////////////
-const superAppConst = new SuperApp('pixi-application-canvas', 1920, 1080, superAppData);
+const superAppConfiguration: SuperAppConfiguration = {
+  widthInitial: 1920,
+  heightInitial: 1080,
+  data: superAppData
+}
+const superAppConst = new SuperApp('pixi-application-canvas', superAppConfiguration);
 
 
 /////////////////////////////
@@ -73,22 +75,29 @@ async function onInitializeCompleted(superApp: SuperApp) {
   superTilemap.y = superApp.getScreenCenterpoint().y - superTilemap.height / 2;
 
   /////////////////////////////
-  // Temp: World centerpoint
+  // Temp:  World centerpoint
+  //        For reference
   /////////////////////////////
   tempWorldOrigin = new PIXI.Graphics()
     .rect(0, 0, 32, 32)
-    .fill(0xcfcfcf);
+    .fill({
+      color: 0xffffff,
+      alpha: 0.5
+    });
   tempWorldOrigin.x = superApp.getScreenCenterpoint().x;
   tempWorldOrigin.y = superApp.getScreenCenterpoint().y;
   superApp.addToViewport(tempWorldOrigin);
 
 
   /////////////////////////////
-  // Temp: Placeholder for player
+  // TODO: Replace with player sprite
   /////////////////////////////
   tempPlayer = new PIXI.Graphics()
     .rect(0, 0, 32, 32)
-    .fill(0x0000ff);
+    .fill({
+      color: 0x0000ff,
+      alpha: 0.5
+    });
   tempPlayer.x = superApp.getScreenCenterpoint().x;
   tempPlayer.y = superApp.getScreenCenterpoint().y;
   superApp.addToViewport(tempPlayer);

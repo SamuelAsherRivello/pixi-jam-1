@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { SuperApp } from '@src/scripts/library/core/SuperApp';
+import { SuperApp } from '@src/scripts/library/core/super/SuperApp';
 import { SuperContainer } from './SuperContainer';
 
 /**
