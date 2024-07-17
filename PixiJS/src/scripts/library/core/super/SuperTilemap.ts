@@ -27,7 +27,7 @@ export class SuperTilemap extends SuperContainer {
     this.isRenderGroup = true;
   }
 
-  public async init() {
+  public async initialize() {
     const response = await fetch(this.tileMapDataUrl);
     const tilemapData = await response.json();
 
@@ -112,7 +112,7 @@ export class SuperTilemap extends SuperContainer {
 
   // Event Handlers -------------------------------
   public override async onAdded() {
-    await this.init();
+    await this.initialize();
   }
 
   private getTilesetForTile(tileIndex: number, tilesets: any[]): any {

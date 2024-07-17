@@ -11,8 +11,8 @@ export class InstructionsSuperText extends SuperText {
     public override onResize(superApp: SuperApp): void {
 
         //UPDATE POSITION
-        this.x = superApp.configuration.data.SCREEN_UI_MARGIN_X;
-        this.y = superApp.configuration.data.SCREEN_UI_MARGIN_Y;
+        this.x = superApp.configuration.data.ScreenUIMarginX;
+        this.y = superApp.configuration.data.ScreenUIMarginY;
 
         //HACK: UPDATE SIZE
         this.style.fontSize = 15 + 7 / superApp.app.renderer.resolution

@@ -25,14 +25,14 @@ PIXI.AbstractRenderer.defaultOptions.resolution = window.devicePixelRatio || 1; 
 // Project Configuration
 /////////////////////////////
 const superAppData: any = {
-  LOGO_IMAGE_URL: 'assets/images/pixijs-logo-32x32.png',
-  TILE_MAP_DATA: 'assets/tilemaps/TreasureHunter2D.tmj',
-  PLAYER_SPRITE_URL: 'assets/images/player-default-sprite.png',
-  COIN_SPRITE_URL: 'assets/images/OpenGameArt/Coin.png',
-  COINS_COLLECTED: 0,
-  COINS_MAX: 10,
-  SCREEN_UI_MARGIN_X: 10,
-  SCREEN_UI_MARGIN_Y: 10,
+  LogoImageUrl: 'assets/images/pixijs-logo-32x32.png',
+  TilemapDataUrl: 'assets/tilemaps/TreasureHunter2D.tmj',
+  PlayerTextureUrl: 'assets/images/player-default-sprite.png',
+  CoinTextureUrl: 'assets/images/OpenGameArt/Coin.png',
+  CoinsCollected: 0,
+  CoinsMax: 10,
+  ScreenUIMarginX: 10,
+  ScreenUIMarginY: 10,
 };
 
 let player: Player;
@@ -44,6 +44,8 @@ let tempWorldOrigin: PIXI.Graphics;
 // Create App
 /////////////////////////////
 const superAppConfiguration: SuperAppConfiguration = {
+
+  //Show all values here, for readability
   widthInitial: 1920,
   heightInitial: 1080,
   data: superAppData
@@ -76,8 +78,10 @@ async function onInitializeCompleted(superApp: SuperApp) {
   /////////////////////////////
   // Create Tilemap
   /////////////////////////////
-  const superTilemap = new SuperTilemap(superApp, superAppData.TILE_MAP_DATA);
-  await superTilemap.init();
+  const superTilemap = new SuperTilemap(superApp, superAppData.TilemapDataUrl);
+
+  //Initialize first, so width and height are available
+  await superTilemap.initialize();
   superApp.addToViewport(superTilemap);
   superTilemap.x = superApp.getScreenCenterpoint().x - superTilemap.width / 2;
   superTilemap.y = superApp.getScreenCenterpoint().y - superTilemap.height / 2;
@@ -92,29 +96,32 @@ async function onInitializeCompleted(superApp: SuperApp) {
       color: 0xffffff,
       alpha: 0.5
     });
+  superApp.addToViewport(tempWorldOrigin);
   tempWorldOrigin.x = superApp.getScreenCenterpoint().x;
   tempWorldOrigin.y = superApp.getScreenCenterpoint().y;
-  superApp.addToViewport(tempWorldOrigin);
+
 
 
   /////////////////////////////
   // Create Coin
   /////////////////////////////
-  for (let i = 0; i < superAppData.COINS_MAX; i++) {
-    coin = new Coin(superApp, { textureUrl: superAppData.COIN_SPRITE_URL as string });
+  for (let i = 0; i < superAppData.CoinsMax; i++) {
+    coin = new Coin(superApp, { textureUrl: superAppData.CoinTextureUrl as string });
+    superApp.addToViewport(coin);
     coin.x = superApp.getScreenCenterpoint().x + 100 + 32 * i * 2;
     coin.y = superApp.getScreenCenterpoint().y;
-    superApp.addToViewport(coin);
+
   }
 
 
   /////////////////////////////
   // Create Player
   /////////////////////////////
-  player = new Player(superApp, { textureUrl: superAppData.PLAYER_SPRITE_URL as string });
+  player = new Player(superApp, { textureUrl: superAppData.PlayerTextureUrl as string });
+  superApp.addToViewport(player);
   player.x = superApp.getScreenCenterpoint().x;
   player.y = superApp.getScreenCenterpoint().y;
-  superApp.addToViewport(player);
+
 
 
   /////////////////////////////
@@ -148,7 +155,7 @@ async function onInitializeCompleted(superApp: SuperApp) {
   const scoreText: ScoreSuperText =
     new ScoreSuperText(
       superApp,
-      `Coins ${superApp.configuration.data?.COINS_COLLECTED}/${superApp.configuration.data?.COINS_MAX}`,
+      `Coins ${superApp.configuration.data?.CoinsCollected}/${superApp.configuration.data?.CoinsMax}`,
       30,
       "right");
   superApp.addToStage(scoreText);

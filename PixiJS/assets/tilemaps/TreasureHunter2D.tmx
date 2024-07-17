@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="10">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="12">
  <editorsettings>
   <export target="TreasureHunter2D.tmj" format="json"/>
  </editorsettings>
@@ -115,7 +115,7 @@
 </data>
  </layer>
  <objectgroup id="3" name="ObjectLayer">
-  <object id="7" gid="340" x="687" y="430" width="32" height="32"/>
-  <object id="9" gid="340" x="591.5" y="784" width="32" height="32"/>
+  <object id="7" type="ChestSuperObject" gid="340" x="687" y="430" width="32" height="32"/>
+  <object id="9" type="ChestSuperObject" gid="340" x="591.5" y="784" width="32" height="32"/>
  </objectgroup>
 </map>
