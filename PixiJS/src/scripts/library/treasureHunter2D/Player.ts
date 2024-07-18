@@ -77,19 +77,19 @@ export class Player extends SuperSprite {
 
         let moveVector: PIXI.Point = new PIXI.Point(0, 0);
 
-        if (this._superApp.input.isKeyDown('a')) {
+        if (this._superApp.systems.inputSystem.isKeyDown('a')) {
             this.isCollision();
             moveVector.x += -1;
         }
-        if (this._superApp.input.isKeyDown('d')) {
+        if (this._superApp.systems.inputSystem.isKeyDown('d')) {
             this.isCollision();
             moveVector.x += 1;
         }
-        if (this._superApp.input.isKeyDown('w')) {
+        if (this._superApp.systems.inputSystem.isKeyDown('w')) {
             this.isCollision();
             moveVector.y += -1;
         }
-        if (this._superApp.input.isKeyDown('s')) {
+        if (this._superApp.systems.inputSystem.isKeyDown('s')) {
             this.isCollision();
             moveVector.y += 1;
         }

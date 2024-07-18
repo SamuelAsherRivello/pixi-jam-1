@@ -6,6 +6,8 @@ import { SuperSprite } from './SuperSprite';
 import { SuperContainer } from './SuperContainer';
 import { SuperText } from './SuperText';
 import { IInitializableAsync } from './IInitializeAsync';
+import { CollisionSystem } from './systems/CollisionSystem';
+import { InputSystem } from './systems/InputSystem';
 
 /**
  * Configuration
@@ -24,48 +26,18 @@ const SuperAppConfigurationDefault: SuperAppConfiguration = {
   data: {}
 }
 
-class KeyState {
-  constructor() {
-    this.isDown = false;
-  }
 
-  public isDown: boolean;
+
+
+export class Systems {
+  public collisionSystem: CollisionSystem;
+  public inputSystem: InputSystem;
+  constructor(superApp: SuperApp) {
+    this.collisionSystem = new CollisionSystem(superApp);
+    this.inputSystem = new InputSystem(superApp);
+  }
 }
 
-class Input {
-  private _keyStateDictionary: Map<string, KeyState>;
-
-  constructor() {
-    this._keyStateDictionary = new Map();
-  }
-
-  private getKeyStateByKey(key: string): KeyState {
-    let keyState: KeyState | undefined = this._keyStateDictionary.get(key);
-    if (keyState == undefined) {
-      let newKeyState: KeyState = new KeyState();
-      this._keyStateDictionary.set(key, newKeyState);
-      return newKeyState;
-    }
-
-    return keyState;
-  }
-
-  public onKeyDown(keyboardEvent: KeyboardEvent) {
-    let keyState: KeyState = this.getKeyStateByKey(keyboardEvent.key);
-    keyState.isDown = true;
-  }
-
-  public onKeyUp(keyboardEvent: KeyboardEvent) {
-    let keyState: KeyState = this.getKeyStateByKey(keyboardEvent.key);
-    keyState.isDown = false;
-  }
-
-  public isKeyDown(key: string) {
-    let keyState: KeyState = this.getKeyStateByKey(key);
-    return keyState.isDown;
-  }
-
-}
 
 /**
  * Wrapper class for initializing and managing a PixiJS application.
@@ -83,22 +55,22 @@ export class SuperApp extends EventEmitter implements IInitializableAsync {
     return this._isInitialized;
   }
 
-  public get configuration(): SuperAppConfiguration {
-    return this._configuration;
+  public get systems(): Systems {
+    return this._systems;
   }
 
-  public get input(): Input {
-    return this._input;
+  public get configuration(): SuperAppConfiguration {
+    return this._configuration;
   }
 
   // Fields ---------------------------------------
   public app: PIXI.Application;
   public viewport!: Viewport;
-  private _input: Input;
   private _configuration: SuperAppConfiguration;
   //
   private _canvasId: string;
   private _isInitialized = false;
+  private _systems: Systems;
 
   // Initialization -------------------------------
   constructor(
@@ -114,7 +86,7 @@ export class SuperApp extends EventEmitter implements IInitializableAsync {
     //
     this.app = new PIXI.Application();
     this._configuration = { ...SuperAppConfigurationDefault, ...configuration };
-    this._input = new Input();
+    this._systems = new Systems(this);
 
     // Every SuperSprite instance listens to SuperApp
     // So this number must be >= to the number of SuperSprite instances
@@ -298,11 +270,11 @@ export class SuperApp extends EventEmitter implements IInitializableAsync {
   }
 
   public keyDown = (keyboardEvent: KeyboardEvent) => {
-    this._input.onKeyDown(keyboardEvent);
+    this.systems.inputSystem.onKeyDown(keyboardEvent);
   }
 
   public keyUp = (keyboardEvent: KeyboardEvent) => {
-    this._input.onKeyUp(keyboardEvent);
+    this.systems.inputSystem.onKeyUp(keyboardEvent);
   }
 
   private setupKeyboardHandling() {

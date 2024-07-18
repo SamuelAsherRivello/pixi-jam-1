@@ -22,6 +22,7 @@ const SuperSpriteConfigurationDefault: SuperSpriteConfiguration = {
   isResizable: true
 }
 
+
 /**
  * Subclass PIXI.Sprite if you want basic sprite functionality.
  * 
@@ -33,6 +34,8 @@ export class SuperSprite extends PIXI.Sprite implements IInitializableAsync {
   public get isInitialized(): boolean {
     return this._isInitialized;
   }
+
+
 
   public get configuration(): SuperSpriteConfiguration {
     return this._configuration;
@@ -52,6 +55,7 @@ export class SuperSprite extends PIXI.Sprite implements IInitializableAsync {
   private _isInitialized: boolean = false;
   protected _isCollidable: boolean = true;
   protected _superApp: SuperApp;
+
 
 
   // Initialization -------------------------------
@@ -147,16 +151,12 @@ export class SuperSprite extends PIXI.Sprite implements IInitializableAsync {
 
     // Empty implementation to be overridden
 
-    // Calculate any collisions. Call onCollisionEnter() if 1 or
-    // more collisions happen this frame and send list of superSprites
-    const collidingSprites: SuperSprite[] = [
-      ...this.getCollidingSprites(this._superApp.app.stage.children),
-      ...this.getCollidingSprites(this._superApp.viewport.children)
-    ];
+    //TODO: This is EXPENSIVE. Call it less
+    const collisions = this._superApp.systems.collisionSystem.getCollisions(this);
+    if (collisions.length) {
+      this.onCollision(collisions);
+    };
 
-    if (collidingSprites.length > 0) {
-      this.onCollision(collidingSprites);
-    }
   }
 
   protected onCollision(superSprites: SuperSprite[]): void {
@@ -174,22 +174,5 @@ export class SuperSprite extends PIXI.Sprite implements IInitializableAsync {
     this.onResize(superApp);
   }
 
-  // Collision Detection
-  private isCollidingWith(other: SuperSprite): boolean {
-    const bounds1 = this.getBounds();
-    const bounds2 = other.getBounds();
 
-    return (
-      bounds1.x < bounds2.x + bounds2.width &&
-      bounds1.x + bounds1.width > bounds2.x &&
-      bounds1.y < bounds2.y + bounds2.height &&
-      bounds1.y + bounds2.height > bounds2.y
-    );
-  }
-
-  private getCollidingSprites(children: PIXI.ContainerChild[]): SuperSprite[] {
-    return children.filter((child) => {
-      return child instanceof SuperSprite && child !== this && this.isCollidingWith(child as SuperSprite);
-    }) as SuperSprite[];
-  }
 }
