@@ -1,14 +1,13 @@
 import { SuperApp } from '@src/scripts/library/core/super/SuperApp';
 import { SuperSprite, SuperSpriteConfiguration } from '@src/scripts/library/core/super/SuperSprite';
-import { Player } from '@src/scripts/library/treasureHunter2D/Player';
-import { SuperTilemapObject } from '../core/super/SuperTilemapObject';
-import { Ticker } from 'pixi.js';
+import { Player } from '../Player';
+import { Actions, Interpolations } from 'pixi-actions';
 
 /**
  * Represents a coin in the game.
  * 
  */
-export class ChestSuperTilemapObject extends SuperTilemapObject {
+export class Coin extends SuperSprite {
 
 
     // Properties -----------------------------------
@@ -24,8 +23,10 @@ export class ChestSuperTilemapObject extends SuperTilemapObject {
 
         // Redeclare anything from super 
         // that you want differently here
-        this.label = (ChestSuperTilemapObject).name;
+        this.label = (Coin).name;
+
     }
+
 
     public override async initializeAsync() {
 
@@ -33,19 +34,42 @@ export class ChestSuperTilemapObject extends SuperTilemapObject {
         super.initializeAsync();
 
         // Local
-        // Do any additional initialization here
+        //Do any additional initialization here
 
     }
 
     // Methods --------------------------------------
-    public override onTick(ticker: Ticker): void {
+    private FloatUp() {
+        let action = Actions.sequence(
 
-        // Super
-        super.onTick(ticker);
+            Actions.delay(0),
+            Actions.runFunc(() => {
+                // Call something?
+            }),
+            Actions.parallel(
 
-        // Local
-        this.rotation += 0.01 * ticker.deltaTime;
+                Actions.moveTo(this,
+                    this.x,
+                    this.y - 32,
+                    20,
+                    Interpolations.smooth2),
+
+                Actions.scaleTo(this,
+                    2,
+                    2,
+                    20,
+                    Interpolations.smooth2),
+
+            ),
+            Actions.runFunc(() => {
+                // Call something?
+                this.destroy();
+            }),
+        );
+        action.play();
+
     }
+
 
     // Event Handlers -------------------------------
 
@@ -57,8 +81,11 @@ export class ChestSuperTilemapObject extends SuperTilemapObject {
 
         superSprites.forEach((superSprite) => {
             if (superSprite instanceof Player) {
+                console.log(`${this.label} is colliding with ${superSprite.label}`);
+
                 this._isCollidable = false;
-                this.destroy();
+                this.FloatUp();
+
             }
         });
     }

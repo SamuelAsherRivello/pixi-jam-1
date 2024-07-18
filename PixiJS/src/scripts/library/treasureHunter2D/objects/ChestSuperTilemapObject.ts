@@ -1,13 +1,14 @@
 import { SuperApp } from '@src/scripts/library/core/super/SuperApp';
 import { SuperSprite, SuperSpriteConfiguration } from '@src/scripts/library/core/super/SuperSprite';
-import { Player } from './Player';
-import { Actions, Interpolations } from 'pixi-actions';
+import { Player } from '@src/scripts/library/treasureHunter2D/Player';
+import { SuperTilemapObject } from '@src/scripts/library/core/super/superTilemap/SuperTilemapObject';
+import { Ticker } from 'pixi.js';
 
 /**
  * Represents a coin in the game.
  * 
  */
-export class Coin extends SuperSprite {
+export class ChestSuperTilemapObject extends SuperTilemapObject {
 
 
     // Properties -----------------------------------
@@ -23,10 +24,8 @@ export class Coin extends SuperSprite {
 
         // Redeclare anything from super 
         // that you want differently here
-        this.label = (Coin).name;
-
+        this.label = (ChestSuperTilemapObject).name;
     }
-
 
     public override async initializeAsync() {
 
@@ -34,42 +33,19 @@ export class Coin extends SuperSprite {
         super.initializeAsync();
 
         // Local
-        //Do any additional initialization here
+        // Do any additional initialization here
 
     }
 
     // Methods --------------------------------------
-    private FloatUp() {
-        let action = Actions.sequence(
+    public override onTick(ticker: Ticker): void {
 
-            Actions.delay(0),
-            Actions.runFunc(() => {
-                // Call something?
-            }),
-            Actions.parallel(
+        // Super
+        super.onTick(ticker);
 
-                Actions.moveTo(this,
-                    this.x,
-                    this.y - 32,
-                    20,
-                    Interpolations.smooth2),
-
-                Actions.scaleTo(this,
-                    2,
-                    2,
-                    20,
-                    Interpolations.smooth2),
-
-            ),
-            Actions.runFunc(() => {
-                // Call something?
-                this.destroy();
-            }),
-        );
-        action.play();
-
+        // Local
+        this.rotation += 0.01 * ticker.deltaTime;
     }
-
 
     // Event Handlers -------------------------------
 
@@ -81,11 +57,8 @@ export class Coin extends SuperSprite {
 
         superSprites.forEach((superSprite) => {
             if (superSprite instanceof Player) {
-                console.log(`${this.label} is colliding with ${superSprite.label}`);
-
                 this._isCollidable = false;
-                this.FloatUp();
-
+                this.destroy();
             }
         });
     }

@@ -1,5 +1,5 @@
-import { SuperText } from '../core/super/SuperText';
-import { SuperApp } from '../core/super/SuperApp';
+import { SuperText } from '../../core/super/SuperText';
+import { SuperApp } from '../../core/super/SuperApp';
 
 export class ScoreSuperText extends SuperText {
 
