@@ -12,7 +12,7 @@ export class SuperTilemapCollisionSystem {
         this._superTilemap = superTilemap;
     }
 
-    public async initialize() {
+    public async initializeAsync() {
         this.collisionMap = this.createCollisionMap(this._superTilemap.tilemapData);
     }
 
@@ -47,7 +47,7 @@ export class SuperTilemapCollisionSystem {
 
         // Populate the collision map based on the tile data
         layers.forEach((layer) => {
-            if (layer.type === "tilelayer") {
+            if (layer.type === "tilelayer" && layer.data) {
                 for (let y = 0; y < layer.height; y++) {
                     for (let x = 0; x < layer.width; x++) {
                         const tileIndex = layer.data[y * layer.width + x];

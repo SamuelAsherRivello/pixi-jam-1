@@ -31,7 +31,7 @@ const superAppData: any = {
   PlayerTextureUrl: 'assets/images/player-default-sprite.png',
   CoinTextureUrl: 'assets/images/OpenGameArt/Coin.png',
   CoinsCollected: 0,
-  CoinsMax: 10,
+  CoinsMax: 5,
   ScreenUIMarginX: 10,
   ScreenUIMarginY: 10,
 };
@@ -96,7 +96,8 @@ async function onInitializeCompleted(superApp: SuperApp) {
 
         case LayerType.ObjectGroup:
 
-          if (tilemapItemData.type == "ChestSuperObject") {
+          console.log(`createTilemapItem: (${tilemapItemData.row},${tilemapItemData.column}) ` + tilemapItemData.type);
+          if (tilemapItemData.type == (ChestSuperTilemapObject).name) {
 
             return new ChestSuperTilemapObject(superApp, { texture: tilemapItemData.texture });
           }
@@ -145,8 +146,8 @@ async function onInitializeCompleted(superApp: SuperApp) {
   for (let i = 0; i < superAppData.CoinsMax; i++) {
     coin = new Coin(superApp, { textureUrl: superAppData.CoinTextureUrl as string });
     superApp.addToViewport(coin);
-    coin.x = superApp.getScreenCenterpoint().x + 100 + 32 * i * 2;
-    coin.y = superApp.getScreenCenterpoint().y;
+    coin.x = superApp.getScreenCenterpoint().x - 132 + 32 * i * 2;
+    coin.y = superApp.getScreenCenterpoint().y - 100;
 
   }
 
