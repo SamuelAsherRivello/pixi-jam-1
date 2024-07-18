@@ -5,13 +5,14 @@ import { Actions, Interpolations } from 'pixi-actions';
 
 //CORE
 import { SuperApp, SuperAppConfiguration } from '@src/scripts/library/core/super/SuperApp';
-import { SuperTilemap } from '@src/scripts/library/core/super/SuperTilemap';
+import { ISuperTilemapItemFactory, LayerType, SuperTilemap, SuperTilemapItemFactoryDefault, TilemapItemData } from '@src/scripts/library/core/super/SuperTilemap';
 
 //TREASURE HUNTER GAME
 import { InstructionsSuperText } from '@src/scripts/library/treasureHunter2D/InstructionsSuperText';
 import { ScoreSuperText } from '@src/scripts/library/treasureHunter2D/ScoreSuperText';
 import { Player } from '@src/scripts/library/treasureHunter2D/Player';
 import { Coin } from './library/treasureHunter2D/Coin';
+import { ChestSuperTilemapObject } from './library/treasureHunter2D/ChestSuperTilemapObject';
 
 
 /////////////////////////////
@@ -75,10 +76,46 @@ document.body.appendChild(stats.dom);
 async function onInitializeCompleted(superApp: SuperApp) {
 
 
+  class SuperTilemapItemFactoryCustom implements ISuperTilemapItemFactory {
+
+    // Fields ---------------------------------------
+    private _superApp: SuperApp;
+
+    // Initialization -------------------------------
+    constructor(superApp: SuperApp) {
+      this._superApp = superApp;
+    }
+
+    // Methods --------------------------------------
+    public async createTilemapItem(tilemapItemData: TilemapItemData): Promise<PIXI.Sprite> {
+
+      switch (tilemapItemData.layerType) {
+
+        case LayerType.TileLayer:
+          return new PIXI.Sprite(tilemapItemData.texture);
+
+        case LayerType.ObjectGroup:
+
+          if (tilemapItemData.type == "ChestSuperObject") {
+
+            return new ChestSuperTilemapObject(superApp, { texture: tilemapItemData.texture });
+          }
+          return new PIXI.Sprite(tilemapItemData.texture);
+
+        default:
+          throw new Error('Invalid layer type');
+      }
+    }
+  }
+
   /////////////////////////////
   // Create Tilemap
   /////////////////////////////
-  const superTilemap = new SuperTilemap(superApp, superAppData.TilemapDataUrl);
+  const superTilemap = new SuperTilemap(
+    superApp,
+    superAppData.TilemapDataUrl,
+    new SuperTilemapItemFactoryCustom(superApp)
+  );
 
   //Initialize first, so width and height are available
   await superTilemap.initialize();

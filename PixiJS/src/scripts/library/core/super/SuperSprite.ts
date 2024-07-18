@@ -1,11 +1,13 @@
 import * as PIXI from 'pixi.js';
 import { SuperApp } from './SuperApp';
+import { SuperUtility } from './SuperUtility';
 
 /**
  * Configuration
  */
 export interface SuperSpriteConfiguration {
   textureUrl: string;
+  texture: PIXI.Texture;
   isCollidable: boolean;
   isTickable: boolean;
   isResizable: boolean;
@@ -13,6 +15,7 @@ export interface SuperSpriteConfiguration {
 
 const SuperSpriteConfigurationDefault: SuperSpriteConfiguration = {
   textureUrl: '',
+  texture: PIXI.Texture.EMPTY,
   isCollidable: true,
   isTickable: true,
   isResizable: true
@@ -55,9 +58,20 @@ export class SuperSprite extends PIXI.Sprite {
     configuration?: Partial<SuperSpriteConfiguration>) {
 
     super();
-
     this._configuration = { ...SuperSpriteConfigurationDefault, ...configuration };
     this._superApp = superApp;
+
+    if (SuperUtility.textureIsNullOrEmpty(this.configuration?.texture) &&
+      SuperUtility.stringIsNullOrEmpty(this.configuration?.textureUrl)) {
+
+      console.log("1: " + this.configuration.texture.width);
+      console.log("2: " + this.configuration.textureUrl)
+      throw new Error("You cannot set both texture and textureUrl in the configuration");
+    }
+
+    if (configuration?.texture != null) {
+      this.texture = configuration.texture;
+    }
 
     // Tick
     if (this.configuration.isTickable) {
@@ -80,7 +94,7 @@ export class SuperSprite extends PIXI.Sprite {
       return;
     }
 
-    if (this.configuration.textureUrl.length) {
+    if (!SuperUtility.stringIsNullOrEmpty(this.configuration.textureUrl)) {
 
       await PIXI.Assets.load([this.configuration.textureUrl]);
       this.texture = PIXI.Texture.from(this.configuration.textureUrl as string);
