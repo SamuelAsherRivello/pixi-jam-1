@@ -1,6 +1,39 @@
 import * as PIXI from 'pixi.js';
 import { SuperApp } from '@src/scripts/library/core/super/SuperApp';
 import { SuperContainer } from '@src/scripts/library/core/super/SuperContainer';
+import { SuperTilemapCollisionSystem } from '@src/scripts/library/core/super/superTilemap/SuperTilemapCollisionSystem';
+
+
+export interface TilemapData {
+  width: number;
+  height: number;
+  tilewidth: number;
+  tileheight: number;
+  layers: Layer[];
+  tilesets: Tileset[];
+}
+
+export interface Layer {
+  type: string;
+  width: number;
+  height: number;
+  data: number[];
+}
+
+export interface Tileset {
+  firstgid: number;
+  tiles: Tile[];
+}
+
+export interface Tile {
+  id: number;
+  properties?: Property[];
+}
+
+export interface Property {
+  name: string;
+  value: boolean;
+}
 
 /**
  * Represents data for a tilemap item
@@ -76,16 +109,25 @@ export enum LayerType {
  */
 export class SuperTilemap extends SuperContainer {
 
+  // Events ---------------------------------------
+
+
+  // Properties -----------------------------------
+  get tilemapData(): TilemapData { return this._tilemapData; }
+
   // Fields ---------------------------------------
-  private tileMapDataUrl: string;
-  private superTilemapItemFactory: ISuperTilemapItemFactory;
+  private _tilemapDataUrl: string;
+  private _superTilemapItemFactory: ISuperTilemapItemFactory;
+  private _superTilemapCollisionSystem: SuperTilemapCollisionSystem;
+  private _tilemapData!: TilemapData;
 
   // Initialization -------------------------------
-  constructor(superApp: SuperApp, tileMapDataUrl: string, superTilemapItemFactory: ISuperTilemapItemFactory) {
+  constructor(superApp: SuperApp, tilemapDataUrl: string, superTilemapItemFactory: ISuperTilemapItemFactory) {
     super(superApp);
 
-    this.tileMapDataUrl = tileMapDataUrl;
-    this.superTilemapItemFactory = superTilemapItemFactory;
+    this._tilemapDataUrl = tilemapDataUrl;
+    this._superTilemapItemFactory = superTilemapItemFactory;
+    this._superTilemapCollisionSystem = new SuperTilemapCollisionSystem(this._superApp, this);
 
     // Give it a name for pretty debugging
     this.label = (SuperTilemap).name;
@@ -105,11 +147,11 @@ export class SuperTilemap extends SuperContainer {
    * Initializes the tilemap by loading data and processing layers
    */
   public async initialize() {
-    const response = await fetch(this.tileMapDataUrl);
-    const tilemapData = await response.json();
+    const response = await fetch(this._tilemapDataUrl);
+    this._tilemapData = await response.json();
 
     // Load all tileset images
-    const tilesetPromises = tilemapData.tilesets.map((tileset: any) => {
+    const tilesetPromises = this._tilemapData.tilesets.map((tileset: any) => {
       const imageUrl = tileset.image.replace('../', 'assets/');
       return PIXI.Assets.load(imageUrl).then(() => {
         return { ...tileset, texture: PIXI.Texture.from(imageUrl) };
@@ -119,13 +161,15 @@ export class SuperTilemap extends SuperContainer {
     const tilesets = await Promise.all(tilesetPromises);
 
     // Iterate over each layer
-    for (const layer of tilemapData.layers) {
+    for (const layer of this._tilemapData.layers) {
       if (layer.type === LayerType.TileLayer) {
         await this.processTileLayer(layer, tilesets);
       } else if (layer.type === LayerType.ObjectGroup) {
         await this.processObjectLayer(layer, tilesets);
       }
     }
+
+    this._superTilemapCollisionSystem.initialize();
   }
 
   /**
@@ -163,7 +207,7 @@ export class SuperTilemap extends SuperContainer {
               type: ""
             };
 
-            const sprite = await this.superTilemapItemFactory.createTilemapItem(tilemapItemData);
+            const sprite = await this._superTilemapItemFactory.createTilemapItem(tilemapItemData);
             sprite.label = `Tile (${row.toString().padStart(2, '0')},${column.toString().padStart(2, '0')})`;
 
             sprite.x = tilemapItemData.x;
@@ -207,7 +251,7 @@ export class SuperTilemap extends SuperContainer {
           type: object.type
         };
 
-        const sprite = await this.superTilemapItemFactory.createTilemapItem(tilemapItemData);
+        const sprite = await this._superTilemapItemFactory.createTilemapItem(tilemapItemData);
         sprite.label = `Object (${object.id})`;
 
         sprite.x = tilemapItemData.x;
@@ -216,6 +260,19 @@ export class SuperTilemap extends SuperContainer {
         this.addChild(sprite);
       }
     }
+  }
+
+  /**
+   * Checks if the given rectangular area collides with any non-walkable tiles.
+   * 
+   * @param playerX - The x-coordinate of the top-left corner of the player's area.
+   * @param playerY - The y-coordinate of the top-left corner of the player's area.
+   * @param playerWidth - The width of the player's area.
+   * @param playerHeight - The height of the player's area.
+   * @returns {boolean} - True if any part of the area collides, false otherwise.
+   */
+  public isCollision(playerX: number, playerY: number, playerWidth: number, playerHeight: number): boolean {
+    return this._superTilemapCollisionSystem.isCollision(playerX, playerY, playerWidth, playerHeight);
   }
 
   // Event Handlers -------------------------------

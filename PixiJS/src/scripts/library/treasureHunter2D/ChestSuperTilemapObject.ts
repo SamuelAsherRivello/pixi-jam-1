@@ -1,7 +1,7 @@
 import { SuperApp } from '@src/scripts/library/core/super/SuperApp';
 import { SuperSprite, SuperSpriteConfiguration } from '@src/scripts/library/core/super/SuperSprite';
 import { Player } from '@src/scripts/library/treasureHunter2D/Player';
-import { SuperTilemapObject } from '../core/super/SuperTilemapObject';
+import { SuperTilemapObject } from '../core/super/superTilemap/SuperTilemapObject';
 import { Ticker } from 'pixi.js';
 
 /**

@@ -5,7 +5,7 @@ import { Actions, Interpolations } from 'pixi-actions';
 
 //CORE
 import { SuperApp, SuperAppConfiguration } from '@src/scripts/library/core/super/SuperApp';
-import { ISuperTilemapItemFactory, LayerType, SuperTilemap, SuperTilemapItemFactoryDefault, TilemapItemData } from '@src/scripts/library/core/super/SuperTilemap';
+import { ISuperTilemapItemFactory, LayerType, SuperTilemap, SuperTilemapItemFactoryDefault, TilemapItemData } from '@src/scripts/library/core/super/superTilemap/SuperTilemap';
 
 //TREASURE HUNTER GAME
 import { InstructionsSuperText } from '@src/scripts/library/treasureHunter2D/InstructionsSuperText';
@@ -154,7 +154,7 @@ async function onInitializeCompleted(superApp: SuperApp) {
   /////////////////////////////
   // Create Player
   /////////////////////////////
-  player = new Player(superApp, { textureUrl: superAppData.PlayerTextureUrl as string });
+  player = new Player(superApp, superTilemap, { textureUrl: superAppData.PlayerTextureUrl as string });
   superApp.addToViewport(player);
   player.x = superApp.getScreenCenterpoint().x;
   player.y = superApp.getScreenCenterpoint().y;

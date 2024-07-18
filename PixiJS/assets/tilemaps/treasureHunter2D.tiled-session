@@ -31,6 +31,7 @@
         "TreasureAdventureMap.tmx"
     ],
     "project": "treasureHunter2D.tiled-project",
+    "property.type": "bool",
     "recentFiles": [
         "GrassTileset.tsx",
         "TreasureAdventureMap.tmx"
