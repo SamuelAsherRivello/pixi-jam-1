@@ -62,9 +62,6 @@ export interface ISuperTilemapItemFactory {
 export class SuperTilemap extends SuperContainer implements IInitializableAsync {
 
   // Properties -----------------------------------
-  get isInitialized(): boolean {
-    return this._isInitialized;
-  }
   get tilemapData(): TilemapData { return this._tilemapData; }
 
   // Fields ---------------------------------------
@@ -72,7 +69,6 @@ export class SuperTilemap extends SuperContainer implements IInitializableAsync 
   private _superTilemapItemFactory: ISuperTilemapItemFactory;
   private _superTilemapCollisionSystem: SuperTilemapCollisionSystem;
   private _tilemapData!: TilemapData;
-  private _isInitialized: boolean = false;
 
   // Initialization -------------------------------
   constructor(superApp: SuperApp, tilemapDataUrl: string, superTilemapItemFactory: ISuperTilemapItemFactory) {
@@ -88,10 +84,12 @@ export class SuperTilemap extends SuperContainer implements IInitializableAsync 
     this.isRenderGroup = true;
   }
 
-  public async initializeAsync() {
-    if (this._isInitialized) {
+  public override async initializeAsync() {
+
+    if (this.isInitialized) {
       return;
     }
+    await super.initializeAsync();
     this._isInitialized = true;
 
     const response = await fetch(this._tilemapDataUrl);
