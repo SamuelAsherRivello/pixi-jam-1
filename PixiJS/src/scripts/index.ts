@@ -13,6 +13,7 @@ import { ScoreSuperText } from '@src/scripts/library/treasureHunter2D/ScoreSuper
 import { Player } from '@src/scripts/library/treasureHunter2D/Player';
 import { Coin } from './library/treasureHunter2D/Coin';
 import { ChestSuperTilemapObject } from './library/treasureHunter2D/ChestSuperTilemapObject';
+import { MultiAnimatedSprite } from './library/core/super/MultiAnimatedSprite';
 
 
 /////////////////////////////
@@ -39,6 +40,7 @@ const superAppData: any = {
 let player: Player;
 let coin: Coin;
 let tempWorldOrigin: PIXI.Graphics;
+let tempAnimatedCoin: PIXI.AnimatedSprite;
 
 
 /////////////////////////////
@@ -151,8 +153,13 @@ async function onInitializeCompleted(superApp: SuperApp) {
 
   }
 
+  // const animatedTextureURL = 'assets/images/AnimatedCoin/animated_coin.png';
+  // const animatedTextureJSONURL = 'assets/images/AnimatedCoin/animated_coin.json';
+  // let mas: MultiAnimatedSprite = new MultiAnimatedSprite(animatedTextureURL, animatedTextureJSONURL);
+  // await mas.initializeAndAddToViewport(superApp);
+  // mas.play('Gold', 0.5);
 
-  /////////////////////////////
+  /////////////////////////////sa
   // Create Player
   /////////////////////////////
   player = new Player(superApp, superTilemap, { textureUrl: superAppData.PlayerTextureUrl as string });
@@ -167,8 +174,8 @@ async function onInitializeCompleted(superApp: SuperApp) {
   /////////////////////////////
   superApp.viewport.follow(player, {
     speed: 1,
-    acceleration: .01,
-    radius: 20
+    acceleration: 1,
+    radius: 100
   });
 
   // Optional: Input for camera
