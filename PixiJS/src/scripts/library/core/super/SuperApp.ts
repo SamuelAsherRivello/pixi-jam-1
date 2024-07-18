@@ -5,6 +5,7 @@ import { EventEmitter } from 'events';
 import { SuperSprite } from './SuperSprite';
 import { SuperContainer } from './SuperContainer';
 import { SuperText } from './SuperText';
+import { IInitializableAsync } from './IInitializeAsync';
 
 /**
  * Configuration
@@ -12,12 +13,14 @@ import { SuperText } from './SuperText';
 export interface SuperAppConfiguration {
   widthInitial: number;
   heightInitial: number;
+  backgroundColor: number;
   data: { [key: string]: any };
 }
 
 const SuperAppConfigurationDefault: SuperAppConfiguration = {
   widthInitial: 1920,
   heightInitial: 1080,
+  backgroundColor: 0x1099bb,
   data: {}
 }
 
@@ -61,12 +64,13 @@ class Input {
     let keyState: KeyState = this.getKeyStateByKey(key);
     return keyState.isDown;
   }
+
 }
 
 /**
  * Wrapper class for initializing and managing a PixiJS application.
  */
-export class SuperApp extends EventEmitter {
+export class SuperApp extends EventEmitter implements IInitializableAsync {
 
 
   // Constants ------------------------------------
@@ -75,6 +79,10 @@ export class SuperApp extends EventEmitter {
   public static readonly EVENT_RESIZE: string = 'resize';
 
   // Properties -----------------------------------
+  public get isInitialized(): boolean {
+    return this._isInitialized;
+  }
+
   public get configuration(): SuperAppConfiguration {
     return this._configuration;
   }
@@ -90,6 +98,7 @@ export class SuperApp extends EventEmitter {
   private _configuration: SuperAppConfiguration;
   //
   private _canvasId: string;
+  private _isInitialized = false;
 
   // Initialization -------------------------------
   constructor(
@@ -112,21 +121,26 @@ export class SuperApp extends EventEmitter {
     this.setMaxListeners(100);
   }
 
+
   /**
    * Initializes the PixiJS application.
    */
-  async init() {
+  public async initializeAsync(): Promise<any> {
+    if (this._isInitialized) {
+      return;
+    }
+
+
     try {
       await this.app.init({
         width: this.configuration.widthInitial,
         height: this.configuration.heightInitial,
-        backgroundColor: 0x1099bb,
+        backgroundColor: this.configuration.backgroundColor,
         resizeTo: window,
         canvas: document.getElementById(this._canvasId) as HTMLCanvasElement,
       });
 
       console.log(`PIXI.Application.init() success! PixiJS v${PIXI.VERSION} with ${this.GetRendererTypeAsString(this.app.renderer.type)} `);
-
 
       /////////////////////////////
       // Create Viewport
@@ -148,18 +162,30 @@ export class SuperApp extends EventEmitter {
         this.viewport.update(ticker.deltaMS);
       });
 
-      this.addToStage(this.viewport);
-      this.viewport.label = "Viewport"; //TODO: Why "Et Viewport"?
 
       /////////////////////////////
       this.emit(SuperApp.EVENT_INITIALIZE_COMPLETE, this);
 
       this.setupResizeHandling();
       this.setupKeyboardHandling();
+
+      this._isInitialized = true;
+      this.addToStage(this.viewport);
+      this.viewport.label = "Viewport"; //TODO: Why "Et Viewport"?
+
     } catch (error) {
       console.log(`PIXI.Application.init() failed! PixiJS v${PIXI.VERSION} with ${this.GetRendererTypeAsString(this.app.renderer.type)} `);
 
       this.emit(SuperApp.EVENT_INITIALIZE_ERROR, error);
+    }
+
+
+  }
+
+  public requireIsInitialized() {
+
+    if (!this.isInitialized) {
+      throw new Error('requireIsInitialized.');
     }
   }
 
@@ -178,6 +204,8 @@ export class SuperApp extends EventEmitter {
   // Add to camera-controlled scene tree
   public addToViewport(obj: PIXI.Container | PIXI.Sprite | SuperSprite | SuperText): any {
 
+    this.requireIsInitialized();
+
     this.viewport.addChild(obj);
 
     if (obj instanceof SuperSprite || obj instanceof SuperContainer || obj instanceof SuperText) {
@@ -190,6 +218,8 @@ export class SuperApp extends EventEmitter {
   // Remove from camera-controlled scene tree
   public removeFromViewport(obj: PIXI.Container | PIXI.Sprite | SuperSprite | SuperText): any {
 
+    this.requireIsInitialized();
+
     this.viewport.removeChild(obj);
 
     if (obj instanceof SuperSprite || obj instanceof SuperContainer || obj instanceof SuperText) {
@@ -201,6 +231,8 @@ export class SuperApp extends EventEmitter {
 
   // Add to basic scene tree
   public addToStage(obj: PIXI.Container | PIXI.Sprite | SuperSprite | SuperText, parent?: PIXI.Sprite): any {
+
+    this.requireIsInitialized();
 
     if (parent == null) {
       this.app.stage.addChild(obj);
@@ -219,6 +251,8 @@ export class SuperApp extends EventEmitter {
   // Remove from basic scene tree
   public removeFromStage(obj: PIXI.Container | PIXI.Sprite | SuperSprite | SuperText, parent?: PIXI.Sprite): any {
 
+    this.requireIsInitialized();
+
     if (parent == null) {
       this.app.stage.removeChild(obj);
     }
@@ -235,6 +269,7 @@ export class SuperApp extends EventEmitter {
 
 
   public resize = () => {
+
     this.emit(SuperApp.EVENT_RESIZE, this);
   };
 

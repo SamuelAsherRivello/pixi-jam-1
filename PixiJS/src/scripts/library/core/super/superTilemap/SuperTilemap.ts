@@ -3,6 +3,8 @@ import { SuperApp } from '@src/scripts/library/core/super/SuperApp';
 import { SuperContainer } from '@src/scripts/library/core/super/SuperContainer';
 import { SuperTilemapCollisionSystem } from '@src/scripts/library/core/super/superTilemap/SuperTilemapCollisionSystem';
 import { SuperUtility } from '../SuperUtility';
+import { IInitializableAsync } from '../IInitializeAsync';
+
 
 export interface TilemapData {
   width: number;
@@ -47,41 +49,32 @@ export interface TilemapItemData {
   type: string;
 }
 
-export interface ISuperTilemapItemFactory {
-  createTilemapItem(tilemapItemData: TilemapItemData): Promise<PIXI.Sprite>;
-}
-
-export class SuperTilemapItemFactoryDefault implements ISuperTilemapItemFactory {
-  private _superApp: SuperApp;
-
-  constructor(superApp: SuperApp) {
-    this._superApp = superApp;
-  }
-
-  public async createTilemapItem(tilemapItemData: TilemapItemData): Promise<PIXI.Sprite> {
-    switch (tilemapItemData.layerType) {
-      case LayerType.TileLayer:
-      case LayerType.ObjectGroup:
-        return new PIXI.Sprite(tilemapItemData.texture);
-      default:
-        throw new Error('Invalid layer type');
-    }
-  }
-}
 
 export enum LayerType {
   TileLayer = 'tilelayer',
   ObjectGroup = 'objectgroup',
 }
 
-export class SuperTilemap extends SuperContainer {
+export interface ISuperTilemapItemFactory {
+  createTilemapItem(tilemapItemData: TilemapItemData): Promise<PIXI.Sprite>;
+}
+
+export class SuperTilemap extends SuperContainer implements IInitializableAsync {
+
+  // Properties -----------------------------------
+  get isInitialized(): boolean {
+    return this._isInitialized;
+  }
   get tilemapData(): TilemapData { return this._tilemapData; }
 
+  // Fields ---------------------------------------
   private _tilemapDataUrl: string;
   private _superTilemapItemFactory: ISuperTilemapItemFactory;
   private _superTilemapCollisionSystem: SuperTilemapCollisionSystem;
   private _tilemapData!: TilemapData;
+  private _isInitialized: boolean = false;
 
+  // Initialization -------------------------------
   constructor(superApp: SuperApp, tilemapDataUrl: string, superTilemapItemFactory: ISuperTilemapItemFactory) {
     super(superApp);
 
@@ -95,7 +88,12 @@ export class SuperTilemap extends SuperContainer {
     this.isRenderGroup = true;
   }
 
-  public async initialize() {
+  public async initializeAsync() {
+    if (this._isInitialized) {
+      return;
+    }
+    this._isInitialized = true;
+
     const response = await fetch(this._tilemapDataUrl);
     this._tilemapData = await response.json();
 
@@ -119,6 +117,11 @@ export class SuperTilemap extends SuperContainer {
     this._superTilemapCollisionSystem.initializeAsync();
   }
 
+  requireIsInitialized() {
+    throw new Error('Method not implemented.');
+  }
+
+  // Methods ------------------------------
   private async processTileLayer(layer: Layer, tilesets: any[]) {
     for (let row = 0; row < layer.height; row++) {
       for (let column = 0; column < layer.width; column++) {
@@ -172,7 +175,6 @@ export class SuperTilemap extends SuperContainer {
           frame: rectangle
         });
 
-
         let typeResult: string = ""; //ok value
         let typePrimary = object.type; //BUG: THis is never populated. Its backup. Ok for now
         let typeBackup = this.getTileType(tileset, localTileIndex)?.toString();
@@ -184,16 +186,20 @@ export class SuperTilemap extends SuperContainer {
           typeResult = typeBackup;
         }
 
+        //this means its not in a grid since objects can be anywhere
+        const unsetValue = -1;
+
         const tilemapItemData: TilemapItemData = {
           x: object.x,
           y: object.y - tileset.tileheight,
-          row: -1,
-          column: -1,
+          row: unsetValue,
+          column: unsetValue,
           texture: tileTexture,
           layerType: LayerType.ObjectGroup,
           type: typeResult
         };
-        console.log("Object type: " + tilemapItemData.type); // Log the type for debugging
+
+        //console.log("Object type: " + tilemapItemData.type); // Log the type for debugging
 
         const sprite = await this._superTilemapItemFactory.createTilemapItem(tilemapItemData);
         sprite.label = `Object (${object.id})`;
@@ -206,18 +212,13 @@ export class SuperTilemap extends SuperContainer {
     }
   }
 
-  private getTileType(tileset: Tileset, tileIndex: number): string | undefined {
-    if (!tileset.tiles) return undefined;
-    const tile = tileset.tiles.find(t => t.id === tileIndex);
-    return tile?.type;
-  }
-
+  // Event Handlers -------------------------------
   public isCollision(playerX: number, playerY: number, playerWidth: number, playerHeight: number): boolean {
     return this._superTilemapCollisionSystem.isCollision(playerX, playerY, playerWidth, playerHeight);
   }
 
   public override async onAdded() {
-    await this.initialize();
+    await this.initializeAsync();
   }
 
   private getTilesetForTile(tileIndex: number, tilesets: any[]): any {
@@ -244,5 +245,11 @@ export class SuperTilemap extends SuperContainer {
 
   public override onTick(ticker: PIXI.Ticker): void {
     // Handle tick updates
+  }
+
+  private getTileType(tileset: Tileset, tileIndex: number): string | undefined {
+    if (!tileset.tiles) return undefined;
+    const tile = tileset.tiles.find(t => t.id === tileIndex);
+    return tile?.type;
   }
 }

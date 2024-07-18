@@ -5,15 +5,16 @@ import { Actions, Interpolations } from 'pixi-actions';
 
 //CORE
 import { SuperApp, SuperAppConfiguration } from '@src/scripts/library/core/super/SuperApp';
-import { ISuperTilemapItemFactory, LayerType, SuperTilemap, SuperTilemapItemFactoryDefault, TilemapItemData } from '@src/scripts/library/core/super/superTilemap/SuperTilemap';
+import { ISuperTilemapItemFactory, LayerType, SuperTilemap, TilemapItemData } from '@src/scripts/library/core/super/superTilemap/SuperTilemap';
 
 //TREASURE HUNTER GAME
-import { InstructionsSuperText } from '@src/scripts/library/treasureHunter2D/InstructionsSuperText';
-import { ScoreSuperText } from '@src/scripts/library/treasureHunter2D/ScoreSuperText';
+import { InstructionsSuperText } from '@src/scripts/library/treasureHunter2D/ui/InstructionsSuperText';
+import { ScoreSuperText } from '@src/scripts/library/treasureHunter2D/ui/ScoreSuperText';
 import { Player } from '@src/scripts/library/treasureHunter2D/Player';
-import { Coin } from './library/treasureHunter2D/Coin';
-import { ChestSuperTilemapObject } from './library/treasureHunter2D/ChestSuperTilemapObject';
-import { MultiAnimatedSprite } from './library/core/super/MultiAnimatedSprite';
+import { Coin } from './library/treasureHunter2D/objects/Coin';
+import { ChestSuperTilemapObject } from './library/treasureHunter2D/objects/ChestSuperTilemapObject';
+import { CustomSuperTilemapItemFactory } from './library/treasureHunter2D/CustomSuperTilemapItemFactory';
+
 
 
 /////////////////////////////
@@ -40,7 +41,6 @@ const superAppData: any = {
 let player: Player;
 let coin: Coin;
 let tempWorldOrigin: PIXI.Graphics;
-let tempAnimatedCoin: PIXI.AnimatedSprite;
 
 
 /////////////////////////////
@@ -51,6 +51,7 @@ const superAppConfiguration: SuperAppConfiguration = {
   //Show all values here, for readability
   widthInitial: 1920,
   heightInitial: 1080,
+  backgroundColor: 0x87867a,
   data: superAppData
 }
 const superAppConst = new SuperApp('pixi-application-canvas', superAppConfiguration);
@@ -78,38 +79,6 @@ document.body.appendChild(stats.dom);
 async function onInitializeCompleted(superApp: SuperApp) {
 
 
-  class SuperTilemapItemFactoryCustom implements ISuperTilemapItemFactory {
-
-    // Fields ---------------------------------------
-    private _superApp: SuperApp;
-
-    // Initialization -------------------------------
-    constructor(superApp: SuperApp) {
-      this._superApp = superApp;
-    }
-
-    // Methods --------------------------------------
-    public async createTilemapItem(tilemapItemData: TilemapItemData): Promise<PIXI.Sprite> {
-
-      switch (tilemapItemData.layerType) {
-
-        case LayerType.TileLayer:
-          return new PIXI.Sprite(tilemapItemData.texture);
-
-        case LayerType.ObjectGroup:
-
-          console.log(`createTilemapItem: (${tilemapItemData.row},${tilemapItemData.column}) ` + tilemapItemData.type);
-          if (tilemapItemData.type == (ChestSuperTilemapObject).name) {
-
-            return new ChestSuperTilemapObject(superApp, { texture: tilemapItemData.texture });
-          }
-          return new PIXI.Sprite(tilemapItemData.texture);
-
-        default:
-          throw new Error('Invalid layer type');
-      }
-    }
-  }
 
   /////////////////////////////
   // Create Tilemap
@@ -117,11 +86,11 @@ async function onInitializeCompleted(superApp: SuperApp) {
   const superTilemap = new SuperTilemap(
     superApp,
     superAppData.TilemapDataUrl,
-    new SuperTilemapItemFactoryCustom(superApp)
+    new CustomSuperTilemapItemFactory(superApp)
   );
 
   //Initialize first, so width and height are available
-  await superTilemap.initialize();
+  await superTilemap.initializeAsync();
   superApp.addToViewport(superTilemap);
   superTilemap.x = superApp.getScreenCenterpoint().x - superTilemap.width / 2;
   superTilemap.y = superApp.getScreenCenterpoint().y - superTilemap.height / 2;
@@ -153,13 +122,8 @@ async function onInitializeCompleted(superApp: SuperApp) {
 
   }
 
-  // const animatedTextureURL = 'assets/images/AnimatedCoin/animated_coin.png';
-  // const animatedTextureJSONURL = 'assets/images/AnimatedCoin/animated_coin.json';
-  // let mas: MultiAnimatedSprite = new MultiAnimatedSprite(animatedTextureURL, animatedTextureJSONURL);
-  // await mas.initializeAndAddToViewport(superApp);
-  // mas.play('Gold', 0.5);
 
-  /////////////////////////////sa
+  /////////////////////////////
   // Create Player
   /////////////////////////////
   player = new Player(superApp, superTilemap, { textureUrl: superAppData.PlayerTextureUrl as string });
@@ -174,8 +138,8 @@ async function onInitializeCompleted(superApp: SuperApp) {
   /////////////////////////////
   superApp.viewport.follow(player, {
     speed: 1,
-    acceleration: 1,
-    radius: 100
+    acceleration: .01,
+    radius: 20
   });
 
   // Optional: Input for camera
@@ -235,5 +199,5 @@ superAppConst.addListener(SuperApp.EVENT_INITIALIZE_ERROR, onInitializeError);
 
 
 (async () => {
-  await superAppConst.init();
+  await superAppConst.initializeAsync();
 })();

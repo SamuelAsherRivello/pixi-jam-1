@@ -1,6 +1,6 @@
 import { SuperApp } from '@src/scripts/library/core/super/SuperApp';
 import { SuperSprite, SuperSpriteConfiguration } from '@src/scripts/library/core/super/SuperSprite';
-import { Player } from './Player';
+import { Player } from '../Player';
 import { Actions, Interpolations } from 'pixi-actions';
 import { MultiAnimatedSprite } from '@src/scripts/library/core/super/MultiAnimatedSprite';
 

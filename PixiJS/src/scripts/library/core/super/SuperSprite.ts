@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { SuperApp } from './SuperApp';
 import { SuperUtility } from './SuperUtility';
+import { IInitializableAsync } from './IInitializeAsync';
 
 /**
  * Configuration
@@ -26,19 +27,19 @@ const SuperSpriteConfigurationDefault: SuperSpriteConfiguration = {
  * 
  * Subclass SuperSprite if you ALSO want onResize and onTick events
  */
-export class SuperSprite extends PIXI.Sprite {
+export class SuperSprite extends PIXI.Sprite implements IInitializableAsync {
 
   // Properties -----------------------------------
+  public get isInitialized(): boolean {
+    return this._isInitialized;
+  }
+
   public get configuration(): SuperSpriteConfiguration {
     return this._configuration;
   }
 
   public get isCollidable(): boolean {
     return this._isCollidable;
-  }
-
-  public get isInitialized(): boolean {
-    return this._isInitialized;
   }
 
   public isAddedToStage(): boolean {
@@ -87,8 +88,15 @@ export class SuperSprite extends PIXI.Sprite {
     this.initializeAsync();
   }
 
+  public requireIsInitialized() {
+
+    if (!this.isInitialized) {
+      throw new Error('requireIsInitialized.');
+    }
+  }
+
   // Initialization -------------------------------
-  public async initializeAsync() {
+  public async initializeAsync(): Promise<any> {
 
     if (this._isInitialized) {
       return;
@@ -106,6 +114,8 @@ export class SuperSprite extends PIXI.Sprite {
 
   // Override PIXI.Sprite's destroy method
   public override destroy(options?: PIXI.DestroyOptions | boolean): void {
+
+    this.requireIsInitialized();
 
     if (this._isDestroyed) return;
 
@@ -134,6 +144,7 @@ export class SuperSprite extends PIXI.Sprite {
   }
 
   public onTick(ticker: PIXI.Ticker): void {
+
     // Empty implementation to be overridden
 
     // Calculate any collisions. Call onCollisionEnter() if 1 or
