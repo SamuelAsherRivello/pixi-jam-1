@@ -35,11 +35,12 @@ export class Coin extends SuperSprite {
 
         // Local
         //Do any additional initialization here
-        const animatedTextureURL = 'assets/images/AnimatedCoin/animated_coin.png';
-        const animatedTextureJSONURL = 'assets/images/AnimatedCoin/animated_coin.json';        
-        this._multiAnimatedSprite = new MultiAnimatedSprite(animatedTextureURL, animatedTextureJSONURL);
-        await this._multiAnimatedSprite.initializeAndAddToViewport(this._superApp, this);
-        this._multiAnimatedSprite.play('Gold', 0.5);
+
+        // const animatedTextureURL = 'assets/images/AnimatedCoin/animated_coin.png';
+        // const animatedTextureJSONURL = 'assets/images/AnimatedCoin/animated_coin.json';        
+        // this._multiAnimatedSprite = new MultiAnimatedSprite(animatedTextureURL, animatedTextureJSONURL);
+        // await this._multiAnimatedSprite.initializeAndAddToViewport(this._superApp, this);
+        // this._multiAnimatedSprite.play('Gold', 0.5);
     }
 
     // Methods --------------------------------------
