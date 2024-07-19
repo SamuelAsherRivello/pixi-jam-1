@@ -3,6 +3,7 @@ import { ChestTilemapObject } from "./tileMapObjects/ChestTilemapObject";
 import { GixiApplication } from "../../gixi/GixiApplication";
 import { ITilemapItemFactory, TilemapItemData } from '../../gixi';
 import { LayerType } from '../../gixi/tilemap/Tilemap';
+import { CoinTilemapObject } from './tileMapObjects/CoinTilemapObject';
 
 export class TilemapItemFactoryCustom implements ITilemapItemFactory {
 
@@ -29,6 +30,13 @@ export class TilemapItemFactoryCustom implements ITilemapItemFactory {
 
           return new ChestTilemapObject(this._app, { texture: tilemapItemData.texture });
         }
+        else if (tilemapItemData.type == (CoinTilemapObject).name) {
+          return new CoinTilemapObject(this._app);
+
+        }
+
+
+        CoinTilemapObject
         return new PIXI.Sprite(tilemapItemData.texture);
 
       default:

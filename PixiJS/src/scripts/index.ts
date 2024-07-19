@@ -11,7 +11,7 @@ import { ScoreSuperText } from '@src/scripts/library/treasureHunter2D/ui/ScoreSu
 import { Player } from '@src/scripts/library/treasureHunter2D/Player';
 import { GIXI } from './library/gixi';
 import { GixiApplication, GixiApplicationConfiguration } from './library/gixi/GixiApplication';
-import { Coin } from './library/treasureHunter2D/tileMap/tileMapObjects/Coin';
+import { CoinTilemapObject } from './library/treasureHunter2D/tileMap/tileMapObjects/CoinTilemapObject';
 import { TilemapItemFactoryCustom } from './library/treasureHunter2D/tileMap/TilemapItemFactoryCustom';
 
 
@@ -30,7 +30,6 @@ const gixiAppData: any = {
   LogoImageUrl: 'assets/images/pixijs-logo-32x32.png',
   TilemapDataUrl: 'assets/tilemaps/TreasureHunter2D.tmj',
   PlayerTextureUrl: 'assets/images/player-default-sprite.png',
-  CoinTextureUrl: 'assets/images/OpenGameArt/Coin.png',
   CoinsCollected: 0,
   CoinsMax: 5,
   ScreenUIMarginX: 10,
@@ -38,7 +37,7 @@ const gixiAppData: any = {
 };
 
 let player: Player;
-let coin: Coin;
+let coin: CoinTilemapObject;
 let tempWorldOrigin: PIXI.Graphics;
 
 
@@ -82,8 +81,6 @@ document.body.appendChild(stats.dom);
 /////////////////////////////
 async function onInitializeCompleted(gixiApp: GixiApplication) {
 
-
-
   /////////////////////////////
   // Create Tilemap
   /////////////////////////////
@@ -112,19 +109,6 @@ async function onInitializeCompleted(gixiApp: GixiApplication) {
   gixiApp.addToViewport(tempWorldOrigin);
   tempWorldOrigin.x = gixiApp.getScreenCenterpoint().x;
   tempWorldOrigin.y = gixiApp.getScreenCenterpoint().y;
-
-
-
-  /////////////////////////////
-  // Create Coin
-  /////////////////////////////
-  for (let i = 0; i < gixiAppData.CoinsMax; i++) {
-    coin = new Coin(gixiApp);
-    gixiApp.addToViewport(coin);
-    coin.x = gixiApp.getScreenCenterpoint().x - 132 + 32 * i * 2;
-    coin.y = gixiApp.getScreenCenterpoint().y - 100;
-
-  }
 
 
   /////////////////////////////
@@ -160,7 +144,7 @@ async function onInitializeCompleted(gixiApp: GixiApplication) {
   const instructionsText: InstructionsSuperText =
     new InstructionsSuperText(
       gixiApp,
-      'Arrows/WASD To Move' + gixiApp.app.renderer.resolution,
+      'SEE INSIDE CLASS',
       30,
       "left");
   gixiApp.addToStage(instructionsText);

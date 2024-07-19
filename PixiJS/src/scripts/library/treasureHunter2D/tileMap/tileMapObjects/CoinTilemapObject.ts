@@ -9,7 +9,7 @@ import { Player } from '../../Player';
  * Represents a coin in the game.
  * 
  */
-export class Coin extends ActorAnimated {
+export class CoinTilemapObject extends ActorAnimated {
 
 
     // Properties -----------------------------------
@@ -25,7 +25,7 @@ export class Coin extends ActorAnimated {
 
         // Redeclare anything from super 
         // that you want differently here
-        this.label = (Coin).name;
+        this.label = (CoinTilemapObject).name;
 
     }
 

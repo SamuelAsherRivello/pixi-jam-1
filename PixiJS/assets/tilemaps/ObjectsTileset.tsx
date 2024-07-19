@@ -3,4 +3,5 @@
  <image source="../images/Cainos/Pixel Art Top Down - Basic/Texture/TX Props.png" width="512" height="512"/>
  <tile id="3" type="ChestTilemapObject"/>
  <tile id="19" type="ChestTilemapObject"/>
+ <tile id="255" type="CoinTilemapObject"/>
 </tileset>

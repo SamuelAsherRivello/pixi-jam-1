@@ -111,7 +111,7 @@ export class Player extends ActorStatic {
         }
 
         if (this._app.systems.inputSystem.isKeyDownThisFrame('Enter') ||         //works
-            this._app.systems.inputSystem.isKeyDownThisFrame('SpaceBar')) {      //does work. TODO: WHy?
+            this._app.systems.inputSystem.isKeyDownThisFrame('Spacebar')) {      //does work. TODO: WHy?
 
             //ACTION!
             this._app.systems.audioSystem.PlayAsync("./assets/audio/Click01.wav");
