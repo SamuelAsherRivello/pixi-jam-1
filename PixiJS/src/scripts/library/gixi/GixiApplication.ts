@@ -133,7 +133,7 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
     if (this._isInitialized) {
       return;
     }
-
+    this._isInitialized = true;
 
     try {
       await this.app.init({
@@ -172,11 +172,7 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
 
       /////////////////////////////
       this.emit(GixiApplication.EVENT_INITIALIZE_COMPLETE, this);
-
       this.setupResizeHandling();
-
-
-      this._isInitialized = true;
       this.addToStage(this.viewport);
       this.viewport.label = "Viewport"; //TODO: Why "Et Viewport"?
 
