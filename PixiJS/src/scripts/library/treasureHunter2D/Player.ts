@@ -2,7 +2,6 @@ import * as PIXI from 'pixi.js';
 import { SuperApp } from '@src/scripts/library/core/super/SuperApp';
 import { Tilemap } from '../core/gixi/tilemap/Tilemap';
 import { ActorStatic, ActorStaticConfiguration } from '../core/gixi/ActorStatic';
-import { Ticker } from '../core/gixi/Ticker';
 
 /**
  * Configuration
@@ -87,7 +86,7 @@ export class Player extends ActorStatic {
 
     // Event Handlers -------------------------------
 
-    public override onTick(ticker: Ticker): void {
+    public override onTick(ticker: PIXI.Ticker): void {
 
         super.onTick(ticker);
 

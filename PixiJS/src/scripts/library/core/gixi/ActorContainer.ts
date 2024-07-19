@@ -1,10 +1,8 @@
 import * as PIXI from 'pixi.js';
 import { IInitializableAsync } from '../super/IInitializeAsync';
 import { SuperApp } from '../super/SuperApp';
-import { SuperSprite } from '../super/SuperSprite';
 import { IActor } from './IActor';
 import { ActorConfiguration } from './ActorConfiguration';
-import { Ticker } from './Ticker';
 
 
 /**
@@ -118,7 +116,7 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
     // Empty implementation to be overridden
   }
 
-  public onTick(ticker: Ticker): void {
+  public onTick(ticker: PIXI.Ticker): void {
 
     // Empty implementation to be overridden
 
@@ -130,12 +128,12 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
 
   }
 
-  protected onCollision(superSprites: SuperSprite[]): void {
+  protected onCollision(superSprites: PIXI.Container[]): void {
     // Empty implementation to be overridden
   }
 
   //TODO: remove these internals???
-  private onTickInternal(ticker: Ticker): void {
+  private onTickInternal(ticker: PIXI.Ticker): void {
     if (this._isDestroyed) return;
     this.onTick(ticker);
   }

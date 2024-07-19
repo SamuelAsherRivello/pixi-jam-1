@@ -1,31 +1,31 @@
 import { SuperApp } from '@src/scripts/library/core/super/SuperApp';
-import { SuperSprite, SuperSpriteConfiguration } from '@src/scripts/library/core/super/SuperSprite';
 import { Player } from '../Player';
 import { Actions, Interpolations } from 'pixi-actions';
-import { MultiAnimatedSprite } from '@src/scripts/library/core/super/MultiAnimatedSprite';
 import { Container } from 'pixi.js';
+import { ActorAnimated, ActorAnimatedConfiguration } from '../../core/gixi/ActorAnimated';
 
 /**
  * Represents a coin in the game.
  * 
  */
-export class Coin extends SuperSprite {
+export class Coin extends ActorAnimated {
 
 
     // Properties -----------------------------------
 
 
     // Fields ---------------------------------------
-    private _multiAnimatedSprite!: MultiAnimatedSprite;
+
 
     // Initialization -------------------------------
-    constructor(superApp: SuperApp, superSpriteConfiguration?: Partial<SuperSpriteConfiguration>) {
+    constructor(superApp: SuperApp, configuration?: Partial<ActorAnimatedConfiguration>) {
 
-        super(superApp, superSpriteConfiguration);
+        super(superApp, configuration);
 
         // Redeclare anything from super 
         // that you want differently here
         this.label = (Coin).name;
+
     }
 
 
@@ -38,12 +38,8 @@ export class Coin extends SuperSprite {
         // Local
         //Do any additional initialization here
 
-        // const animatedTextureURL = 'assets/images/AnimatedCoin/animated_coin.png';
-        // const animatedTextureJSONURL = 'assets/images/AnimatedCoin/animated_coin.json';        
-        // this._multiAnimatedSprite = new MultiAnimatedSprite(animatedTextureURL, animatedTextureJSONURL);
-        // await this._multiAnimatedSprite.initializeAndAddToViewport(this._superApp, this);
-        // this._multiAnimatedSprite.play('Gold', 0.5);
     }
+
 
     // Methods --------------------------------------
     private FloatUp() {

@@ -1,13 +1,10 @@
-import * as PIXI from 'pixi.js';
 import { ActorContainer } from './ActorContainer';
 import { SuperApp } from '../super/SuperApp';
 import { IActor } from './IActor';
 import { IInitializableAsync } from '../super/IInitializeAsync';
 import { ActorConfiguration } from './ActorConfiguration';
 import { SuperUtility } from '../super/SuperUtility';
-import { Sprite } from './Sprite';
-import { Ticker } from './Ticker';
-
+import * as PIXI from 'pixi.js';
 
 /**
  * Configuration
@@ -39,7 +36,7 @@ export class ActorStatic extends ActorContainer implements IInitializableAsync, 
     }
 
     // Fields ---------------------------------------
-    protected _sprite!: Sprite;
+    protected _sprite!: PIXI.Sprite;
 
     // Initialization -------------------------------
     constructor(superApp: SuperApp, configuration?: Partial<ActorStaticConfiguration>) {
@@ -65,12 +62,12 @@ export class ActorStatic extends ActorContainer implements IInitializableAsync, 
         await super.initializeAsync();
 
         if (!SuperUtility.textureIsNullOrEmpty(this.configuration?.texture)) {
-            this._sprite = new Sprite(this.configuration?.texture);
+            this._sprite = new PIXI.Sprite(this.configuration?.texture);
         }
         else if (!SuperUtility.stringIsNullOrEmpty(this.configuration?.textureUrl)) {
             await PIXI.Assets.load([this.configuration.textureUrl]);
             const texture: PIXI.Texture = PIXI.Texture.from(this.configuration.textureUrl);
-            this._sprite = new Sprite(texture);
+            this._sprite = new PIXI.Sprite(texture);
         }
 
         this.addChild(this._sprite);
@@ -85,7 +82,7 @@ export class ActorStatic extends ActorContainer implements IInitializableAsync, 
 
     // Event Handlers -------------------------------
 
-    public override onTick(ticker: Ticker): void {
+    public override onTick(ticker: PIXI.Ticker): void {
 
         // Super
         super.onTick(ticker);

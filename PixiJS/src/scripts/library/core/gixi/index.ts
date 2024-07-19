@@ -10,13 +10,13 @@ import {
     LayerType,
     ITilemapItemFactory,
 } from './tilemap/Tilemap';
-import { ActorContainer } from './ActorContainer';
+import { ActorContainer, ActorContainerConfiguration } from './ActorContainer';
 import { TilemapCollisionSystem } from './tilemap/TilemapCollisionSystem';
 import { TilemapItemFactoryDefault } from './tilemap/TilemapItemFactoryDefault';
 import { TilemapObject } from './tilemap/TilemapObject';
-import { ActorStatic } from './ActorStatic';
-import { Ticker } from './Ticker';
-import { Sprite } from './Sprite';
+import { ActorStatic, ActorStaticConfiguration } from './ActorStatic';
+import { ActorAnimated, ActorAnimatedConfiguration } from './ActorAnimated';
+import { ActorConfiguration } from './ActorConfiguration';
 
 // Classes - GIXI
 export const GIXI = {
@@ -26,11 +26,21 @@ export const GIXI = {
     TilemapItemFactoryDefault,
     TilemapObject,
     ActorStatic,
-    Ticker,
-    Sprite
-
+    ActorAnimated
 };
 
 // Non-Classes - Not Yet GIXI - TODO: Add to GIXI somehow. Not sure
-export type { TilemapData, Layer, Tileset, Tile, Property, TilemapItemData, LayerType, ITilemapItemFactory };
+export type {
+    TilemapData,
+    Layer,
+    Tileset,
+    Tile, Property,
+    TilemapItemData,
+    LayerType,
+    ITilemapItemFactory,
+    ActorConfiguration,
+    ActorContainerConfiguration,
+    ActorAnimatedConfiguration,
+    ActorStaticConfiguration
+};
 

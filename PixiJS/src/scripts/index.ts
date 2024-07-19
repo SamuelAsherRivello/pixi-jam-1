@@ -114,7 +114,7 @@ async function onInitializeCompleted(superApp: SuperApp) {
   // Create Coin
   /////////////////////////////
   for (let i = 0; i < superAppData.CoinsMax; i++) {
-    coin = new Coin(superApp, { textureUrl: superAppData.CoinTextureUrl as string });
+    coin = new Coin(superApp);
     superApp.addToViewport(coin);
     coin.x = superApp.getScreenCenterpoint().x - 132 + 32 * i * 2;
     coin.y = superApp.getScreenCenterpoint().y - 100;

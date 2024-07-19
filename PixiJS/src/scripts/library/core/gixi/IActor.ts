@@ -1,7 +1,6 @@
-
+import * as PIXI from 'pixi.js';
 import { SuperApp } from '../super/SuperApp';
 import { ActorConfiguration } from './ActorConfiguration';
-import { Ticker } from './Ticker';
 
 /**
  * IActor Interface
@@ -17,5 +16,5 @@ export interface IActor {
     onAdded(): void;
     onRemoved(): void;
     onResize(superApp: SuperApp): void;
-    onTick(ticker: Ticker): void;
+    onTick(ticker: PIXI.Ticker): void;
 }
