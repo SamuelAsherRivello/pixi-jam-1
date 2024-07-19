@@ -134,6 +134,7 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
       return;
     }
     this._isInitialized = true;
+    console.log("initializeAsync()" + this._isInitialized);
 
     try {
       await this.app.init({
@@ -207,6 +208,8 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
   // Add to camera-controlled scene tree
   public addToViewport(obj: PIXI.Container | PIXI.Sprite | SuperText): any {
 
+
+    console.log("addToViewport()" + this._isInitialized);
     this.requireIsInitialized();
 
     this.viewport.addChild(obj);
