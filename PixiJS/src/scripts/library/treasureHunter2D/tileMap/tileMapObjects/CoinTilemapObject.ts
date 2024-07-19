@@ -50,12 +50,13 @@ export class CoinTilemapObject extends ActorAnimated {
 
 
     // Methods --------------------------------------
-    private FloatUp() {
+    private destroyAfterAnimation() {
         let action = Actions.sequence(
 
             Actions.delay(0),
             Actions.runFunc(() => {
-                // Call something?
+                // BEFORE Animation: Call something?
+                this._app.systems.audioSystem.Play("./assets/audio/Chime01.mp3");
             }),
             Actions.parallel(
 
@@ -73,7 +74,7 @@ export class CoinTilemapObject extends ActorAnimated {
 
             ),
             Actions.runFunc(() => {
-                // Call something?
+                // AFTER Animation: Call something?
                 this.destroy();
             }),
         );
@@ -84,19 +85,16 @@ export class CoinTilemapObject extends ActorAnimated {
 
     // Event Handlers -------------------------------
 
-    public override onCollision(superSprites: Container[]): void {
+    public override onCollision(collisions: Container[]): void {
 
         if (!this._isCollidable) {
             return;
         }
 
-        superSprites.forEach((superSprite) => {
+        collisions.forEach((superSprite) => {
             if (superSprite instanceof Player) {
-                console.log(`${this.label} is colliding with ${superSprite.label}`);
-
                 this._isCollidable = false;
-                this.FloatUp();
-
+                this.destroyAfterAnimation();
             }
         });
     }

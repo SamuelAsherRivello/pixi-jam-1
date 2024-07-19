@@ -121,15 +121,14 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
 
     // Empty implementation to be overridden
 
-    //TODO: This is EXPENSIVE. Call it less
-    //const collisions = this._app.systems.collisionSystem.getCollisions(this);
-    // if (collisions.length) {
-    //   this.onCollision(collisions);
-    // };
+    const collisions = this._app.systems.collisionSystem.getCollisions(this);
+    if (collisions.length) {
+      this.onCollision(collisions);
+    };
 
   }
 
-  protected onCollision(superSprites: PIXI.Container[]): void {
+  protected onCollision(collisions: PIXI.Container[]): void {
     // Empty implementation to be overridden
   }
 
