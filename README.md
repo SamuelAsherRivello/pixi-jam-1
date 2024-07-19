@@ -2,6 +2,14 @@
 
 This repo includes Html5 examples using [PixiJS](https://pixijs.com/) and [TypeScript](https://www.typescriptlang.org/).
 
+
+### Play
+
+* https://samuelasherrivello.github.io/pixi-jam-1/PixiJS/dist/index.html
+
+
+### More
+
 It is based on Samuel Asher Rivello's [pixi-project-template](https://github.com/SamuelAsherRivello/pixi-project-template) which is a recommended starting point for new projects.
 <figure>
     <img alt="screenshot"
