@@ -72,6 +72,7 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
     this._isFullscreen = value;
 
     var elem = document.getElementById(this.app.canvas.id);
+    console.log(this.app.canvas.id)
 
     if (this._isFullscreen) {
 
@@ -173,6 +174,7 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
       this.emit(GixiApplication.EVENT_INITIALIZE_COMPLETE, this);
 
       this.setupResizeHandling();
+
 
       this._isInitialized = true;
       this.addToStage(this.viewport);
@@ -287,8 +289,8 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
     /////////////////////////////
     // Observe window resize
     /////////////////////////////
-    window.addEventListener('resize', this.resize);
-    window.addEventListener('resize', resizeAfterDelay);
+    window.addEventListener('resize', this.resize);               //now
+    window.addEventListener('resize', resizeAfterDelay);          //and after delay. Robust.
     window.addEventListener('orientationchange', this.resize);
     window.addEventListener('orientationchange', resizeAfterDelay);
     this.resize(); // Initial resize
