@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { GixiApplication } from '../gixi/GixiApplication';
+import { GixiApplication } from '../../gixi/GixiApplication';
 
 /**
  * Subclass PIXI.Text if you want basic text functionality.

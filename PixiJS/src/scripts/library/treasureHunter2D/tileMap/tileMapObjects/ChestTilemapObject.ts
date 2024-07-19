@@ -1,7 +1,7 @@
+import { GixiApplication } from '@src/scripts/library/gixi/GixiApplication';
+import { TilemapObject, TilemapObjectConfiguration } from '@src/scripts/library/gixi/tilemap/TilemapObject';
 import { Player } from '@src/scripts/library/treasureHunter2D/Player';
 import { Container, Ticker } from 'pixi.js';
-import { TilemapObject, TilemapObjectConfiguration } from '../../core/gixi/tilemap/TilemapObject';
-import { GixiApplication } from '../../core/gixi/GixiApplication';
 
 /**
  * Represents a coin in the game.

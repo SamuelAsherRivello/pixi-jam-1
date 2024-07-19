@@ -1,4 +1,4 @@
-import { GixiApplication } from "../../gixi/GixiApplication";
+import { GixiApplication } from "../GixiApplication";
 
 /**
  * Handles keyboard input and maintains the state of keys.

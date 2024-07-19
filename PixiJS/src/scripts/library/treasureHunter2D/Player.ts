@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
-import { GixiApplication } from '@src/scripts/library/core/gixi/GixiApplication';
-import { Tilemap } from '../core/gixi/tilemap/Tilemap';
-import { ActorStatic, ActorStaticConfiguration } from '../core/gixi/ActorStatic';
+import { GixiApplication } from '@src/scripts/library/gixi/GixiApplication';
+import { Tilemap } from '../gixi/tilemap/Tilemap';
+import { ActorStatic, ActorStaticConfiguration } from '../gixi/ActorStatic';
 
 /**
  * Configuration

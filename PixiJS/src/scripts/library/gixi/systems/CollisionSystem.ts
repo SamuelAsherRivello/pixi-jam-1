@@ -1,4 +1,4 @@
-import { GixiApplication } from "../../gixi/GixiApplication";
+import { GixiApplication } from "../GixiApplication";
 import * as PIXI from 'pixi.js';
 
 export class CollisionSystem {

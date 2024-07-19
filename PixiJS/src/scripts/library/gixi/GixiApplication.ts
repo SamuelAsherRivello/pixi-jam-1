@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { Viewport } from 'pixi-viewport';
 import { EventEmitter } from 'events';
-import { SuperText } from '../super/SuperText';
+import { SuperText } from '../core/super/SuperText';
 import { IInitializableAsync } from './interfaces/IInitializeAsync';
 import { CollisionSystem } from './systems/CollisionSystem';
 import { InputSystem } from './systems/InputSystem';

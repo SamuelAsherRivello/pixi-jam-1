@@ -1,5 +1,5 @@
 import { SuperText } from '../../core/super/SuperText';
-import { GixiApplication } from '../../core/gixi/GixiApplication';
+import { GixiApplication } from '../../gixi/GixiApplication';
 
 export class InstructionsSuperText extends SuperText {
 

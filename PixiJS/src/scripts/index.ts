@@ -9,10 +9,10 @@ import { Actions, Interpolations } from 'pixi-actions';
 import { InstructionsSuperText } from '@src/scripts/library/treasureHunter2D/ui/InstructionsSuperText';
 import { ScoreSuperText } from '@src/scripts/library/treasureHunter2D/ui/ScoreSuperText';
 import { Player } from '@src/scripts/library/treasureHunter2D/Player';
-import { Coin } from './library/treasureHunter2D/objects/Coin';
-import { GIXI } from './library/core/gixi';
-import { TilemapItemFactoryCustom } from './library/treasureHunter2D/TilemapItemFactoryCustom';
-import { GixiApplication, GixiApplicationConfiguration } from './library/core/gixi/GixiApplication';
+import { GIXI } from './library/gixi';
+import { GixiApplication, GixiApplicationConfiguration } from './library/gixi/GixiApplication';
+import { Coin } from './library/treasureHunter2D/tileMap/tileMapObjects/Coin';
+import { TilemapItemFactoryCustom } from './library/treasureHunter2D/tileMap/TilemapItemFactoryCustom';
 
 
 

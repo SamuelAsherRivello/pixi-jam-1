@@ -1,7 +1,8 @@
-import { GixiApplication } from "../core/gixi/GixiApplication";
-import { ITilemapItemFactory, LayerType, TilemapItemData } from "../core/gixi/tilemap/Tilemap";
 import * as PIXI from 'pixi.js';
-import { ChestTilemapObject } from "./objects/ChestTilemapObject";
+import { ChestTilemapObject } from "./tileMapObjects/ChestTilemapObject";
+import { GixiApplication } from "../../gixi/GixiApplication";
+import { ITilemapItemFactory, TilemapItemData } from '../../gixi';
+import { LayerType } from '../../gixi/tilemap/Tilemap';
 
 export class TilemapItemFactoryCustom implements ITilemapItemFactory {
 

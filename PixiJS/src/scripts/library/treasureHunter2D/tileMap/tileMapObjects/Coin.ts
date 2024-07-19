@@ -1,8 +1,9 @@
-import { GixiApplication } from '@src/scripts/library/core/gixi/GixiApplication';
-import { Player } from '../Player';
+import { ActorAnimatedConfiguration } from '@src/scripts/library/gixi';
+import { ActorAnimated } from '@src/scripts/library/gixi/ActorAnimated';
+import { GixiApplication } from '@src/scripts/library/gixi/GixiApplication';
 import { Actions, Interpolations } from 'pixi-actions';
 import { Container } from 'pixi.js';
-import { ActorAnimated, ActorAnimatedConfiguration } from '../../core/gixi/ActorAnimated';
+import { Player } from '../../Player';
 
 /**
  * Represents a coin in the game.
