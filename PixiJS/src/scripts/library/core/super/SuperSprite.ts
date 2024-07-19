@@ -159,7 +159,7 @@ export class SuperSprite extends PIXI.Sprite implements IInitializableAsync {
 
   }
 
-  protected onCollision(superSprites: SuperSprite[]): void {
+  protected onCollision(superSprites: PIXI.Container[]): void {
     // Empty implementation to be overridden
   }
 

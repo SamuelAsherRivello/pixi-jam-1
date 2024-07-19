@@ -3,6 +3,7 @@ import { SuperSprite, SuperSpriteConfiguration } from '@src/scripts/library/core
 import { Player } from '../Player';
 import { Actions, Interpolations } from 'pixi-actions';
 import { MultiAnimatedSprite } from '@src/scripts/library/core/super/MultiAnimatedSprite';
+import { Container } from 'pixi.js';
 
 /**
  * Represents a coin in the game.
@@ -78,7 +79,7 @@ export class Coin extends SuperSprite {
 
     // Event Handlers -------------------------------
 
-    public override onCollision(superSprites: SuperSprite[]): void {
+    public override onCollision(superSprites: Container[]): void {
 
         if (!this._isCollidable) {
             return;

@@ -1,5 +1,4 @@
 import { SuperApp } from "../SuperApp";
-import { SuperSprite } from "../SuperSprite";
 import * as PIXI from 'pixi.js';
 
 export class CollisionSystem {
@@ -9,8 +8,8 @@ export class CollisionSystem {
         this._superApp = superApp;
     }
 
-    public getCollisions(me: SuperSprite): SuperSprite[] {
-        const collidingSprites: SuperSprite[] = [
+    public getCollisions(me: PIXI.Container): PIXI.Container[] {
+        const collidingSprites: PIXI.Container[] = [
             ...this.getCollidingSpritesFromChildren(me, this._superApp.app.stage.children),
             ...this.getCollidingSpritesFromChildren(me, this._superApp.viewport.children),
         ];
@@ -19,7 +18,7 @@ export class CollisionSystem {
     }
 
     // Collision Detection
-    private isCollidingWith(me: SuperSprite, other: SuperSprite): boolean {
+    private isCollidingWith(me: PIXI.Container, other: PIXI.Container): boolean {
         const bounds1 = me.getBounds();
         const bounds2 = other.getBounds();
 
@@ -31,13 +30,13 @@ export class CollisionSystem {
         );
     }
 
-    private getCollidingSpritesFromChildren(me: SuperSprite, children: PIXI.Container[]): SuperSprite[] {
+    private getCollidingSpritesFromChildren(me: PIXI.Container, children: PIXI.Container[]): PIXI.Container[] {
         return children.filter((child) => {
             return (
-                child instanceof SuperSprite &&
+                child instanceof PIXI.Container &&
                 child !== me &&
-                this.isCollidingWith(me, child as SuperSprite)
+                this.isCollidingWith(me, child as PIXI.Container)
             );
-        }) as SuperSprite[];
+        }) as PIXI.Container[];
     }
 }

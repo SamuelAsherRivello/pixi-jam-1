@@ -1,9 +1,9 @@
 import * as PIXI from 'pixi.js';
 import { SuperApp } from '@src/scripts/library/core/super/SuperApp';
-import { SuperContainer } from '@src/scripts/library/core/super/SuperContainer';
 import { SuperTilemapCollisionSystem } from '@src/scripts/library/core/super/superTilemap/SuperTilemapCollisionSystem';
 import { SuperUtility } from '../SuperUtility';
 import { IInitializableAsync } from '../IInitializeAsync';
+import { Gixi } from '../../gixi/ActorContainer';
 
 
 export interface TilemapData {
@@ -59,7 +59,7 @@ export interface ISuperTilemapItemFactory {
   createTilemapItem(tilemapItemData: TilemapItemData): Promise<PIXI.Sprite>;
 }
 
-export class SuperTilemap extends SuperContainer implements IInitializableAsync {
+export class SuperTilemap extends Gixi.ActorContainer implements IInitializableAsync {
 
   // Properties -----------------------------------
   get tilemapData(): TilemapData { return this._tilemapData; }
@@ -82,6 +82,9 @@ export class SuperTilemap extends SuperContainer implements IInitializableAsync 
     this.position.set(0, 0);
     this.scale.set(1);
     this.isRenderGroup = true;
+  }
+  get isInitialized(): boolean {
+    return this._isInitialized;
   }
 
   public override async initializeAsync() {

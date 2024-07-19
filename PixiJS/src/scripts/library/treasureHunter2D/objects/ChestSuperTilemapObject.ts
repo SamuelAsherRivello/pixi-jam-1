@@ -11,6 +11,7 @@ import { Ticker } from 'pixi.js';
 export class ChestSuperTilemapObject extends SuperTilemapObject {
 
 
+
     // Properties -----------------------------------
 
 

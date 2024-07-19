@@ -1,13 +1,14 @@
 import * as PIXI from 'pixi.js';
 import { SuperApp } from '@src/scripts/library/core/super/SuperApp';
 import { SuperSprite, SuperSpriteConfiguration } from '@src/scripts/library/core/super/SuperSprite';
+import { Gixi } from '../core/gixi/ActorContainer';
 import { SuperTilemap } from '../core/super/superTilemap/SuperTilemap';
 
 /**
  * Represents a coin in the game.
  * 
  */
-export class Player extends SuperSprite {
+export class Player extends Gixi.ActorContainer {
 
 
     // Properties -----------------------------------
@@ -15,17 +16,20 @@ export class Player extends SuperSprite {
 
     // Fields ---------------------------------------
     private _superTilemap: SuperTilemap;
+    private _superSprite: SuperSprite;
 
     // Initialization -------------------------------
     constructor(superApp: SuperApp, superTilemap: SuperTilemap, superSpriteConfiguration?: Partial<SuperSpriteConfiguration>) {
 
         super(superApp, superSpriteConfiguration);
         this._superTilemap = superTilemap;
+        this._superSprite = new SuperSprite(this._superApp, superSpriteConfiguration);
+        this._superApp.addToStage(this._superSprite, this);
+
 
         // Redeclare anything from super 
         // that you want differently here
         this.label = (Player).name;
-        this.anchor.set(0.0, 0.0);
 
     }
 
@@ -34,6 +38,8 @@ export class Player extends SuperSprite {
 
         // Super
         super.initializeAsync();
+        await this._superSprite.initializeAsync();
+
 
         // Local
         //Do any additional initialization here
