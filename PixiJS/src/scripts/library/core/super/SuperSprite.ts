@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js';
 import { SuperApp } from './SuperApp';
 import { SuperUtility } from './SuperUtility';
 import { IInitializableAsync } from './IInitializeAsync';
+import { Ticker } from '../gixi/Ticker';
 
 /**
  * Configuration
@@ -35,8 +36,6 @@ export class SuperSprite extends PIXI.Sprite implements IInitializableAsync {
     return this._isInitialized;
   }
 
-
-
   public get configuration(): SuperSpriteConfiguration {
     return this._configuration;
   }
@@ -45,7 +44,7 @@ export class SuperSprite extends PIXI.Sprite implements IInitializableAsync {
     return this._isCollidable;
   }
 
-  public isAddedToStage(): boolean {
+  public isChild(): boolean {
     return this.parent !== null;
   }
 
@@ -206,7 +205,7 @@ export class SuperSprite extends PIXI.Sprite implements IInitializableAsync {
     // Empty implementation to be overridden
   }
 
-  public onTick(ticker: PIXI.Ticker): void {
+  public onTick(ticker: Ticker): void {
 
     // Empty implementation to be overridden
 
@@ -223,7 +222,7 @@ export class SuperSprite extends PIXI.Sprite implements IInitializableAsync {
   }
 
   // Internal methods to handle event callbacks and check for destruction
-  private onTickInternal(ticker: PIXI.Ticker): void {
+  private onTickInternal(ticker: Ticker): void {
     if (this._isDestroyed) return;
     this.onTick(ticker);
   }

@@ -1,18 +1,20 @@
 import * as PIXI from 'pixi.js';
-import { SuperSprite, SuperSpriteConfiguration } from '@src/scripts/library/core/super/SuperSprite';
 import { ActorContainer } from './ActorContainer';
 import { SuperApp } from '../super/SuperApp';
+import { IActor } from './IActor';
+import { IInitializableAsync } from '../super/IInitializeAsync';
+import { ActorConfiguration } from './ActorConfiguration';
+import { SuperUtility } from '../super/SuperUtility';
+import { Sprite } from './Sprite';
+import { Ticker } from './Ticker';
 
 
 /**
  * Configuration
  */
-export interface ActorStaticConfiguration {
+export interface ActorStaticConfiguration extends ActorConfiguration {
     textureUrl: string;
     texture: PIXI.Texture;
-    isCollidable: boolean;
-    isTickable: boolean;
-    isResizable: boolean;
 }
 
 const ActorStaticConfigurationDefault: ActorStaticConfiguration = {
@@ -28,36 +30,51 @@ const ActorStaticConfigurationDefault: ActorStaticConfiguration = {
  * Represents a coin in the game.
  * 
  */
-export class ActorStatic extends ActorContainer {
+export class ActorStatic extends ActorContainer implements IInitializableAsync, IActor {
 
 
     // Properties -----------------------------------
-
+    public override get configuration(): ActorStaticConfiguration {
+        return this._configuration as ActorStaticConfiguration;
+    }
 
     // Fields ---------------------------------------
-    protected _superSprite: SuperSprite;
+    protected _sprite!: Sprite;
 
     // Initialization -------------------------------
-    constructor(superApp: SuperApp, actorStaticConfiguration?: Partial<ActorStaticConfiguration>) {
+    constructor(superApp: SuperApp, configuration?: Partial<ActorStaticConfiguration>) {
 
-        super(superApp, actorStaticConfiguration);
-        this._superSprite = new SuperSprite(this._superApp, actorStaticConfiguration);
-        this._superApp.addToStage(this._superSprite, this);
+        super(superApp, { ...ActorStaticConfigurationDefault, ...configuration });
+
+        if (!SuperUtility.textureIsNullOrEmpty(this.configuration?.texture) &&
+            !SuperUtility.stringIsNullOrEmpty(this.configuration?.textureUrl)) {
+            throw new Error("You cannot set both texture and textureUrl in the configuration");
+        }
 
         // Redeclare anything from super 
         // that you want differently here
         this.label = (ActorStatic).name;
-        this._superSprite.anchor.set(0.5, 0.5);
 
+        this.initializeAsync();
     }
 
 
     public override async initializeAsync() {
 
         // Super
-        super.initializeAsync();
-        await this._superSprite.initializeAsync();
+        await super.initializeAsync();
 
+        if (!SuperUtility.textureIsNullOrEmpty(this.configuration?.texture)) {
+            this._sprite = new Sprite(this.configuration?.texture);
+        }
+        else if (!SuperUtility.stringIsNullOrEmpty(this.configuration?.textureUrl)) {
+            await PIXI.Assets.load([this.configuration.textureUrl]);
+            const texture: PIXI.Texture = PIXI.Texture.from(this.configuration.textureUrl);
+            this._sprite = new Sprite(texture);
+        }
+
+        this.addChild(this._sprite);
+        this._sprite.anchor.set(0.5, 0.5);
 
         // Local
         //Do any additional initialization here
@@ -68,7 +85,7 @@ export class ActorStatic extends ActorContainer {
 
     // Event Handlers -------------------------------
 
-    public override onTick(ticker: PIXI.Ticker): void {
+    public override onTick(ticker: Ticker): void {
 
         // Super
         super.onTick(ticker);

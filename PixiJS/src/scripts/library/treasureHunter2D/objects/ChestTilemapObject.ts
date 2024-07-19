@@ -1,7 +1,6 @@
-import { SuperSprite, SuperSpriteConfiguration } from '@src/scripts/library/core/super/SuperSprite';
 import { Player } from '@src/scripts/library/treasureHunter2D/Player';
 import { Container, Ticker } from 'pixi.js';
-import { TilemapObject } from '../../core/gixi/tilemap/TilemapObject';
+import { TilemapObject, TilemapObjectConfiguration } from '../../core/gixi/tilemap/TilemapObject';
 import { SuperApp } from '../../core/super/SuperApp';
 
 /**
@@ -19,9 +18,9 @@ export class ChestTilemapObject extends TilemapObject {
 
 
     // Initialization -------------------------------
-    constructor(superApp: SuperApp, superSpriteConfiguration?: Partial<SuperSpriteConfiguration>) {
+    constructor(superApp: SuperApp, configuration?: Partial<TilemapObjectConfiguration>) {
 
-        super(superApp, superSpriteConfiguration);
+        super(superApp, configuration);
 
         // Redeclare anything from super 
         // that you want differently here
@@ -31,7 +30,7 @@ export class ChestTilemapObject extends TilemapObject {
     public override async initializeAsync() {
 
         // Super
-        super.initializeAsync();
+        await super.initializeAsync();
 
         // Local
         // Do any additional initialization here

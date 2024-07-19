@@ -4,6 +4,7 @@ import { SuperUtility } from '../../super/SuperUtility';
 import { IInitializableAsync } from '../../super/IInitializeAsync';
 import { ActorContainer } from '../ActorContainer';
 import { TilemapCollisionSystem } from './TilemapCollisionSystem';
+import { Ticker } from '../Ticker';
 
 export interface TilemapData {
   width: number;
@@ -244,7 +245,7 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
     // Handle resizing logic
   }
 
-  public override onTick(ticker: PIXI.Ticker): void {
+  public override onTick(ticker: Ticker): void {
     // Handle tick updates
   }
 

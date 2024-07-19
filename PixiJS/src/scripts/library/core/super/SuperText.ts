@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { SuperApp } from './SuperApp';
+import { Ticker } from '../gixi/Ticker';
 
 /**
  * Subclass PIXI.Text if you want basic text functionality.
@@ -45,7 +46,7 @@ export class SuperText extends PIXI.Text {
     }
 
     // Initialization -------------------------------
-    public isAddedToStage(): boolean {
+    public isChild(): boolean {
         return parent !== null;
     }
 
@@ -62,7 +63,7 @@ export class SuperText extends PIXI.Text {
         // Empty implementation to be overridden
     }
 
-    public onTick(ticker: PIXI.Ticker): void {
+    public onTick(ticker: Ticker): void {
         // Empty implementation to be overridden
     }
 }

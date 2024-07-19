@@ -2,15 +2,15 @@ import * as PIXI from 'pixi.js';
 import { IInitializableAsync } from '../super/IInitializeAsync';
 import { SuperApp } from '../super/SuperApp';
 import { SuperSprite } from '../super/SuperSprite';
+import { IActor } from './IActor';
+import { ActorConfiguration } from './ActorConfiguration';
+import { Ticker } from './Ticker';
 
 
 /**
 * Configuration
 */
-export interface ActorContainerConfiguration {
-  isCollidable: boolean;
-  isTickable: boolean;
-  isResizable: boolean;
+export interface ActorContainerConfiguration extends ActorConfiguration {
 }
 
 const ActorContainerConfigurationDefault: ActorContainerConfiguration = {
@@ -21,7 +21,7 @@ const ActorContainerConfigurationDefault: ActorContainerConfiguration = {
 
 
 
-export class ActorContainer extends PIXI.Container implements IInitializableAsync {
+export class ActorContainer extends PIXI.Container implements IInitializableAsync, IActor {
 
   // Properties -----------------------------------
   public get isInitialized(): boolean {
@@ -36,13 +36,13 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
     return this._isCollidable;
   }
 
-  public isAddedToStage(): boolean {
+  public isChild(): boolean {
     return this.parent !== null;
   }
 
   // Fields ---------------------------------------
   private _isDestroyed: boolean = false;
-  private _configuration: ActorContainerConfiguration;
+  protected _configuration: ActorContainerConfiguration;
   protected _isInitialized: boolean = false;
   protected _isCollidable: boolean = true;
   protected _superApp: SuperApp;
@@ -77,7 +77,6 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
     }
   }
 
-  // Initialization -------------------------------
   public async initializeAsync(): Promise<any> {
 
     if (this._isInitialized) {
@@ -119,7 +118,7 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
     // Empty implementation to be overridden
   }
 
-  public onTick(ticker: PIXI.Ticker): void {
+  public onTick(ticker: Ticker): void {
 
     // Empty implementation to be overridden
 
@@ -135,8 +134,8 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
     // Empty implementation to be overridden
   }
 
-  // Internal methods to handle event callbacks and check for destruction
-  private onTickInternal(ticker: PIXI.Ticker): void {
+  //TODO: remove these internals???
+  private onTickInternal(ticker: Ticker): void {
     if (this._isDestroyed) return;
     this.onTick(ticker);
   }

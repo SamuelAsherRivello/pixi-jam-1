@@ -2,6 +2,21 @@ import * as PIXI from 'pixi.js';
 import { SuperApp } from '@src/scripts/library/core/super/SuperApp';
 import { Tilemap } from '../core/gixi/tilemap/Tilemap';
 import { ActorStatic, ActorStaticConfiguration } from '../core/gixi/ActorStatic';
+import { Ticker } from '../core/gixi/Ticker';
+
+/**
+ * Configuration
+ */
+export interface PlayerConfiguration extends ActorStaticConfiguration {
+}
+
+const PlayerConfigurationDefault: PlayerConfiguration = {
+    textureUrl: '',
+    texture: PIXI.Texture.EMPTY,
+    isCollidable: true,
+    isTickable: true,
+    isResizable: true
+}
 
 /**
  * Represents a coin in the game.
@@ -17,27 +32,27 @@ export class Player extends ActorStatic {
     private _Tilemap: Tilemap;
 
     // Initialization -------------------------------
-    constructor(superApp: SuperApp, Tilemap: Tilemap, actorStaticConfiguration?: Partial<ActorStaticConfiguration>) {
+    constructor(superApp: SuperApp, Tilemap: Tilemap, configuration?: Partial<PlayerConfiguration>) {
 
-        super(superApp, actorStaticConfiguration);
+        super(superApp, { ...PlayerConfigurationDefault, ...configuration });
         this._Tilemap = Tilemap;
-
 
         // Redeclare anything from super 
         // that you want differently here
         this.label = (Player).name;
-        this._superSprite.anchor.set(0, 0);
 
     }
+
 
 
     public override async initializeAsync() {
 
         // Super
-        super.initializeAsync();
+        await super.initializeAsync();
 
         // Local
         //Do any additional initialization here
+        this._sprite.anchor.set(0, 0);
 
     }
 
@@ -72,7 +87,7 @@ export class Player extends ActorStatic {
 
     // Event Handlers -------------------------------
 
-    public override onTick(ticker: PIXI.Ticker): void {
+    public override onTick(ticker: Ticker): void {
 
         super.onTick(ticker);
 

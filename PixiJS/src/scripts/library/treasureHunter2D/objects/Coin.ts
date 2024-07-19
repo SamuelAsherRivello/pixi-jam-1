@@ -29,10 +29,11 @@ export class Coin extends SuperSprite {
     }
 
 
+
     public override async initializeAsync() {
 
         // Super
-        super.initializeAsync();
+        await super.initializeAsync();
 
         // Local
         //Do any additional initialization here

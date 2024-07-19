@@ -1,5 +1,22 @@
+//PIXI
+import * as PIXI from 'pixi.js';
 import { SuperApp } from '../../super/SuperApp';
 import { ActorStatic, ActorStaticConfiguration } from '../ActorStatic';
+
+/**
+ * Configuration
+ */
+export interface TilemapObjectConfiguration extends ActorStaticConfiguration {
+}
+
+const TilemapObjectConfigurationDefault: TilemapObjectConfiguration = {
+    textureUrl: '',
+    texture: PIXI.Texture.EMPTY,
+    isCollidable: true,
+    isTickable: true,
+    isResizable: true
+}
+
 
 /**
  * Represents an item from the Object layer in a tilemap
@@ -15,21 +32,20 @@ export class TilemapObject extends ActorStatic {
 
 
     // Initialization -------------------------------
-    constructor(superApp: SuperApp, actorStaticConfiguration?: Partial<ActorStaticConfiguration>) {
+    constructor(superApp: SuperApp, configuration?: Partial<TilemapObjectConfiguration>) {
 
-        super(superApp, actorStaticConfiguration);
+        super(superApp, { ...TilemapObjectConfigurationDefault, ...configuration });
 
         // Redeclare anything from super 
         // that you want differently here
         this.label = (TilemapObject).name;
-        //this.anchor.set(0.5);
 
     }
 
     public override async initializeAsync() {
 
         // Super
-        super.initializeAsync();
+        await super.initializeAsync();
 
         // Local
         // Do any additional initialization here
