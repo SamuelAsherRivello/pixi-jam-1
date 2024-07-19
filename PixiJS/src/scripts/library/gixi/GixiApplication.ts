@@ -15,12 +15,16 @@ export interface GixiApplicationConfiguration {
   widthInitial: number;
   heightInitial: number;
   backgroundColor: number;
+  minFPS: number,
+  maxFPS: number,
   data: { [key: string]: any };
 }
 
 const GixiApplicationConfigurationDefault: GixiApplicationConfiguration = {
   widthInitial: 1920,
   heightInitial: 1080,
+  minFPS: 1,
+  maxFPS: 240,
   backgroundColor: 0x1099bb,
   data: {}
 }
@@ -114,6 +118,9 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
         resizeTo: window,
         canvas: document.getElementById(this._canvasId) as HTMLCanvasElement,
       });
+
+      this.app.ticker.minFPS = this.configuration.minFPS;
+      this.app.ticker.maxFPS = this.configuration.maxFPS;
 
       console.log(`PIXI.Application.init() success! PixiJS v${PIXI.VERSION} with ${this.GetRendererTypeAsString(this.app.renderer.type)} `);
 

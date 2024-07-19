@@ -48,8 +48,11 @@ let tempWorldOrigin: PIXI.Graphics;
 const gixiAppConfiguration: GixiApplicationConfiguration = {
 
   //Show all values here, for readability
+  //Or simply use GixiApplicationConfigurationDefault
   widthInitial: 1920,
   heightInitial: 1080,
+  minFPS: 1,
+  maxFPS: 240,
   backgroundColor: 0x87867a,
   data: gixiAppData
 }
