@@ -95,8 +95,28 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
     await super.initializeAsync();
     this._isInitialized = true;
 
-    const response = await fetch(this._tilemapDataUrl);
-    this._tilemapData = await response.json();
+    if (GixiUtility.stringIsNullOrEmpty(this._tilemapDataUrl)) {
+      throw new Error(`Tilemap.initializeAsync() file missing error. tilemapDataUrl = "${this._tilemapDataUrl}"`);
+    }
+
+    if (!this._tilemapDataUrl.endsWith(".tmj")) {
+      throw new Error(`Tilemap.initializeAsync() file extension error. tilemapDataUrl = "${this._tilemapDataUrl}"`);
+    }
+
+    let response!: Response;
+    try {
+      response = await fetch(this._tilemapDataUrl);
+    }
+    catch (e) {
+      throw new Error(`Tilemap.initializeAsync() fetch error. tilemapDataUrl = "${this._tilemapDataUrl}"`);
+    }
+
+    try {
+      this._tilemapData = await response.json();
+    }
+    catch (e) {
+      throw new Error(`Tilemap.initializeAsync() json error. tilemapDataUrl = "${this._tilemapDataUrl}"`);
+    }
 
     const tilesetPromises = this._tilemapData.tilesets.map((tileset: any) => {
       const imageUrl = tileset.image.replace('../', 'assets/');
@@ -104,6 +124,7 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
         return { ...tileset, texture: PIXI.Texture.from(imageUrl) };
       });
     });
+
 
     const tilesets = await Promise.all(tilesetPromises);
 
