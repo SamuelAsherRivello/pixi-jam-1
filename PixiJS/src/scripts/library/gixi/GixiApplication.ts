@@ -218,6 +218,7 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
       obj.onAdded();
     }
 
+
     this.resize();
   }
 
