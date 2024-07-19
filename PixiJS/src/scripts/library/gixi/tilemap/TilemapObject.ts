@@ -32,9 +32,9 @@ export class TilemapObject extends ActorStatic {
 
 
     // Initialization -------------------------------
-    constructor(superApp: GixiApplication, configuration?: Partial<TilemapObjectConfiguration>) {
+    constructor(app: GixiApplication, configuration?: Partial<TilemapObjectConfiguration>) {
 
-        super(superApp, { ...TilemapObjectConfigurationDefault, ...configuration });
+        super(app, { ...TilemapObjectConfigurationDefault, ...configuration });
 
         // Redeclare anything from super 
         // that you want differently here

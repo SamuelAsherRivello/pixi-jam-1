@@ -7,11 +7,11 @@ import { LayerType } from '../../gixi/tilemap/Tilemap';
 export class TilemapItemFactoryCustom implements ITilemapItemFactory {
 
   // Fields ---------------------------------------
-  private _superApp: GixiApplication;
+  private _app: GixiApplication;
 
   // Initialization -------------------------------
-  constructor(superApp: GixiApplication) {
-    this._superApp = superApp;
+  constructor(app: GixiApplication) {
+    this._app = app;
   }
 
   // Methods --------------------------------------
@@ -27,7 +27,7 @@ export class TilemapItemFactoryCustom implements ITilemapItemFactory {
         //console.log(`createTilemapItem: (${tilemapItemData.row},${tilemapItemData.column}) ` + tilemapItemData.type);
         if (tilemapItemData.type == (ChestTilemapObject).name) {
 
-          return new ChestTilemapObject(this._superApp, { texture: tilemapItemData.texture });
+          return new ChestTilemapObject(this._app, { texture: tilemapItemData.texture });
         }
         return new PIXI.Sprite(tilemapItemData.texture);
 

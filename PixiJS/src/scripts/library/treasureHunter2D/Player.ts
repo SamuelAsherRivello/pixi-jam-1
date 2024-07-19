@@ -31,9 +31,9 @@ export class Player extends ActorStatic {
     private _Tilemap: Tilemap;
 
     // Initialization -------------------------------
-    constructor(superApp: GixiApplication, Tilemap: Tilemap, configuration?: Partial<PlayerConfiguration>) {
+    constructor(app: GixiApplication, Tilemap: Tilemap, configuration?: Partial<PlayerConfiguration>) {
 
-        super(superApp, { ...PlayerConfigurationDefault, ...configuration });
+        super(app, { ...PlayerConfigurationDefault, ...configuration });
         this._Tilemap = Tilemap;
 
         // Redeclare anything from super 
@@ -92,19 +92,19 @@ export class Player extends ActorStatic {
 
         let moveVector: PIXI.Point = new PIXI.Point(0, 0);
 
-        if (this._superApp.systems.inputSystem.isKeyDown('a')) {
+        if (this._app.systems.inputSystem.isKeyDown('a')) {
             this.isCollisionWithTilemap();
             moveVector.x += -1;
         }
-        if (this._superApp.systems.inputSystem.isKeyDown('d')) {
+        if (this._app.systems.inputSystem.isKeyDown('d')) {
             this.isCollisionWithTilemap();
             moveVector.x += 1;
         }
-        if (this._superApp.systems.inputSystem.isKeyDown('w')) {
+        if (this._app.systems.inputSystem.isKeyDown('w')) {
             this.isCollisionWithTilemap();
             moveVector.y += -1;
         }
-        if (this._superApp.systems.inputSystem.isKeyDown('s')) {
+        if (this._app.systems.inputSystem.isKeyDown('s')) {
             this.isCollisionWithTilemap();
             moveVector.y += 1;
         }

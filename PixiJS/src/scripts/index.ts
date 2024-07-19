@@ -26,7 +26,7 @@ PIXI.AbstractRenderer.defaultOptions.resolution = window.devicePixelRatio || 1; 
 /////////////////////////////
 // Project Configuration
 /////////////////////////////
-const superAppData: any = {
+const gixiAppData: any = {
   LogoImageUrl: 'assets/images/pixijs-logo-32x32.png',
   TilemapDataUrl: 'assets/tilemaps/TreasureHunter2D.tmj',
   PlayerTextureUrl: 'assets/images/player-default-sprite.png',
@@ -45,15 +45,15 @@ let tempWorldOrigin: PIXI.Graphics;
 /////////////////////////////
 // Create App
 /////////////////////////////
-const superAppConfiguration: GixiApplicationConfiguration = {
+const gixiAppConfiguration: GixiApplicationConfiguration = {
 
   //Show all values here, for readability
   widthInitial: 1920,
   heightInitial: 1080,
   backgroundColor: 0x87867a,
-  data: superAppData
+  data: gixiAppData
 }
-const superAppConst = new GixiApplication('pixi-application-canvas', superAppConfiguration);
+const gixiAppConst = new GixiApplication('pixi-application-canvas', gixiAppConfiguration);
 
 
 /////////////////////////////
@@ -69,13 +69,13 @@ document.body.appendChild(stats.dom);
 // Setup Pixi JS DevTools
 // https://bit.ly/pixijs-devtools
 /////////////////////////////
-(globalThis as any).__PIXI_APP__ = superAppConst.app;
+(globalThis as any).__PIXI_APP__ = gixiAppConst.app;
 
 
 /////////////////////////////
 // Handle App Initialize
 /////////////////////////////
-async function onInitializeCompleted(superApp: GixiApplication) {
+async function onInitializeCompleted(gixiApp: GixiApplication) {
 
 
 
@@ -83,16 +83,16 @@ async function onInitializeCompleted(superApp: GixiApplication) {
   // Create Tilemap
   /////////////////////////////
   const Tilemap = new GIXI.Tilemap(
-    superApp,
-    superAppData.TilemapDataUrl,
-    new TilemapItemFactoryCustom(superApp)
+    gixiApp,
+    gixiAppData.TilemapDataUrl,
+    new TilemapItemFactoryCustom(gixiApp)
   );
 
   //Initialize first, so width and height are available
   await Tilemap.initializeAsync();
-  superApp.addToViewport(Tilemap);
-  Tilemap.x = superApp.getScreenCenterpoint().x - Tilemap.width / 2;
-  Tilemap.y = superApp.getScreenCenterpoint().y - Tilemap.height / 2;
+  gixiApp.addToViewport(Tilemap);
+  Tilemap.x = gixiApp.getScreenCenterpoint().x - Tilemap.width / 2;
+  Tilemap.y = gixiApp.getScreenCenterpoint().y - Tilemap.height / 2;
 
   /////////////////////////////
   // Temp:  World centerpoint
@@ -104,20 +104,20 @@ async function onInitializeCompleted(superApp: GixiApplication) {
       color: 0xffffff,
       alpha: 0.5
     });
-  superApp.addToViewport(tempWorldOrigin);
-  tempWorldOrigin.x = superApp.getScreenCenterpoint().x;
-  tempWorldOrigin.y = superApp.getScreenCenterpoint().y;
+  gixiApp.addToViewport(tempWorldOrigin);
+  tempWorldOrigin.x = gixiApp.getScreenCenterpoint().x;
+  tempWorldOrigin.y = gixiApp.getScreenCenterpoint().y;
 
 
 
   /////////////////////////////
   // Create Coin
   /////////////////////////////
-  for (let i = 0; i < superAppData.CoinsMax; i++) {
-    coin = new Coin(superApp);
-    superApp.addToViewport(coin);
-    coin.x = superApp.getScreenCenterpoint().x - 132 + 32 * i * 2;
-    coin.y = superApp.getScreenCenterpoint().y - 100;
+  for (let i = 0; i < gixiAppData.CoinsMax; i++) {
+    coin = new Coin(gixiApp);
+    gixiApp.addToViewport(coin);
+    coin.x = gixiApp.getScreenCenterpoint().x - 132 + 32 * i * 2;
+    coin.y = gixiApp.getScreenCenterpoint().y - 100;
 
   }
 
@@ -125,24 +125,24 @@ async function onInitializeCompleted(superApp: GixiApplication) {
   /////////////////////////////
   // Create Player
   /////////////////////////////
-  player = new Player(superApp, Tilemap, { textureUrl: superAppData.PlayerTextureUrl as string });
-  superApp.addToViewport(player);
-  player.x = superApp.getScreenCenterpoint().x;
-  player.y = superApp.getScreenCenterpoint().y;
+  player = new Player(gixiApp, Tilemap, { textureUrl: gixiAppData.PlayerTextureUrl as string });
+  gixiApp.addToViewport(player);
+  player.x = gixiApp.getScreenCenterpoint().x;
+  player.y = gixiApp.getScreenCenterpoint().y;
 
 
 
   /////////////////////////////
   // Setup Camera
   /////////////////////////////
-  superApp.viewport.follow(player, {
+  gixiApp.viewport.follow(player, {
     speed: 1,
     acceleration: .01,
     radius: 20
   });
 
   // Optional: Input for camera
-  // superApp.viewport
+  // app.viewport
   //   .drag()
   //   .pinch()
   //   .wheel()
@@ -154,24 +154,24 @@ async function onInitializeCompleted(superApp: GixiApplication) {
   /////////////////////////////
   const instructionsText: InstructionsSuperText =
     new InstructionsSuperText(
-      superApp,
-      'Arrows/WASD To Move' + superApp.app.renderer.resolution,
+      gixiApp,
+      'Arrows/WASD To Move' + gixiApp.app.renderer.resolution,
       30,
       "left");
-  superApp.addToStage(instructionsText);
+  gixiApp.addToStage(instructionsText);
 
   const scoreText: ScoreSuperText =
     new ScoreSuperText(
-      superApp,
-      `Coins ${superApp.configuration.data?.CoinsCollected}/${superApp.configuration.data?.CoinsMax}`,
+      gixiApp,
+      `Coins ${gixiApp.configuration.data?.CoinsCollected}/${gixiApp.configuration.data?.CoinsMax}`,
       30,
       "right");
-  superApp.addToStage(scoreText);
+  gixiApp.addToStage(scoreText);
 
   /////////////////////////////
   // Update Systems Every Frame
   /////////////////////////////
-  superApp.app.ticker.add((ticker) => {
+  gixiApp.app.ticker.add((ticker) => {
 
     stats.begin();
     Actions.tick(ticker.deltaTime);
@@ -193,10 +193,10 @@ function onInitializeError(error: Error) {
 /////////////////////////////
 // Initialize App
 /////////////////////////////
-superAppConst.addListener(GixiApplication.EVENT_INITIALIZE_COMPLETE, onInitializeCompleted);
-superAppConst.addListener(GixiApplication.EVENT_INITIALIZE_ERROR, onInitializeError);
+gixiAppConst.addListener(GixiApplication.EVENT_INITIALIZE_COMPLETE, onInitializeCompleted);
+gixiAppConst.addListener(GixiApplication.EVENT_INITIALIZE_ERROR, onInitializeError);
 
 
 (async () => {
-  await superAppConst.initializeAsync();
+  await gixiAppConst.initializeAsync();
 })();

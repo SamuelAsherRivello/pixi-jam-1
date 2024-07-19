@@ -44,26 +44,26 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
   protected _configuration: ActorContainerConfiguration;
   protected _isInitialized: boolean = false;
   protected _isCollidable: boolean = true;
-  protected _superApp: GixiApplication;
+  protected _app: GixiApplication;
 
 
 
   // Initialization -------------------------------
-  constructor(superApp: GixiApplication,
+  constructor(app: GixiApplication,
     configuration?: Partial<ActorContainerConfiguration>) {
 
     super();
     this._configuration = { ...ActorContainerConfigurationDefault, ...configuration };
-    this._superApp = superApp;
+    this._app = app;
 
     // Tick
     if (this.configuration.isTickable) {
-      this._superApp.app.ticker.add(this.onTickInternal.bind(this));
+      this._app.app.ticker.add(this.onTickInternal.bind(this));
     }
 
     // Resize
     if (this.configuration.isResizable) {
-      this._superApp.addListener(GixiApplication.EVENT_RESIZE, this.onResizeInternal.bind(this));
+      this._app.addListener(GixiApplication.EVENT_RESIZE, this.onResizeInternal.bind(this));
     }
 
     // DO NOT CALL initializeAsync here. It is called by the child
@@ -95,10 +95,10 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
 
     // Clean up
     if (this.configuration.isTickable) {
-      this._superApp.app.ticker.remove(this.onTickInternal.bind(this));
+      this._app.app.ticker.remove(this.onTickInternal.bind(this));
     }
     if (this.configuration.isResizable) {
-      this._superApp.removeListener(GixiApplication.EVENT_RESIZE, this.onResizeInternal.bind(this));
+      this._app.removeListener(GixiApplication.EVENT_RESIZE, this.onResizeInternal.bind(this));
     }
     this._isDestroyed = true;
     super.destroy(options);
@@ -113,7 +113,7 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
     // Empty implementation to be overridden
   }
 
-  public onResize(superApp: GixiApplication): void {
+  public onResize(app: GixiApplication): void {
     // Empty implementation to be overridden
   }
 
@@ -122,7 +122,7 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
     // Empty implementation to be overridden
 
     //TODO: This is EXPENSIVE. Call it less
-    // const collisions = this._superApp.systems.collisionSystem.getCollisions(this);
+    //const collisions = this._app.systems.collisionSystem.getCollisions(this);
     // if (collisions.length) {
     //   this.onCollision(collisions);
     // };
@@ -139,9 +139,9 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
     this.onTick(ticker);
   }
 
-  private onResizeInternal(superApp: GixiApplication): void {
+  private onResizeInternal(app: GixiApplication): void {
     if (this._isDestroyed) return;
-    this.onResize(superApp);
+    this.onResize(app);
   }
 
 

@@ -24,7 +24,7 @@ class MultiAnimatedSprite {
     }
 
     // Methods ------------------------------
-    public async initializeAndReparent(superApp: GixiApplication, parent: PIXI.Container) {
+    public async initializeAndReparent(app: GixiApplication, parent: PIXI.Container) {
         const spriteSheetAtlasResponse = await fetch(this._spriteSheetURL);
         const spriteSheetAtlas = await spriteSheetAtlasResponse.json();
         await PIXI.Assets.load(this._textureImageURL);
@@ -93,9 +93,9 @@ export class ActorAnimated extends ActorContainer implements IInitializableAsync
     protected _multiAnimatedSprite!: MultiAnimatedSprite;
 
     // Initialization -------------------------------
-    constructor(superApp: GixiApplication, configuration?: Partial<ActorAnimatedConfiguration>) {
+    constructor(app: GixiApplication, configuration?: Partial<ActorAnimatedConfiguration>) {
 
-        super(superApp, { ...ActorAnimatedConfigurationDefault, ...configuration });
+        super(app, { ...ActorAnimatedConfigurationDefault, ...configuration });
 
         // Redeclare anything from super 
         // that you want differently here
@@ -121,7 +121,7 @@ export class ActorAnimated extends ActorContainer implements IInitializableAsync
         const animatedTextureURL = 'assets/images/AnimatedCoin/animated_coin.png';
         const animatedTextureJSONURL = 'assets/images/AnimatedCoin/animated_coin.json';
         this._multiAnimatedSprite = new MultiAnimatedSprite(animatedTextureURL, animatedTextureJSONURL);
-        await this._multiAnimatedSprite.initializeAndReparent(this._superApp, this);
+        await this._multiAnimatedSprite.initializeAndReparent(this._app, this);
         this._multiAnimatedSprite.play('Gold', 0.3);
 
 

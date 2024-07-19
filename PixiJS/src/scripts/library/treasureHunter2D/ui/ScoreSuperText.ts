@@ -8,14 +8,14 @@ export class ScoreSuperText extends SuperText {
     // Initialization -------------------------------
 
     // Event Handlers -------------------------------
-    public override onResize(superApp: GixiApplication): void {
+    public override onResize(app: GixiApplication): void {
 
         //UPDATE POSITION
-        this.x = superApp.app.screen.width - this.width - superApp.configuration.data.ScreenUIMarginX;
-        this.y = superApp.configuration.data.ScreenUIMarginY;
+        this.x = app.app.screen.width - this.width - app.configuration.data.ScreenUIMarginX;
+        this.y = app.configuration.data.ScreenUIMarginY;
 
         //HACK: UPDATE SIZE
-        this.style.fontSize = 15 + 7 / superApp.app.renderer.resolution
+        this.style.fontSize = 15 + 7 / app.app.renderer.resolution
 
     }
 }

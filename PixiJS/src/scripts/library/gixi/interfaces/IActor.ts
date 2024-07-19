@@ -15,6 +15,6 @@ export interface IActor {
     isChild(): boolean;
     onAdded(): void;
     onRemoved(): void;
-    onResize(superApp: GixiApplication): void;
+    onResize(app: GixiApplication): void;
     onTick(ticker: PIXI.Ticker): void;
 }

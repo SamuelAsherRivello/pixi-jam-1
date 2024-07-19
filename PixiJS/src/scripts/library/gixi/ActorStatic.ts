@@ -38,9 +38,9 @@ export class ActorStatic extends ActorContainer implements IInitializableAsync, 
     protected _sprite!: PIXI.Sprite;
 
     // Initialization -------------------------------
-    constructor(superApp: GixiApplication, configuration?: Partial<ActorStaticConfiguration>) {
+    constructor(app: GixiApplication, configuration?: Partial<ActorStaticConfiguration>) {
 
-        super(superApp, { ...ActorStaticConfigurationDefault, ...configuration });
+        super(app, { ...ActorStaticConfigurationDefault, ...configuration });
 
         if (!GixiUtility.textureIsNullOrEmpty(this.configuration?.texture) &&
             !GixiUtility.stringIsNullOrEmpty(this.configuration?.textureUrl)) {

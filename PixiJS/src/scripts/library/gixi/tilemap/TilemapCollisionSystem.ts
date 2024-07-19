@@ -5,11 +5,11 @@ import { Tilemap } from './Tilemap';
 
 export class TilemapCollisionSystem {
     private collisionMap!: boolean[][];
-    private _superApp: GixiApplication;
+    private _app: GixiApplication;
     private _Tilemap: Tilemap;
 
-    constructor(superApp: GixiApplication, Tilemap: Tilemap) {
-        this._superApp = superApp;
+    constructor(app: GixiApplication, Tilemap: Tilemap) {
+        this._app = app;
         this._Tilemap = Tilemap;
     }
 
@@ -67,7 +67,7 @@ export class TilemapCollisionSystem {
     public isCollision(x: number, y: number, width: number, height: number): boolean {
         const localPos = new PIXI.Point(x, y);
         const globalPos = new PIXI.Point();
-        this._superApp.app.stage.toGlobal(localPos, globalPos);
+        this._app.app.stage.toGlobal(localPos, globalPos);
 
         const tileWidth = this._Tilemap.tilemapData.tilewidth;
         const tileHeight = this._Tilemap.tilemapData.tileheight;

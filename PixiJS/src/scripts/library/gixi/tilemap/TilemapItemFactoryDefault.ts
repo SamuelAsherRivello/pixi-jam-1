@@ -6,11 +6,11 @@ import { GixiApplication } from "../GixiApplication";
 export class TilemapItemFactoryDefault implements ITilemapItemFactory {
 
     // Fields ---------------------------------------
-    private _superApp: GixiApplication;
+    private _app: GixiApplication;
 
     // Initialization -------------------------------
-    constructor(superApp: GixiApplication) {
-        this._superApp = superApp;
+    constructor(app: GixiApplication) {
+        this._app = app;
     }
 
     // Methods --------------------------------------

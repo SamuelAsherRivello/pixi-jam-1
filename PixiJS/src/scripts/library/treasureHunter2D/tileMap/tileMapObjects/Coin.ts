@@ -19,9 +19,9 @@ export class Coin extends ActorAnimated {
 
 
     // Initialization -------------------------------
-    constructor(superApp: GixiApplication, configuration?: Partial<ActorAnimatedConfiguration>) {
+    constructor(app: GixiApplication, configuration?: Partial<ActorAnimatedConfiguration>) {
 
-        super(superApp, configuration);
+        super(app, configuration);
 
         // Redeclare anything from super 
         // that you want differently here

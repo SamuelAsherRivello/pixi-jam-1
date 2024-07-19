@@ -2,16 +2,16 @@ import { GixiApplication } from "../GixiApplication";
 import * as PIXI from 'pixi.js';
 
 export class CollisionSystem {
-    private _superApp: GixiApplication;
+    private _app: GixiApplication;
 
-    constructor(superApp: GixiApplication) {
-        this._superApp = superApp;
+    constructor(app: GixiApplication) {
+        this._app = app;
     }
 
     public getCollisions(me: PIXI.Container): PIXI.Container[] {
         const collidingSprites: PIXI.Container[] = [
-            ...this.getCollidingSpritesFromChildren(me, this._superApp.app.stage.children),
-            ...this.getCollidingSpritesFromChildren(me, this._superApp.viewport.children),
+            ...this.getCollidingSpritesFromChildren(me, this._app.app.stage.children),
+            ...this.getCollidingSpritesFromChildren(me, this._app.viewport.children),
         ];
 
         return collidingSprites;

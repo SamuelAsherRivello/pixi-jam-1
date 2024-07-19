@@ -9,10 +9,10 @@ import { GixiApplication } from '../../gixi/GixiApplication';
 export class SuperText extends PIXI.Text {
 
     // Fields ---------------------------------------
-    protected _superApp: GixiApplication;
+    protected _app: GixiApplication;
 
     // Initialization -------------------------------
-    constructor(superApp: GixiApplication, message: string, fontSize: number = 8, align: PIXI.TextStyleAlign = 'left') {
+    constructor(app: GixiApplication, message: string, fontSize: number = 8, align: PIXI.TextStyleAlign = 'left') {
 
 
         const textStyle = new PIXI.TextStyle({
@@ -33,14 +33,14 @@ export class SuperText extends PIXI.Text {
 
         this.label = (SuperText).name;
 
-        this._superApp = superApp;
+        this._app = app;
 
         // Tick
-        superApp.app.ticker.add(this.onTick.bind(this));
+        app.app.ticker.add(this.onTick.bind(this));
 
         // Resize
-        this._superApp.addListener(GixiApplication.EVENT_RESIZE, this.onResize.bind(this));
-        this.onResize(this._superApp);
+        this._app.addListener(GixiApplication.EVENT_RESIZE, this.onResize.bind(this));
+        this.onResize(this._app);
 
     }
 
@@ -58,7 +58,7 @@ export class SuperText extends PIXI.Text {
         // Empty implementation to be overridden
     }
 
-    public onResize(superApp: GixiApplication): void {
+    public onResize(app: GixiApplication): void {
         // Empty implementation to be overridden
     }
 

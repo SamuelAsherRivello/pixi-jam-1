@@ -32,9 +32,9 @@ class Systems {
   public inputSystem: InputSystem;
 
   // Initialization -------------------------------
-  constructor(superApp: GixiApplication) {
-    this.collisionSystem = new CollisionSystem(superApp);
-    this.inputSystem = new InputSystem(superApp);
+  constructor(app: GixiApplication) {
+    this.collisionSystem = new CollisionSystem(app);
+    this.inputSystem = new InputSystem(app);
   }
 }
 
@@ -88,7 +88,7 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
     this._configuration = { ...GixiApplicationConfigurationDefault, ...configuration };
     this._systems = new Systems(this);
 
-    // Every SuperSprite instance listens to SuperApp
+    // Every SuperSprite instance listens to App
     // So this number must be >= to the number of SuperSprite instances
     this.setMaxListeners(100);
   }

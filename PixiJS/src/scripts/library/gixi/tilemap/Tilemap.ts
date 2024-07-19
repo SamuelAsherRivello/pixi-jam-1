@@ -71,12 +71,12 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
   private _tilemapData!: TilemapData;
 
   // Initialization -------------------------------
-  constructor(superApp: GixiApplication, tilemapDataUrl: string, TilemapItemFactory: ITilemapItemFactory) {
-    super(superApp);
+  constructor(app: GixiApplication, tilemapDataUrl: string, TilemapItemFactory: ITilemapItemFactory) {
+    super(app);
 
     this._tilemapDataUrl = tilemapDataUrl;
     this._TilemapItemFactory = TilemapItemFactory;
-    this._TilemapCollisionSystem = new TilemapCollisionSystem(this._superApp, this);
+    this._TilemapCollisionSystem = new TilemapCollisionSystem(this._app, this);
 
     this.label = (Tilemap).name;
     this.position.set(0, 0);
@@ -261,7 +261,7 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
     }
   }
 
-  public override onResize(superApp: GixiApplication): void {
+  public override onResize(app: GixiApplication): void {
     // Handle resizing logic
   }
 

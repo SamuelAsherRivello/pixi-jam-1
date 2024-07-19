@@ -12,11 +12,11 @@ export class InputSystem {
 
     // Fields ---------------------------------------
     private _keyStateDictionary: Map<string, KeyState>;
-    private _superApp: GixiApplication;
+    private _app: GixiApplication;
 
     // Initialization -------------------------------
-    constructor(superApp: GixiApplication) {
-        this._superApp = superApp;
+    constructor(app: GixiApplication) {
+        this._app = app;
         this._keyStateDictionary = new Map();
     }
 
