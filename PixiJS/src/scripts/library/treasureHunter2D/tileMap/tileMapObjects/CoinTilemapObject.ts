@@ -4,6 +4,7 @@ import { GixiApplication } from '@src/scripts/library/gixi/GixiApplication';
 import { Actions, Interpolations } from 'pixi-actions';
 import { Container } from 'pixi.js';
 import { Player } from '../../Player';
+import { DropShadowFilter, GlowFilter } from 'pixi-filters';
 
 /**
  * Represents a coin in the game.
@@ -35,6 +36,12 @@ export class CoinTilemapObject extends ActorAnimated {
 
         // Super
         await super.initializeAsync();
+
+        // OPTIONAL: Try these - https://pixijs.io/filters/
+        this.filters = [
+            //new GlowFilter({ distance: 1, outerStrength: 1, innerStrength: 1, color: 0xffff00 }),
+            new DropShadowFilter({ blur: 1, alpha: 0.5, quality: 3, resolution: 2 }) //
+        ];
 
         // Local
         //Do any additional initialization here

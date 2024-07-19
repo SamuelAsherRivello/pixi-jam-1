@@ -1,6 +1,7 @@
 import { GixiApplication } from '@src/scripts/library/gixi/GixiApplication';
 import { TilemapObject, TilemapObjectConfiguration } from '@src/scripts/library/gixi/tilemap/TilemapObject';
 import { Player } from '@src/scripts/library/treasureHunter2D/Player';
+import { DropShadowFilter } from 'pixi-filters';
 import { Container, Ticker } from 'pixi.js';
 
 /**
@@ -31,6 +32,10 @@ export class ChestTilemapObject extends TilemapObject {
 
         // Super
         await super.initializeAsync();
+
+        this.filters = [
+            new DropShadowFilter({ blur: 1, alpha: 0.5, quality: 3, resolution: 2 })
+        ];
 
         // Local
         // Do any additional initialization here

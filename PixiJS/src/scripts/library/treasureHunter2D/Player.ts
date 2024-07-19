@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js';
 import { GixiApplication } from '@src/scripts/library/gixi/GixiApplication';
 import { Tilemap } from '../gixi/tilemap/Tilemap';
 import { ActorStatic, ActorStaticConfiguration } from '../gixi/ActorStatic';
+import { DropShadowFilter } from 'pixi-filters';
 
 /**
  * Configuration
@@ -48,6 +49,11 @@ export class Player extends ActorStatic {
 
         // Super
         await super.initializeAsync();
+
+        // OPTIONAL: Try these - https://pixijs.io/filters/
+        this._sprite.filters = [
+            new DropShadowFilter({ blur: 1, alpha: 0.5, quality: 3, resolution: 2 })
+        ];
 
         // Local
         //Do any additional initialization here

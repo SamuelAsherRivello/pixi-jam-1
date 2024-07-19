@@ -72,7 +72,6 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
     this._isFullscreen = value;
 
     var elem = document.getElementById(this.app.canvas.id);
-    console.log(this.app.canvas.id)
 
     if (this._isFullscreen) {
 

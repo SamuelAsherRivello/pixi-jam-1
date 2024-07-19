@@ -125,8 +125,11 @@ async function onInitializeCompleted(gixiApp: GixiApplication) {
   // Setup Camera
   /////////////////////////////
   gixiApp.viewport.follow(player, {
+
+    //TODO: find the settings that work VERY smoothly at fullsceen
+    //its close, now.  But not perfect
     speed: 1,
-    acceleration: .01,
+    acceleration: 1,
     radius: 20
   });
 

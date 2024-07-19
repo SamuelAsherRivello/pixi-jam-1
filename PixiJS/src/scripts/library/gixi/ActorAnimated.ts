@@ -4,6 +4,7 @@ import { IActor } from './interfaces/IActor';
 import { IInitializableAsync } from './interfaces/IInitializeAsync';
 import { GixiUtility } from './GixiUtility';
 import * as PIXI from 'pixi.js';
+import { GlowFilter } from 'pixi-filters';
 
 
 
@@ -47,6 +48,9 @@ class MultiAnimatedSprite {
             //TODO: Go to index.ts and try to put a coin at a specific world position and then be sure it looks good
             value.setSize(size.x, size.y);
             value.label = (MultiAnimatedSprite).name;
+
+
+
             value.anchor.set(0.5, 0.5);
             parent.addChild(value);
         });
