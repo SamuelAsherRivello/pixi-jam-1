@@ -48,15 +48,15 @@ export class AudioSystem extends SystemBase {
      * Play a sound file.
      * @param fileName 
      */
-    public async Play(fileName: string) {
-        this.PlayAsync(fileName);
+    public async play(fileName: string) {
+        this.playAsync(fileName);
     }
 
     /**
      * Play a sound file.
      * @param fileName 
      */
-    public async PlayAsync(fileName: string) {
+    public async playAsync(fileName: string) {
         if (!this._audioContextResumed) {
             console.warn('Audio context not resumed yet. Cannot play sound.');
             return;

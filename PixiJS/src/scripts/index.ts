@@ -15,7 +15,6 @@ import { CoinTilemapObject } from './library/treasureHunter2D/tileMap/tileMapObj
 import { TilemapItemFactoryCustom } from './library/treasureHunter2D/tileMap/TilemapItemFactoryCustom';
 
 
-
 /////////////////////////////
 // PIXI Configuration
 /////////////////////////////
@@ -37,7 +36,6 @@ const gixiAppData: any = {
 };
 
 let player: Player;
-let coin: CoinTilemapObject;
 let tempWorldOrigin: PIXI.Graphics;
 
 
@@ -92,8 +90,6 @@ async function onInitializeCompleted(gixiApp: GixiApplication) {
 
   //Initialize first, so width and height are available
   await tilemap.initializeAsync();
-
-  console.log("gixiApp: " + gixiApp.isInitialized);
   gixiApp.addToViewport(tilemap);
   tilemap.x = gixiApp.getScreenCenterpoint().x - tilemap.width / 2;
   tilemap.y = gixiApp.getScreenCenterpoint().y - tilemap.height / 2;

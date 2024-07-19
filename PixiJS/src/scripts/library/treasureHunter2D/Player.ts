@@ -3,6 +3,8 @@ import { GixiApplication } from '@src/scripts/library/gixi/GixiApplication';
 import { Tilemap } from '../gixi/tilemap/Tilemap';
 import { ActorStatic, ActorStaticConfiguration } from '../gixi/ActorStatic';
 import { DropShadowFilter } from 'pixi-filters';
+import { CoinTilemapObject } from './tileMap/tileMapObjects/CoinTilemapObject';
+import { ChestTilemapObject } from './tileMap/tileMapObjects/ChestTilemapObject';
 
 /**
  * Configuration
@@ -40,6 +42,14 @@ export class Player extends ActorStatic {
         // Redeclare anything from super 
         // that you want differently here
         this.label = (Player).name;
+
+
+        //TEST
+        //TODO: Update InputSystem to take screen-swipes instead of player-taps
+        this.on('pointerdown', (event) => {
+            this.position.x += 10;
+        });
+        this.eventMode = 'static';
 
     }
 
@@ -120,7 +130,7 @@ export class Player extends ActorStatic {
             this._app.systems.inputSystem.isKeyDownThisFrame('Spacebar')) {      //does work. TODO: WHy?
 
             //ACTION!
-            this._app.systems.audioSystem.Play("./assets/audio/Click01.wav");
+            this._app.systems.audioSystem.play("./assets/audio/Click01.wav");
         }
 
         if (this._app.systems.inputSystem.isKeyDownThisFrame('f')) {
@@ -132,6 +142,28 @@ export class Player extends ActorStatic {
         const movementSpeed = 3.0;
         this.position.x += moveVector.x * ticker.deltaTime * movementSpeed;
         this.position.y += moveVector.y * ticker.deltaTime * movementSpeed;
+    }
+
+
+    public override onCollision(collisions: PIXI.Container[]): void {
+
+        collisions.forEach((collision) => {
+
+            console.log("collision2: " + collision.label)
+            if (collision instanceof CoinTilemapObject) {
+                if (!collision.isCollected) {
+                    collision.collect();
+                    return;
+                }
+            }
+
+            if (collision instanceof ChestTilemapObject) {
+                if (!collision.isCollected) {
+                    collision.collect();
+                    return;
+                }
+            }
+        });
     }
 }
 

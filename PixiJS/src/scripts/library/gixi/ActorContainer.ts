@@ -3,6 +3,7 @@ import { IInitializableAsync } from './interfaces/IInitializeAsync';
 import { GixiApplication } from './GixiApplication';
 import { IActor } from './interfaces/IActor';
 import { IActorConfiguration } from './interfaces/IActorConfiguration';
+import { Player } from '../treasureHunter2D/Player';
 
 
 /**
@@ -121,7 +122,12 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
 
     // Empty implementation to be overridden
 
+    if (!this.isCollidable) {
+      return;
+    }
+
     const collisions = this._app.systems.collisionSystem.getCollisions(this);
+
     if (collisions.length) {
       this.onCollision(collisions);
     };

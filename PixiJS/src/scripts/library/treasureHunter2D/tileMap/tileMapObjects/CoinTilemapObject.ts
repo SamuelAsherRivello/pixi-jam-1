@@ -2,8 +2,6 @@ import { ActorAnimatedConfiguration } from '@src/scripts/library/gixi';
 import { ActorAnimated } from '@src/scripts/library/gixi/ActorAnimated';
 import { GixiApplication } from '@src/scripts/library/gixi/GixiApplication';
 import { Actions, Interpolations } from 'pixi-actions';
-import { Container } from 'pixi.js';
-import { Player } from '../../Player';
 import { DropShadowFilter, GlowFilter } from 'pixi-filters';
 
 /**
@@ -20,7 +18,13 @@ export class CoinTilemapObject extends ActorAnimated {
 
 
     // Initialization -------------------------------
-    constructor(app: GixiApplication, configuration?: Partial<ActorAnimatedConfiguration>) {
+    constructor(app: GixiApplication) {
+
+        const configuration: ActorAnimatedConfiguration = {
+            isCollidable: false,
+            isTickable: false,
+            isResizable: false
+        }
 
         super(app, configuration);
 
@@ -30,6 +34,10 @@ export class CoinTilemapObject extends ActorAnimated {
 
     }
 
+    public whatever() {
+        this.isCollected = true;
+        this.destroyAfterAnimation();
+    }
 
 
     public override async initializeAsync() {
@@ -50,13 +58,15 @@ export class CoinTilemapObject extends ActorAnimated {
 
 
     // Methods --------------------------------------
-    private destroyAfterAnimation() {
+
+
+    public destroyAfterAnimation() {
         let action = Actions.sequence(
 
             Actions.delay(0),
             Actions.runFunc(() => {
                 // BEFORE Animation: Call something?
-                this._app.systems.audioSystem.Play("./assets/audio/Chime01.mp3");
+                this._app.systems.audioSystem.play("./assets/audio/Chime01.mp3");
             }),
             Actions.parallel(
 
@@ -80,22 +90,22 @@ export class CoinTilemapObject extends ActorAnimated {
         );
         action.play();
 
-    }
 
+    }
 
     // Event Handlers -------------------------------
 
-    public override onCollision(collisions: Container[]): void {
+    //TODO: Rethink what and where this should be
+    public isCollected = false;
+    public collect() {
 
-        if (!this._isCollidable) {
+        if (this.isCollected) {
             return;
         }
-
-        collisions.forEach((superSprite) => {
-            if (superSprite instanceof Player) {
-                this._isCollidable = false;
-                this.destroyAfterAnimation();
-            }
-        });
+        this.isCollected = true;
+        this.destroyAfterAnimation();
     }
+
 }
+
+

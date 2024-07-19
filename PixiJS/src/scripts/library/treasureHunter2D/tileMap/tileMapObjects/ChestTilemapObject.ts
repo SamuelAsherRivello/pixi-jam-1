@@ -1,6 +1,5 @@
+import { ActorStatic, ActorStaticConfiguration } from '@src/scripts/library/gixi/ActorStatic';
 import { GixiApplication } from '@src/scripts/library/gixi/GixiApplication';
-import { TilemapObject, TilemapObjectConfiguration } from '@src/scripts/library/gixi/tilemap/TilemapObject';
-import { Player } from '@src/scripts/library/treasureHunter2D/Player';
 import { Actions, Interpolations } from 'pixi-actions';
 import { DropShadowFilter } from 'pixi-filters';
 import { Container, Ticker } from 'pixi.js';
@@ -9,9 +8,7 @@ import { Container, Ticker } from 'pixi.js';
  * Represents a coin in the game.
  * 
  */
-export class ChestTilemapObject extends TilemapObject {
-
-
+export class ChestTilemapObject extends ActorStatic {
 
     // Properties -----------------------------------
 
@@ -20,7 +17,7 @@ export class ChestTilemapObject extends TilemapObject {
 
 
     // Initialization -------------------------------
-    constructor(app: GixiApplication, configuration?: Partial<TilemapObjectConfiguration>) {
+    constructor(app: GixiApplication, configuration?: Partial<ActorStaticConfiguration>) {
 
         super(app, configuration);
 
@@ -59,7 +56,7 @@ export class ChestTilemapObject extends TilemapObject {
             Actions.delay(0),
             Actions.runFunc(() => {
                 // BEFORE Animation: Call something?
-                this._app.systems.audioSystem.Play("./assets/audio/Chime02.mp3");
+                this._app.systems.audioSystem.play("./assets/audio/Chime02.mp3");
             }),
             Actions.parallel(
 
@@ -86,18 +83,15 @@ export class ChestTilemapObject extends TilemapObject {
 
     // Event Handlers -------------------------------
 
-    public override onCollision(collisions: Container[]): void {
+    //TODO: Rethink what and where this should be
+    public isCollected = false;
+    public collect() {
 
-        if (!this._isCollidable) {
+        if (this.isCollected) {
             return;
         }
-
-        collisions.forEach((superSprite) => {
-            if (superSprite instanceof Player) {
-                this._isCollidable = false;
-                this.destroyAfterAnimation();
-            }
-        });
+        this.isCollected = true;
+        this.destroyAfterAnimation();
     }
 
 }

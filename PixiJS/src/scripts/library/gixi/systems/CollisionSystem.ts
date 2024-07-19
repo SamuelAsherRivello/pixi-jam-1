@@ -1,6 +1,8 @@
 import { GixiApplication } from "../GixiApplication";
 import * as PIXI from 'pixi.js';
 import { SystemBase } from "./SystemBase";
+import { ActorContainer } from "../ActorContainer";
+import { Viewport } from "pixi-viewport";
 
 /**
  * CollisionSystem is responsible for detecting collisions between PIXI containers.
@@ -21,12 +23,18 @@ export class CollisionSystem extends SystemBase {
      * @returns An array of sprites that are colliding with the given sprite.
      */
     public getCollisions(me: PIXI.Container): PIXI.Container[] {
-        const collidingSprites: PIXI.Container[] = [
+        const collisions: PIXI.Container[] = [
             ...this.getCollidingSpritesFromChildren(me, this._app.app.stage.children),
             ...this.getCollidingSpritesFromChildren(me, this._app.viewport.children),
         ];
 
-        return collidingSprites;
+        // console.log("this : " + me.label)
+
+        // if (me.label == "Player") {
+        //     console.log("length : " + collisions.length)
+        // };
+
+        return collisions;
     }
 
     // Internal Methods -----------------------------
@@ -57,10 +65,18 @@ export class CollisionSystem extends SystemBase {
      */
     private getCollidingSpritesFromChildren(me: PIXI.Container, children: PIXI.Container[]): PIXI.Container[] {
         return children.filter((child) => {
+            const isCollidable =
+                child instanceof ActorContainer
+                    ? child.configuration.isCollidable
+                    : true;
+
             return (
+                child instanceof Viewport &&        //TODO: Remove this check. Handle elsewhere
+                child instanceof PIXI.Graphics &&   //TODO: Remove this check. Handle elsewhere
                 child instanceof PIXI.Container &&
                 child !== me &&
-                this.isCollidingWith(me, child as PIXI.Container)
+                this.isCollidingWith(me, child as PIXI.Container) &&
+                isCollidable
             );
         }) as PIXI.Container[];
     }

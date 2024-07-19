@@ -72,7 +72,6 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
     this._isFullscreen = value;
 
     var elem = document.getElementById(this.app.canvas.id);
-    console.log(this.app.canvas.id)
 
     if (this._isFullscreen) {
 
@@ -133,16 +132,30 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
     if (this._isInitialized) {
       return;
     }
+
     this._isInitialized = true;
-    console.log("initializeAsync()" + this._isInitialized);
 
     try {
       await this.app.init({
+        canvas: document.getElementById(this._canvasId) as HTMLCanvasElement,
+        backgroundColor: this.configuration.backgroundColor,
         width: this.configuration.widthInitial,
         height: this.configuration.heightInitial,
-        backgroundColor: this.configuration.backgroundColor,
         resizeTo: window,
-        canvas: document.getElementById(this._canvasId) as HTMLCanvasElement,
+
+        // EVENTS
+        eventMode: 'passive',
+        eventFeatures: {
+
+          /** what is this? */
+          move: true, //try false after I get swipe working
+
+          /** disables the global move events which can be very expensive in large scenes */
+          globalMove: true, //try false after I get swipe working
+          click: true,
+          wheel: false
+        }
+
       });
 
       this.app.ticker.minFPS = this.configuration.minFPS;
@@ -208,8 +221,6 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
   // Add to camera-controlled scene tree
   public addToViewport(obj: PIXI.Container | PIXI.Sprite | SuperText): any {
 
-
-    console.log("addToViewport()" + this._isInitialized);
     this.requireIsInitialized();
 
     this.viewport.addChild(obj);

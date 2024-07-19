@@ -85,13 +85,6 @@ export class TilemapCollisionSystem {
         const tilemapGlobalPos = new PIXI.Point();
         this._Tilemap.toGlobal(new PIXI.Point(0, 0), tilemapGlobalPos);
 
-        // console.log(`Player local position: (${localPos.x}, ${localPos.y}) with dimensions (${width}, ${height})`);
-        // console.log(`Player local tile position: (${localTileX}, ${localTileY})`);
-        // console.log(`Player global position: (${globalPos.x}, ${globalPos.y})`);
-        // console.log(`Player global tile position: (${globalTileX}, ${globalTileY})`);
-        // console.log(`Tilemap global position: (${tilemapGlobalPos.x}, ${tilemapGlobalPos.y})`);
-        // console.log(`Checking collision from (${startX}, ${startY}) to (${endX}, ${endY})`);
-
         for (let tileY = startY; tileY < endY; tileY++) {
             for (let tileX = startX; tileX < endX; tileX++) {
                 if (tileY >= 0 && tileY < this.collisionMap.length && tileX >= 0 && tileX < this.collisionMap[0].length) {

@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js';
 import { GixiApplication } from '@src/scripts/library/gixi/GixiApplication';
 import { GixiUtility } from '../GixiUtility';
 import { IInitializableAsync } from '../interfaces/IInitializeAsync';
-import { ActorContainer } from '../ActorContainer';
+import { ActorContainer, ActorContainerConfiguration } from '../ActorContainer';
 import { TilemapCollisionSystem } from './TilemapCollisionSystem';
 
 export interface TilemapData {
@@ -72,19 +72,32 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
 
   // Initialization -------------------------------
   constructor(app: GixiApplication, tilemapDataUrl: string, TilemapItemFactory: ITilemapItemFactory) {
-    super(app);
+
+    const configuration: ActorContainerConfiguration = {
+      isCollidable: false,
+      isTickable: false,
+      isResizable: false
+    }
+    super(app, configuration);
 
     this._tilemapDataUrl = tilemapDataUrl;
     this._TilemapItemFactory = TilemapItemFactory;
     this._TilemapCollisionSystem = new TilemapCollisionSystem(this._app, this);
 
-    //https://pixijs.com/8.x/guides/advanced/render-groups
-    //As you delve deeper into PixiJS, especially with version 8, 
-    //you'll encounter a powerful feature known as RenderGroups. Think 
-    //of RenderGroups as specialized containers within your scene graph 
-    //that act like mini scene graphs themselves. Here's what you need to
-    // know to effectively use Render Groups in your projects:
+
+    // OPTIMIZATION
+    //  https://pixijs.com/8.x/guides/advanced/render-groups
+    //    As you delve deeper into PixiJS, especially with version 8, 
+    //    you'll encounter a powerful feature known as RenderGroups. Think 
+    //    of RenderGroups as specialized containers within your scene graph 
+    //    that act like mini scene graphs themselves. Here's what you need to
+    //    know to effectively use Render Groups in your projects:
     this.isRenderGroup = true;
+
+    // INPUT
+    // https://pixijs.com/8.x/guides/components/interaction
+    this.interactive = false;
+    this.interactiveChildren = false;
 
 
     //
@@ -98,6 +111,7 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
   }
 
   public override async initializeAsync() {
+
 
     if (this.isInitialized) {
       return;
@@ -230,8 +244,6 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
           layerType: LayerType.ObjectGroup,
           type: typeResult
         };
-
-        //console.log("Object type: " + tilemapItemData.type); // Log the type for debugging
 
         const sprite = await this._TilemapItemFactory.createTilemapItem(tilemapItemData);
         sprite.label = `Object (${object.id})`;

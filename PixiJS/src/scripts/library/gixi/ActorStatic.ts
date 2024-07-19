@@ -47,11 +47,11 @@ export class ActorStatic extends ActorContainer implements IInitializableAsync, 
             throw new Error("You cannot set both texture and textureUrl in the configuration");
         }
 
+        this.initializeAsync();
+
         // Redeclare anything from super 
         // that you want differently here
         this.label = (ActorStatic).name;
-
-        this.initializeAsync();
     }
 
 
@@ -69,6 +69,7 @@ export class ActorStatic extends ActorContainer implements IInitializableAsync, 
             this._sprite = new PIXI.Sprite(texture);
         }
 
+        this._sprite.label = this.label;
         this.addChild(this._sprite);
         this._sprite.anchor.set(0.5, 0.5);
 

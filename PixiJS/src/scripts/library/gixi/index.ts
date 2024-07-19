@@ -13,7 +13,6 @@ import {
 import { ActorContainer, ActorContainerConfiguration } from './ActorContainer';
 import { TilemapCollisionSystem } from './tilemap/TilemapCollisionSystem';
 import { TilemapItemFactoryDefault } from './tilemap/TilemapItemFactoryDefault';
-import { TilemapObject } from './tilemap/TilemapObject';
 import { ActorStatic, ActorStaticConfiguration } from './ActorStatic';
 import { ActorAnimated, ActorAnimatedConfiguration } from './ActorAnimated';
 import { GixiApplication } from './GixiApplication';
@@ -26,7 +25,6 @@ export const GIXI = {
     Tilemap,
     TilemapCollisionSystem,
     TilemapItemFactoryDefault,
-    TilemapObject,
     ActorStatic,
     ActorAnimated,
     GixiApplication,
