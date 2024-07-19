@@ -1,14 +1,15 @@
 import * as PIXI from 'pixi.js';
-import { IInitializableAsync } from '../super/IInitializeAsync';
-import { SuperApp } from '../super/SuperApp';
-import { IActor } from './IActor';
-import { ActorConfiguration } from './ActorConfiguration';
+import { IInitializableAsync } from './interfaces/IInitializeAsync';
+import { GixiApplication } from './GixiApplication';
+import { IActor } from './interfaces/IActor';
+import { IActorConfiguration } from './interfaces/IActorConfiguration';
 
 
 /**
 * Configuration
 */
-export interface ActorContainerConfiguration extends ActorConfiguration {
+export interface ActorContainerConfiguration extends IActorConfiguration {
+
 }
 
 const ActorContainerConfigurationDefault: ActorContainerConfiguration = {
@@ -43,12 +44,12 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
   protected _configuration: ActorContainerConfiguration;
   protected _isInitialized: boolean = false;
   protected _isCollidable: boolean = true;
-  protected _superApp: SuperApp;
+  protected _superApp: GixiApplication;
 
 
 
   // Initialization -------------------------------
-  constructor(superApp: SuperApp,
+  constructor(superApp: GixiApplication,
     configuration?: Partial<ActorContainerConfiguration>) {
 
     super();
@@ -62,7 +63,7 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
 
     // Resize
     if (this.configuration.isResizable) {
-      this._superApp.addListener(SuperApp.EVENT_RESIZE, this.onResizeInternal.bind(this));
+      this._superApp.addListener(GixiApplication.EVENT_RESIZE, this.onResizeInternal.bind(this));
     }
 
     // DO NOT CALL initializeAsync here. It is called by the child
@@ -97,7 +98,7 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
       this._superApp.app.ticker.remove(this.onTickInternal.bind(this));
     }
     if (this.configuration.isResizable) {
-      this._superApp.removeListener(SuperApp.EVENT_RESIZE, this.onResizeInternal.bind(this));
+      this._superApp.removeListener(GixiApplication.EVENT_RESIZE, this.onResizeInternal.bind(this));
     }
     this._isDestroyed = true;
     super.destroy(options);
@@ -112,7 +113,7 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
     // Empty implementation to be overridden
   }
 
-  public onResize(superApp: SuperApp): void {
+  public onResize(superApp: GixiApplication): void {
     // Empty implementation to be overridden
   }
 
@@ -138,7 +139,7 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
     this.onTick(ticker);
   }
 
-  private onResizeInternal(superApp: SuperApp): void {
+  private onResizeInternal(superApp: GixiApplication): void {
     if (this._isDestroyed) return;
     this.onResize(superApp);
   }

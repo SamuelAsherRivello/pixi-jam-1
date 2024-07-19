@@ -1,4 +1,4 @@
-import { SuperApp } from '@src/scripts/library/core/super/SuperApp';
+import { GixiApplication } from '@src/scripts/library/core/gixi/GixiApplication';
 import { Player } from '../Player';
 import { Actions, Interpolations } from 'pixi-actions';
 import { Container } from 'pixi.js';
@@ -18,7 +18,7 @@ export class Coin extends ActorAnimated {
 
 
     // Initialization -------------------------------
-    constructor(superApp: SuperApp, configuration?: Partial<ActorAnimatedConfiguration>) {
+    constructor(superApp: GixiApplication, configuration?: Partial<ActorAnimatedConfiguration>) {
 
         super(superApp, configuration);
 

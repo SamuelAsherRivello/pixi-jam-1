@@ -1,10 +1,10 @@
-import { SuperApp } from "../SuperApp";
+import { GixiApplication } from "../../gixi/GixiApplication";
 import * as PIXI from 'pixi.js';
 
 export class CollisionSystem {
-    private _superApp: SuperApp;
+    private _superApp: GixiApplication;
 
-    constructor(superApp: SuperApp) {
+    constructor(superApp: GixiApplication) {
         this._superApp = superApp;
     }
 

@@ -1,14 +1,14 @@
 import * as PIXI from 'pixi.js';
-import { SuperApp } from '../../super/SuperApp';
+import { GixiApplication } from '../GixiApplication';
 import { TilemapData } from '..';
 import { Tilemap } from './Tilemap';
 
 export class TilemapCollisionSystem {
     private collisionMap!: boolean[][];
-    private _superApp: SuperApp;
+    private _superApp: GixiApplication;
     private _Tilemap: Tilemap;
 
-    constructor(superApp: SuperApp, Tilemap: Tilemap) {
+    constructor(superApp: GixiApplication, Tilemap: Tilemap) {
         this._superApp = superApp;
         this._Tilemap = Tilemap;
     }

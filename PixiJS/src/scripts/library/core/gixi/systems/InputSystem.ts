@@ -1,4 +1,4 @@
-import { SuperApp } from "../SuperApp";
+import { GixiApplication } from "../../gixi/GixiApplication";
 
 /**
  * Handles keyboard input and maintains the state of keys.
@@ -12,10 +12,10 @@ export class InputSystem {
 
     // Fields ---------------------------------------
     private _keyStateDictionary: Map<string, KeyState>;
-    private _superApp: SuperApp;
+    private _superApp: GixiApplication;
 
     // Initialization -------------------------------
-    constructor(superApp: SuperApp) {
+    constructor(superApp: GixiApplication) {
         this._superApp = superApp;
         this._keyStateDictionary = new Map();
     }

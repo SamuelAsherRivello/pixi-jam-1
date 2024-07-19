@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { SuperApp } from './SuperApp';
+import { GixiApplication } from '../gixi/GixiApplication';
 
 /**
  * Subclass PIXI.Text if you want basic text functionality.
@@ -9,10 +9,10 @@ import { SuperApp } from './SuperApp';
 export class SuperText extends PIXI.Text {
 
     // Fields ---------------------------------------
-    protected _superApp: SuperApp;
+    protected _superApp: GixiApplication;
 
     // Initialization -------------------------------
-    constructor(superApp: SuperApp, message: string, fontSize: number = 8, align: PIXI.TextStyleAlign = 'left') {
+    constructor(superApp: GixiApplication, message: string, fontSize: number = 8, align: PIXI.TextStyleAlign = 'left') {
 
 
         const textStyle = new PIXI.TextStyle({
@@ -39,7 +39,7 @@ export class SuperText extends PIXI.Text {
         superApp.app.ticker.add(this.onTick.bind(this));
 
         // Resize
-        this._superApp.addListener(SuperApp.EVENT_RESIZE, this.onResize.bind(this));
+        this._superApp.addListener(GixiApplication.EVENT_RESIZE, this.onResize.bind(this));
         this.onResize(this._superApp);
 
     }
@@ -58,7 +58,7 @@ export class SuperText extends PIXI.Text {
         // Empty implementation to be overridden
     }
 
-    public onResize(superApp: SuperApp): void {
+    public onResize(superApp: GixiApplication): void {
         // Empty implementation to be overridden
     }
 

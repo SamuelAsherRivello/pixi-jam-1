@@ -1,15 +1,14 @@
-import { ActorContainer } from './ActorContainer';
-import { SuperApp } from '../super/SuperApp';
-import { IActor } from './IActor';
-import { IInitializableAsync } from '../super/IInitializeAsync';
-import { ActorConfiguration } from './ActorConfiguration';
-import { SuperUtility } from '../super/SuperUtility';
+import { ActorContainer, ActorContainerConfiguration } from './ActorContainer';
+import { GixiApplication } from './GixiApplication';
+import { IActor } from './interfaces/IActor';
+import { IInitializableAsync } from './interfaces/IInitializeAsync';
+import { GixiUtility } from './GixiUtility';
 import * as PIXI from 'pixi.js';
 
 /**
  * Configuration
  */
-export interface ActorStaticConfiguration extends ActorConfiguration {
+export interface ActorStaticConfiguration extends ActorContainerConfiguration {
     textureUrl: string;
     texture: PIXI.Texture;
 }
@@ -39,12 +38,12 @@ export class ActorStatic extends ActorContainer implements IInitializableAsync, 
     protected _sprite!: PIXI.Sprite;
 
     // Initialization -------------------------------
-    constructor(superApp: SuperApp, configuration?: Partial<ActorStaticConfiguration>) {
+    constructor(superApp: GixiApplication, configuration?: Partial<ActorStaticConfiguration>) {
 
         super(superApp, { ...ActorStaticConfigurationDefault, ...configuration });
 
-        if (!SuperUtility.textureIsNullOrEmpty(this.configuration?.texture) &&
-            !SuperUtility.stringIsNullOrEmpty(this.configuration?.textureUrl)) {
+        if (!GixiUtility.textureIsNullOrEmpty(this.configuration?.texture) &&
+            !GixiUtility.stringIsNullOrEmpty(this.configuration?.textureUrl)) {
             throw new Error("You cannot set both texture and textureUrl in the configuration");
         }
 
@@ -61,10 +60,10 @@ export class ActorStatic extends ActorContainer implements IInitializableAsync, 
         // Super
         await super.initializeAsync();
 
-        if (!SuperUtility.textureIsNullOrEmpty(this.configuration?.texture)) {
+        if (!GixiUtility.textureIsNullOrEmpty(this.configuration?.texture)) {
             this._sprite = new PIXI.Sprite(this.configuration?.texture);
         }
-        else if (!SuperUtility.stringIsNullOrEmpty(this.configuration?.textureUrl)) {
+        else if (!GixiUtility.stringIsNullOrEmpty(this.configuration?.textureUrl)) {
             await PIXI.Assets.load([this.configuration.textureUrl]);
             const texture: PIXI.Texture = PIXI.Texture.from(this.configuration.textureUrl);
             this._sprite = new PIXI.Sprite(texture);

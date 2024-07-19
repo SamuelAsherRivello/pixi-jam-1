@@ -16,7 +16,9 @@ import { TilemapItemFactoryDefault } from './tilemap/TilemapItemFactoryDefault';
 import { TilemapObject } from './tilemap/TilemapObject';
 import { ActorStatic, ActorStaticConfiguration } from './ActorStatic';
 import { ActorAnimated, ActorAnimatedConfiguration } from './ActorAnimated';
-import { ActorConfiguration } from './ActorConfiguration';
+import { GixiApplication } from './GixiApplication';
+import { GixiUtility } from './GixiUtility';
+import { IActorConfiguration } from './interfaces/IActorConfiguration';
 
 // Classes - GIXI
 export const GIXI = {
@@ -26,7 +28,9 @@ export const GIXI = {
     TilemapItemFactoryDefault,
     TilemapObject,
     ActorStatic,
-    ActorAnimated
+    ActorAnimated,
+    GixiApplication,
+    GixiUtility,
 };
 
 // Non-Classes - Not Yet GIXI - TODO: Add to GIXI somehow. Not sure
@@ -38,7 +42,7 @@ export type {
     TilemapItemData,
     LayerType,
     ITilemapItemFactory,
-    ActorConfiguration,
+    IActorConfiguration,
     ActorContainerConfiguration,
     ActorAnimatedConfiguration,
     ActorStaticConfiguration

@@ -1,15 +1,15 @@
 import { ITilemapItemFactory, TilemapItemData } from "..";
 import * as PIXI from 'pixi.js';
 import { LayerType } from './Tilemap';
-import { SuperApp } from "../../super/SuperApp";
+import { GixiApplication } from "../GixiApplication";
 
 export class TilemapItemFactoryDefault implements ITilemapItemFactory {
 
     // Fields ---------------------------------------
-    private _superApp: SuperApp;
+    private _superApp: GixiApplication;
 
     // Initialization -------------------------------
-    constructor(superApp: SuperApp) {
+    constructor(superApp: GixiApplication) {
         this._superApp = superApp;
     }
 

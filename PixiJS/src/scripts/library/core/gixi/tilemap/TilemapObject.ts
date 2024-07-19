@@ -1,6 +1,6 @@
 //PIXI
 import * as PIXI from 'pixi.js';
-import { SuperApp } from '../../super/SuperApp';
+import { GixiApplication } from '../GixiApplication';
 import { ActorStatic, ActorStaticConfiguration } from '../ActorStatic';
 
 /**
@@ -32,7 +32,7 @@ export class TilemapObject extends ActorStatic {
 
 
     // Initialization -------------------------------
-    constructor(superApp: SuperApp, configuration?: Partial<TilemapObjectConfiguration>) {
+    constructor(superApp: GixiApplication, configuration?: Partial<TilemapObjectConfiguration>) {
 
         super(superApp, { ...TilemapObjectConfigurationDefault, ...configuration });
 

@@ -1,5 +1,5 @@
 import { SuperText } from '../../core/super/SuperText';
-import { SuperApp } from '../../core/super/SuperApp';
+import { GixiApplication } from '../../core/gixi/GixiApplication';
 
 export class ScoreSuperText extends SuperText {
 
@@ -8,7 +8,7 @@ export class ScoreSuperText extends SuperText {
     // Initialization -------------------------------
 
     // Event Handlers -------------------------------
-    public override onResize(superApp: SuperApp): void {
+    public override onResize(superApp: GixiApplication): void {
 
         //UPDATE POSITION
         this.x = superApp.app.screen.width - this.width - superApp.configuration.data.ScreenUIMarginX;

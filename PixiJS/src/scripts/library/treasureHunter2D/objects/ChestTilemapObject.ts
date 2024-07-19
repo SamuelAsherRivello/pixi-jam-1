@@ -1,7 +1,7 @@
 import { Player } from '@src/scripts/library/treasureHunter2D/Player';
 import { Container, Ticker } from 'pixi.js';
 import { TilemapObject, TilemapObjectConfiguration } from '../../core/gixi/tilemap/TilemapObject';
-import { SuperApp } from '../../core/super/SuperApp';
+import { GixiApplication } from '../../core/gixi/GixiApplication';
 
 /**
  * Represents a coin in the game.
@@ -18,7 +18,7 @@ export class ChestTilemapObject extends TilemapObject {
 
 
     // Initialization -------------------------------
-    constructor(superApp: SuperApp, configuration?: Partial<TilemapObjectConfiguration>) {
+    constructor(superApp: GixiApplication, configuration?: Partial<TilemapObjectConfiguration>) {
 
         super(superApp, configuration);
 

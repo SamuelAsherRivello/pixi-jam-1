@@ -4,7 +4,6 @@ import Stats from 'stats.js';
 import { Actions, Interpolations } from 'pixi-actions';
 
 //CORE
-import { SuperApp, SuperAppConfiguration } from '@src/scripts/library/core/super/SuperApp';
 
 //TREASURE HUNTER GAME
 import { InstructionsSuperText } from '@src/scripts/library/treasureHunter2D/ui/InstructionsSuperText';
@@ -13,6 +12,7 @@ import { Player } from '@src/scripts/library/treasureHunter2D/Player';
 import { Coin } from './library/treasureHunter2D/objects/Coin';
 import { GIXI } from './library/core/gixi';
 import { TilemapItemFactoryCustom } from './library/treasureHunter2D/TilemapItemFactoryCustom';
+import { GixiApplication, GixiApplicationConfiguration } from './library/core/gixi/GixiApplication';
 
 
 
@@ -45,7 +45,7 @@ let tempWorldOrigin: PIXI.Graphics;
 /////////////////////////////
 // Create App
 /////////////////////////////
-const superAppConfiguration: SuperAppConfiguration = {
+const superAppConfiguration: GixiApplicationConfiguration = {
 
   //Show all values here, for readability
   widthInitial: 1920,
@@ -53,7 +53,7 @@ const superAppConfiguration: SuperAppConfiguration = {
   backgroundColor: 0x87867a,
   data: superAppData
 }
-const superAppConst = new SuperApp('pixi-application-canvas', superAppConfiguration);
+const superAppConst = new GixiApplication('pixi-application-canvas', superAppConfiguration);
 
 
 /////////////////////////////
@@ -75,7 +75,7 @@ document.body.appendChild(stats.dom);
 /////////////////////////////
 // Handle App Initialize
 /////////////////////////////
-async function onInitializeCompleted(superApp: SuperApp) {
+async function onInitializeCompleted(superApp: GixiApplication) {
 
 
 
@@ -193,8 +193,8 @@ function onInitializeError(error: Error) {
 /////////////////////////////
 // Initialize App
 /////////////////////////////
-superAppConst.addListener(SuperApp.EVENT_INITIALIZE_COMPLETE, onInitializeCompleted);
-superAppConst.addListener(SuperApp.EVENT_INITIALIZE_ERROR, onInitializeError);
+superAppConst.addListener(GixiApplication.EVENT_INITIALIZE_COMPLETE, onInitializeCompleted);
+superAppConst.addListener(GixiApplication.EVENT_INITIALIZE_ERROR, onInitializeError);
 
 
 (async () => {

@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { SuperApp } from '@src/scripts/library/core/super/SuperApp';
+import { GixiApplication } from '@src/scripts/library/core/gixi/GixiApplication';
 import { Tilemap } from '../core/gixi/tilemap/Tilemap';
 import { ActorStatic, ActorStaticConfiguration } from '../core/gixi/ActorStatic';
 
@@ -31,7 +31,7 @@ export class Player extends ActorStatic {
     private _Tilemap: Tilemap;
 
     // Initialization -------------------------------
-    constructor(superApp: SuperApp, Tilemap: Tilemap, configuration?: Partial<PlayerConfiguration>) {
+    constructor(superApp: GixiApplication, Tilemap: Tilemap, configuration?: Partial<PlayerConfiguration>) {
 
         super(superApp, { ...PlayerConfigurationDefault, ...configuration });
         this._Tilemap = Tilemap;
@@ -73,10 +73,10 @@ export class Player extends ActorStatic {
         //let globalPos = this.toGlobal(this.position);
 
         if (isCollision) {
-            console.log(`isCollision (${x}, ${y}, ${width}, ${height}) = ${isCollision}`);
+            console.log(`isCollisionWithTilemap (x=${x}, y=${y}) = ${isCollision}`);
         }
         else {
-            //console.log(`isCollision (${x}, ${y}, ${width}, ${height}) = ${isCollision}`);
+            //console.log(`isCollisionWithTilemap (x=${x}, y=${y}) = ${isCollision}`);
         }
 
 

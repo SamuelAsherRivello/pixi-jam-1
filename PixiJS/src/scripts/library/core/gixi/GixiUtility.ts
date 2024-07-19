@@ -3,7 +3,7 @@ import * as PIXI from 'pixi.js';
 /**
  * Common functionality
  */
-export class SuperUtility {
+export class GixiUtility {
 
   // Properties -----------------------------------
 

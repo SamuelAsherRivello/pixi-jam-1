@@ -1,9 +1,8 @@
-import { ActorContainer } from './ActorContainer';
-import { SuperApp } from '../super/SuperApp';
-import { IActor } from './IActor';
-import { IInitializableAsync } from '../super/IInitializeAsync';
-import { ActorConfiguration } from './ActorConfiguration';
-import { SuperUtility } from '../super/SuperUtility';
+import { ActorContainer, ActorContainerConfiguration } from './ActorContainer';
+import { GixiApplication } from './GixiApplication';
+import { IActor } from './interfaces/IActor';
+import { IInitializableAsync } from './interfaces/IInitializeAsync';
+import { GixiUtility } from './GixiUtility';
 import * as PIXI from 'pixi.js';
 
 
@@ -25,7 +24,7 @@ class MultiAnimatedSprite {
     }
 
     // Methods ------------------------------
-    public async initializeAndReparent(superApp: SuperApp, parent: PIXI.Container) {
+    public async initializeAndReparent(superApp: GixiApplication, parent: PIXI.Container) {
         const spriteSheetAtlasResponse = await fetch(this._spriteSheetURL);
         const spriteSheetAtlas = await spriteSheetAtlasResponse.json();
         await PIXI.Assets.load(this._textureImageURL);
@@ -68,7 +67,7 @@ class MultiAnimatedSprite {
 /**
  * Configuration
  */
-export interface ActorAnimatedConfiguration extends ActorConfiguration {
+export interface ActorAnimatedConfiguration extends ActorContainerConfiguration {
 }
 
 const ActorAnimatedConfigurationDefault: ActorAnimatedConfiguration = {
@@ -94,7 +93,7 @@ export class ActorAnimated extends ActorContainer implements IInitializableAsync
     protected _multiAnimatedSprite!: MultiAnimatedSprite;
 
     // Initialization -------------------------------
-    constructor(superApp: SuperApp, configuration?: Partial<ActorAnimatedConfiguration>) {
+    constructor(superApp: GixiApplication, configuration?: Partial<ActorAnimatedConfiguration>) {
 
         super(superApp, { ...ActorAnimatedConfigurationDefault, ...configuration });
 

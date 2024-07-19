@@ -1,24 +1,23 @@
 import * as PIXI from 'pixi.js';
 import { Viewport } from 'pixi-viewport';
-//
 import { EventEmitter } from 'events';
-import { SuperText } from './SuperText';
-import { IInitializableAsync } from './IInitializeAsync';
+import { SuperText } from '../super/SuperText';
+import { IInitializableAsync } from './interfaces/IInitializeAsync';
 import { CollisionSystem } from './systems/CollisionSystem';
 import { InputSystem } from './systems/InputSystem';
-import { ActorContainer } from '../gixi/ActorContainer';
+import { ActorContainer } from './ActorContainer';
 
 /**
  * Configuration
  */
-export interface SuperAppConfiguration {
+export interface GixiApplicationConfiguration {
   widthInitial: number;
   heightInitial: number;
   backgroundColor: number;
   data: { [key: string]: any };
 }
 
-const SuperAppConfigurationDefault: SuperAppConfiguration = {
+const GixiApplicationConfigurationDefault: GixiApplicationConfiguration = {
   widthInitial: 1920,
   heightInitial: 1080,
   backgroundColor: 0x1099bb,
@@ -26,12 +25,14 @@ const SuperAppConfigurationDefault: SuperAppConfiguration = {
 }
 
 
+class Systems {
 
-
-export class Systems {
+  // Fields ---------------------------------------
   public collisionSystem: CollisionSystem;
   public inputSystem: InputSystem;
-  constructor(superApp: SuperApp) {
+
+  // Initialization -------------------------------
+  constructor(superApp: GixiApplication) {
     this.collisionSystem = new CollisionSystem(superApp);
     this.inputSystem = new InputSystem(superApp);
   }
@@ -41,7 +42,7 @@ export class Systems {
 /**
  * Wrapper class for initializing and managing a PixiJS application.
  */
-export class SuperApp extends EventEmitter implements IInitializableAsync {
+export class GixiApplication extends EventEmitter implements IInitializableAsync {
 
 
   // Constants ------------------------------------
@@ -58,14 +59,14 @@ export class SuperApp extends EventEmitter implements IInitializableAsync {
     return this._systems;
   }
 
-  public get configuration(): SuperAppConfiguration {
+  public get configuration(): GixiApplicationConfiguration {
     return this._configuration;
   }
 
   // Fields ---------------------------------------
   public app: PIXI.Application;
   public viewport!: Viewport;
-  private _configuration: SuperAppConfiguration;
+  private _configuration: GixiApplicationConfiguration;
   //
   private _canvasId: string;
   private _isInitialized = false;
@@ -74,7 +75,7 @@ export class SuperApp extends EventEmitter implements IInitializableAsync {
   // Initialization -------------------------------
   constructor(
     canvasId: string = 'pixi-application-canvas',
-    configuration?: Partial<SuperAppConfiguration>
+    configuration?: Partial<GixiApplicationConfiguration>
   ) {
 
     /////////////////////////////
@@ -84,7 +85,7 @@ export class SuperApp extends EventEmitter implements IInitializableAsync {
     this._canvasId = canvasId;
     //
     this.app = new PIXI.Application();
-    this._configuration = { ...SuperAppConfigurationDefault, ...configuration };
+    this._configuration = { ...GixiApplicationConfigurationDefault, ...configuration };
     this._systems = new Systems(this);
 
     // Every SuperSprite instance listens to SuperApp
@@ -135,7 +136,7 @@ export class SuperApp extends EventEmitter implements IInitializableAsync {
 
 
       /////////////////////////////
-      this.emit(SuperApp.EVENT_INITIALIZE_COMPLETE, this);
+      this.emit(GixiApplication.EVENT_INITIALIZE_COMPLETE, this);
 
       this.setupResizeHandling();
       this.setupKeyboardHandling();
@@ -147,7 +148,7 @@ export class SuperApp extends EventEmitter implements IInitializableAsync {
     } catch (error) {
       console.log(`PIXI.Application.init() failed! PixiJS v${PIXI.VERSION} with ${this.GetRendererTypeAsString(this.app.renderer.type)} `);
 
-      this.emit(SuperApp.EVENT_INITIALIZE_ERROR, error);
+      this.emit(GixiApplication.EVENT_INITIALIZE_ERROR, error);
     }
 
 
@@ -241,7 +242,7 @@ export class SuperApp extends EventEmitter implements IInitializableAsync {
 
   public resize = () => {
 
-    this.emit(SuperApp.EVENT_RESIZE, this);
+    this.emit(GixiApplication.EVENT_RESIZE, this);
   };
 
   private setupResizeHandling() {

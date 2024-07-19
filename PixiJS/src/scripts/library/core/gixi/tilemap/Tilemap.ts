@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
-import { SuperApp } from '@src/scripts/library/core/super/SuperApp';
-import { SuperUtility } from '../../super/SuperUtility';
-import { IInitializableAsync } from '../../super/IInitializeAsync';
+import { GixiApplication } from '@src/scripts/library/core/gixi/GixiApplication';
+import { GixiUtility } from '../GixiUtility';
+import { IInitializableAsync } from '../interfaces/IInitializeAsync';
 import { ActorContainer } from '../ActorContainer';
 import { TilemapCollisionSystem } from './TilemapCollisionSystem';
 
@@ -71,7 +71,7 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
   private _tilemapData!: TilemapData;
 
   // Initialization -------------------------------
-  constructor(superApp: SuperApp, tilemapDataUrl: string, TilemapItemFactory: ITilemapItemFactory) {
+  constructor(superApp: GixiApplication, tilemapDataUrl: string, TilemapItemFactory: ITilemapItemFactory) {
     super(superApp);
 
     this._tilemapDataUrl = tilemapDataUrl;
@@ -180,10 +180,10 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
         let typePrimary = object.type; //BUG: THis is never populated. Its backup. Ok for now
         let typeBackup = this.getTileType(tileset, localTileIndex)?.toString();
 
-        if (!SuperUtility.stringIsNullOrEmpty(typePrimary)) {
+        if (!GixiUtility.stringIsNullOrEmpty(typePrimary)) {
           typeResult = typePrimary;
         }
-        else if (typeBackup != null && !SuperUtility.stringIsNullOrEmpty(typeBackup)) {
+        else if (typeBackup != null && !GixiUtility.stringIsNullOrEmpty(typeBackup)) {
           typeResult = typeBackup;
         }
 
@@ -240,7 +240,7 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
     }
   }
 
-  public override onResize(superApp: SuperApp): void {
+  public override onResize(superApp: GixiApplication): void {
     // Handle resizing logic
   }
 
