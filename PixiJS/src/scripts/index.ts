@@ -84,17 +84,19 @@ async function onInitializeCompleted(gixiApp: GixiApplication) {
   /////////////////////////////
   // Create Tilemap
   /////////////////////////////
-  const Tilemap = new GIXI.Tilemap(
+  const tilemap = new GIXI.Tilemap(
     gixiApp,
     gixiAppData.TilemapDataUrl,
     new TilemapItemFactoryCustom(gixiApp)
   );
 
   //Initialize first, so width and height are available
-  await Tilemap.initializeAsync();
-  gixiApp.addToViewport(Tilemap);
-  Tilemap.x = gixiApp.getScreenCenterpoint().x - Tilemap.width / 2;
-  Tilemap.y = gixiApp.getScreenCenterpoint().y - Tilemap.height / 2;
+  await tilemap.initializeAsync();
+
+  console.log("gixiApp: " + gixiApp.isInitialized);
+  gixiApp.addToViewport(tilemap);
+  tilemap.x = gixiApp.getScreenCenterpoint().x - tilemap.width / 2;
+  tilemap.y = gixiApp.getScreenCenterpoint().y - tilemap.height / 2;
 
   /////////////////////////////
   // Temp:  World centerpoint
@@ -114,7 +116,7 @@ async function onInitializeCompleted(gixiApp: GixiApplication) {
   /////////////////////////////
   // Create Player
   /////////////////////////////
-  player = new Player(gixiApp, Tilemap, { textureUrl: gixiAppData.PlayerTextureUrl as string });
+  player = new Player(gixiApp, tilemap, { textureUrl: gixiAppData.PlayerTextureUrl as string });
   gixiApp.addToViewport(player);
   player.x = gixiApp.getScreenCenterpoint().x;
   player.y = gixiApp.getScreenCenterpoint().y;
