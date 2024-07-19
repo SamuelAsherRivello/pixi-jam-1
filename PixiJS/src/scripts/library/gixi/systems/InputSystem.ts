@@ -1,24 +1,25 @@
 import { GixiApplication } from "../GixiApplication";
+import { SystemBase } from "./SystemBase";
 
 /**
  * Handles keyboard input and maintains the state of keys.
- * 
- * Inspiration: <see cref="https://google.github.io/styleguide/tsguide.html#naming" />
  */
-export class InputSystem {
+export class InputSystem extends SystemBase {
+
 
     // Properties -----------------------------------
-    // No public properties defined
+
 
     // Fields ---------------------------------------
     private _keyStateDictionary: Map<string, KeyState>;
-    private _app: GixiApplication;
+
 
     // Initialization -------------------------------
     constructor(app: GixiApplication) {
-        this._app = app;
+        super(app);
         this._keyStateDictionary = new Map();
     }
+
 
     // Methods ------------------------------
     /**
@@ -49,10 +50,6 @@ export class InputSystem {
         keyState.isDown = false;
     }
 
-    // Event Handlers -------------------------------
-    // No event handlers defined
-
-    // Private Methods ------------------------------
     /**
      * Retrieves the key state for the specified key. If the key does not exist, a new KeyState is created and returned.
      * @param key - The key to retrieve the state for.
@@ -68,6 +65,9 @@ export class InputSystem {
 
         return keyState;
     }
+
+    // Event Handlers -------------------------------
+    // No event handlers defined
 }
 
 /**

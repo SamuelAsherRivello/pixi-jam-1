@@ -4,8 +4,9 @@ import { EventEmitter } from 'events';
 import { SuperText } from '../core/super/SuperText';
 import { IInitializableAsync } from './interfaces/IInitializeAsync';
 import { CollisionSystem } from './systems/CollisionSystem';
-import { InputSystem } from './systems/InputSystem';
 import { ActorContainer } from './ActorContainer';
+import { InputSystem } from './systems/InputSystem';
+import { AudioSystem } from './systems/AudioSystem';
 
 /**
  * Configuration
@@ -30,11 +31,13 @@ class Systems {
   // Fields ---------------------------------------
   public collisionSystem: CollisionSystem;
   public inputSystem: InputSystem;
+  public audioSystem: AudioSystem;
 
   // Initialization -------------------------------
   constructor(app: GixiApplication) {
     this.collisionSystem = new CollisionSystem(app);
     this.inputSystem = new InputSystem(app);
+    this.audioSystem = new AudioSystem(app);
   }
 }
 

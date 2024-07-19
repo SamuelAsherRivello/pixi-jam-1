@@ -95,6 +95,7 @@ export class Player extends ActorStatic {
         if (this._app.systems.inputSystem.isKeyDown('a')) {
             this.isCollisionWithTilemap();
             moveVector.x += -1;
+            this._app.systems.audioSystem.PlayAsync("./assets/audio/Chime01.mp3");
         }
         if (this._app.systems.inputSystem.isKeyDown('d')) {
             this.isCollisionWithTilemap();
