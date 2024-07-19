@@ -5,7 +5,7 @@ This repo includes Html5 examples using [PixiJS](https://pixijs.com/) and [TypeS
 
 ### Play
 
-* https://samuelasherrivello.github.io/pixi-jam-1/PixiJS/dist/index.html
+* [https://samuelasherrivello.github.io/pixi-jam-1/PixiJS/dist/index.html](https://samuelasherrivello.github.io/pixi-jam-1/PixiJS/dist/index.html)
 
 
 ### More
