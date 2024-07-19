@@ -57,9 +57,33 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
   public static readonly EVENT_INITIALIZE_ERROR: string = 'initializeError';
   public static readonly EVENT_RESIZE: string = 'resize';
 
+
   // Properties -----------------------------------
   public get isInitialized(): boolean {
     return this._isInitialized;
+  }
+
+  public get isFullscreen(): boolean {
+    return this._isFullscreen;
+  }
+
+  public set isFullscreen(value: boolean) {
+
+    this._isFullscreen = value;
+
+    var elem = document.getElementById(this.app.canvas.id);
+    console.log(this.app.canvas.id)
+
+    if (this._isFullscreen) {
+
+      if (elem?.requestFullscreen) {
+        elem?.requestFullscreen();
+      }
+
+    }
+    else {
+      document.fullscreenEnabled && document.exitFullscreen();
+    }
   }
 
   public get systems(): Systems {
@@ -78,6 +102,7 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
   private _canvasId: string;
   private _isInitialized = false;
   private _systems: Systems;
+  private _isFullscreen: boolean = false;
 
   // Initialization -------------------------------
   constructor(
@@ -149,7 +174,6 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
       this.emit(GixiApplication.EVENT_INITIALIZE_COMPLETE, this);
 
       this.setupResizeHandling();
-      this.setupKeyboardHandling();
 
       this._isInitialized = true;
       this.addToStage(this.viewport);
@@ -279,18 +303,7 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
     );
   }
 
-  public keyDown = (keyboardEvent: KeyboardEvent) => {
-    this.systems.inputSystem.onKeyDown(keyboardEvent);
-  }
 
-  public keyUp = (keyboardEvent: KeyboardEvent) => {
-    this.systems.inputSystem.onKeyUp(keyboardEvent);
-  }
-
-  private setupKeyboardHandling() {
-    window.addEventListener('keydown', this.keyDown);
-    window.addEventListener('keyup', this.keyUp);
-  }
 
   getScreenCenterpoint() {
 

@@ -59,6 +59,8 @@ const gixiAppConfiguration: GixiApplicationConfiguration = {
 const gixiAppConst = new GixiApplication('pixi-application-canvas', gixiAppConfiguration);
 
 
+
+
 /////////////////////////////
 // Setup Stats
 /////////////////////////////

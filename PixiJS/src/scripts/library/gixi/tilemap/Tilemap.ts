@@ -78,6 +78,16 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
     this._TilemapItemFactory = TilemapItemFactory;
     this._TilemapCollisionSystem = new TilemapCollisionSystem(this._app, this);
 
+    //https://pixijs.com/8.x/guides/advanced/render-groups
+    //As you delve deeper into PixiJS, especially with version 8, 
+    //you'll encounter a powerful feature known as RenderGroups. Think 
+    //of RenderGroups as specialized containers within your scene graph 
+    //that act like mini scene graphs themselves. Here's what you need to
+    // know to effectively use Render Groups in your projects:
+    this.isRenderGroup = true;
+
+
+    //
     this.label = (Tilemap).name;
     this.position.set(0, 0);
     this.scale.set(1);

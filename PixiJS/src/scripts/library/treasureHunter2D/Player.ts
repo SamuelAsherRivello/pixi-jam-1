@@ -95,7 +95,7 @@ export class Player extends ActorStatic {
         if (this._app.systems.inputSystem.isKeyDown('a')) {
             this.isCollisionWithTilemap();
             moveVector.x += -1;
-            this._app.systems.audioSystem.PlayAsync("./assets/audio/Chime01.mp3");
+
         }
         if (this._app.systems.inputSystem.isKeyDown('d')) {
             this.isCollisionWithTilemap();
@@ -108,6 +108,19 @@ export class Player extends ActorStatic {
         if (this._app.systems.inputSystem.isKeyDown('s')) {
             this.isCollisionWithTilemap();
             moveVector.y += 1;
+        }
+
+        if (this._app.systems.inputSystem.isKeyDownThisFrame('Enter') ||         //works
+            this._app.systems.inputSystem.isKeyDownThisFrame('SpaceBar')) {      //does work. TODO: WHy?
+
+            //ACTION!
+            this._app.systems.audioSystem.PlayAsync("./assets/audio/Click01.wav");
+        }
+
+        if (this._app.systems.inputSystem.isKeyDownThisFrame('f')) {
+
+            //FULLSCREEN
+            this._app.isFullscreen = !this._app.isFullscreen;
         }
 
         const movementSpeed = 3.0;

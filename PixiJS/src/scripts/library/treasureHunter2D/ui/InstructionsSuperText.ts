@@ -20,7 +20,7 @@ export class InstructionsSuperText extends SuperText {
         //TEMP: SHOW DEBUGGING
         let r1 = Math.round(app.app.renderer.resolution * 100) / 100;
         let r2 = Math.round(this.resolution * 100) / 100;
-        this.text = `Arrows/WASD To Move\n[Resolution: ${r1}, ${r2}]`;
+        this.text = `Arrows / WASD To Move\nEnter / Spacebar For Attack\nF For Fullscreen\n\n[Resolution: ${r1}, ${r2}]`;
 
     }
 }
