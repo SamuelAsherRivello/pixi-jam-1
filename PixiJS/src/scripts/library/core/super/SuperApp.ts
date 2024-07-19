@@ -7,7 +7,7 @@ import { SuperText } from './SuperText';
 import { IInitializableAsync } from './IInitializeAsync';
 import { CollisionSystem } from './systems/CollisionSystem';
 import { InputSystem } from './systems/InputSystem';
-import { Gixi } from '../gixi/ActorContainer';
+import { ActorContainer } from '../gixi/ActorContainer';
 
 /**
  * Configuration
@@ -180,7 +180,7 @@ export class SuperApp extends EventEmitter implements IInitializableAsync {
 
     this.viewport.addChild(obj);
 
-    if (obj instanceof SuperSprite || obj instanceof Gixi.ActorContainer || obj instanceof SuperText) {
+    if (obj instanceof SuperSprite || obj instanceof ActorContainer || obj instanceof SuperText) {
       obj.onAdded();
     }
 
@@ -194,7 +194,7 @@ export class SuperApp extends EventEmitter implements IInitializableAsync {
 
     this.viewport.removeChild(obj);
 
-    if (obj instanceof SuperSprite || obj instanceof Gixi.ActorContainer || obj instanceof SuperText) {
+    if (obj instanceof SuperSprite || obj instanceof ActorContainer || obj instanceof SuperText) {
       obj.onRemoved();
     }
 
@@ -202,7 +202,7 @@ export class SuperApp extends EventEmitter implements IInitializableAsync {
   }
 
   // Add to basic scene tree
-  public addToStage(obj: PIXI.Container | PIXI.Sprite | SuperSprite | SuperText, parent?: PIXI.Sprite | Gixi.ActorContainer): any {
+  public addToStage(obj: PIXI.Container | PIXI.Sprite | SuperSprite | SuperText, parent?: PIXI.Sprite | ActorContainer): any {
 
     this.requireIsInitialized();
 
@@ -212,7 +212,7 @@ export class SuperApp extends EventEmitter implements IInitializableAsync {
       parent.addChild(obj);
     }
 
-    if (obj instanceof SuperSprite || obj instanceof Gixi.ActorContainer || obj instanceof SuperText) {
+    if (obj instanceof SuperSprite || obj instanceof ActorContainer || obj instanceof SuperText) {
       obj.onAdded();
     }
 
@@ -221,7 +221,7 @@ export class SuperApp extends EventEmitter implements IInitializableAsync {
 
 
   // Remove from basic scene tree
-  public removeFromStage(obj: PIXI.Container | PIXI.Sprite | SuperSprite | SuperText, parent?: PIXI.Sprite | Gixi.ActorContainer): any {
+  public removeFromStage(obj: PIXI.Container | PIXI.Sprite | SuperSprite | SuperText, parent?: PIXI.Sprite | ActorContainer): any {
 
     this.requireIsInitialized();
 
@@ -232,7 +232,7 @@ export class SuperApp extends EventEmitter implements IInitializableAsync {
       parent.removeChild(obj);
     }
 
-    if (obj instanceof SuperSprite || obj instanceof Gixi.ActorContainer || obj instanceof SuperText) {
+    if (obj instanceof SuperSprite || obj instanceof ActorContainer || obj instanceof SuperText) {
       obj.onRemoved();
     }
 

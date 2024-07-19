@@ -1,11 +1,11 @@
-import { SuperApp } from '@src/scripts/library/core/super/SuperApp';
-import { SuperSprite, SuperSpriteConfiguration } from '@src/scripts/library/core/super/SuperSprite';
+import { SuperApp } from '../../super/SuperApp';
+import { ActorStatic, ActorStaticConfiguration } from '../ActorStatic';
 
 /**
  * Represents an item from the Object layer in a tilemap
  * 
  */
-export class SuperTilemapObject extends SuperSprite {
+export class TilemapObject extends ActorStatic {
 
 
     // Properties -----------------------------------
@@ -15,14 +15,14 @@ export class SuperTilemapObject extends SuperSprite {
 
 
     // Initialization -------------------------------
-    constructor(superApp: SuperApp, superSpriteConfiguration?: Partial<SuperSpriteConfiguration>) {
+    constructor(superApp: SuperApp, actorStaticConfiguration?: Partial<ActorStaticConfiguration>) {
 
-        super(superApp, superSpriteConfiguration);
+        super(superApp, actorStaticConfiguration);
 
         // Redeclare anything from super 
         // that you want differently here
-        this.label = (SuperTilemapObject).name;
-        this.anchor.set(0.5);
+        this.label = (TilemapObject).name;
+        //this.anchor.set(0.5);
 
     }
 

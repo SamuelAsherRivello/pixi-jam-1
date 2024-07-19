@@ -293,11 +293,11 @@
          "tiles":[
                 {
                  "id":3,
-                 "type":"ChestSuperTilemapObject"
+                 "type":"ChestTilemapObject"
                 }, 
                 {
                  "id":19,
-                 "type":"ChestSuperTilemapObject"
+                 "type":"ChestTilemapObject"
                 }],
          "tilewidth":32
         }, 

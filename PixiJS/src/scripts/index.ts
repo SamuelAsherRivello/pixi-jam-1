@@ -5,15 +5,14 @@ import { Actions, Interpolations } from 'pixi-actions';
 
 //CORE
 import { SuperApp, SuperAppConfiguration } from '@src/scripts/library/core/super/SuperApp';
-import { ISuperTilemapItemFactory, LayerType, SuperTilemap, TilemapItemData } from '@src/scripts/library/core/super/superTilemap/SuperTilemap';
 
 //TREASURE HUNTER GAME
 import { InstructionsSuperText } from '@src/scripts/library/treasureHunter2D/ui/InstructionsSuperText';
 import { ScoreSuperText } from '@src/scripts/library/treasureHunter2D/ui/ScoreSuperText';
 import { Player } from '@src/scripts/library/treasureHunter2D/Player';
 import { Coin } from './library/treasureHunter2D/objects/Coin';
-import { ChestSuperTilemapObject } from './library/treasureHunter2D/objects/ChestSuperTilemapObject';
-import { CustomSuperTilemapItemFactory } from './library/treasureHunter2D/CustomSuperTilemapItemFactory';
+import { GIXI } from './library/core/gixi';
+import { TilemapItemFactoryCustom } from './library/treasureHunter2D/TilemapItemFactoryCustom';
 
 
 
@@ -83,17 +82,17 @@ async function onInitializeCompleted(superApp: SuperApp) {
   /////////////////////////////
   // Create Tilemap
   /////////////////////////////
-  const superTilemap = new SuperTilemap(
+  const Tilemap = new GIXI.Tilemap(
     superApp,
     superAppData.TilemapDataUrl,
-    new CustomSuperTilemapItemFactory(superApp)
+    new TilemapItemFactoryCustom(superApp)
   );
 
   //Initialize first, so width and height are available
-  await superTilemap.initializeAsync();
-  superApp.addToViewport(superTilemap);
-  superTilemap.x = superApp.getScreenCenterpoint().x - superTilemap.width / 2;
-  superTilemap.y = superApp.getScreenCenterpoint().y - superTilemap.height / 2;
+  await Tilemap.initializeAsync();
+  superApp.addToViewport(Tilemap);
+  Tilemap.x = superApp.getScreenCenterpoint().x - Tilemap.width / 2;
+  Tilemap.y = superApp.getScreenCenterpoint().y - Tilemap.height / 2;
 
   /////////////////////////////
   // Temp:  World centerpoint
@@ -126,7 +125,7 @@ async function onInitializeCompleted(superApp: SuperApp) {
   /////////////////////////////
   // Create Player
   /////////////////////////////
-  player = new Player(superApp, superTilemap, { textureUrl: superAppData.PlayerTextureUrl as string });
+  player = new Player(superApp, Tilemap, { textureUrl: superAppData.PlayerTextureUrl as string });
   superApp.addToViewport(player);
   player.x = superApp.getScreenCenterpoint().x;
   player.y = superApp.getScreenCenterpoint().y;

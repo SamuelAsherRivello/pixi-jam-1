@@ -1,10 +1,9 @@
 import * as PIXI from 'pixi.js';
 import { SuperApp } from '@src/scripts/library/core/super/SuperApp';
-import { SuperTilemapCollisionSystem } from '@src/scripts/library/core/super/superTilemap/SuperTilemapCollisionSystem';
-import { SuperUtility } from '../SuperUtility';
-import { IInitializableAsync } from '../IInitializeAsync';
-import { Gixi } from '../../gixi/ActorContainer';
-
+import { SuperUtility } from '../../super/SuperUtility';
+import { IInitializableAsync } from '../../super/IInitializeAsync';
+import { ActorContainer } from '../ActorContainer';
+import { TilemapCollisionSystem } from './TilemapCollisionSystem';
 
 export interface TilemapData {
   width: number;
@@ -55,30 +54,31 @@ export enum LayerType {
   ObjectGroup = 'objectgroup',
 }
 
-export interface ISuperTilemapItemFactory {
-  createTilemapItem(tilemapItemData: TilemapItemData): Promise<PIXI.Sprite>;
+export interface ITilemapItemFactory {
+  createTilemapItem(tilemapItemData: TilemapItemData): Promise<PIXI.Container>;
 }
 
-export class SuperTilemap extends Gixi.ActorContainer implements IInitializableAsync {
+
+export class Tilemap extends ActorContainer implements IInitializableAsync {
 
   // Properties -----------------------------------
   get tilemapData(): TilemapData { return this._tilemapData; }
 
   // Fields ---------------------------------------
   private _tilemapDataUrl: string;
-  private _superTilemapItemFactory: ISuperTilemapItemFactory;
-  private _superTilemapCollisionSystem: SuperTilemapCollisionSystem;
+  private _TilemapItemFactory: ITilemapItemFactory;
+  private _TilemapCollisionSystem: TilemapCollisionSystem;
   private _tilemapData!: TilemapData;
 
   // Initialization -------------------------------
-  constructor(superApp: SuperApp, tilemapDataUrl: string, superTilemapItemFactory: ISuperTilemapItemFactory) {
+  constructor(superApp: SuperApp, tilemapDataUrl: string, TilemapItemFactory: ITilemapItemFactory) {
     super(superApp);
 
     this._tilemapDataUrl = tilemapDataUrl;
-    this._superTilemapItemFactory = superTilemapItemFactory;
-    this._superTilemapCollisionSystem = new SuperTilemapCollisionSystem(this._superApp, this);
+    this._TilemapItemFactory = TilemapItemFactory;
+    this._TilemapCollisionSystem = new TilemapCollisionSystem(this._superApp, this);
 
-    this.label = (SuperTilemap).name;
+    this.label = (Tilemap).name;
     this.position.set(0, 0);
     this.scale.set(1);
     this.isRenderGroup = true;
@@ -115,7 +115,7 @@ export class SuperTilemap extends Gixi.ActorContainer implements IInitializableA
       }
     }
 
-    this._superTilemapCollisionSystem.initializeAsync();
+    this._TilemapCollisionSystem.initializeAsync();
   }
 
   requireIsInitialized() {
@@ -150,7 +150,7 @@ export class SuperTilemap extends Gixi.ActorContainer implements IInitializableA
               type: this.getTileType(tileset, localTileIndex) || ""
             };
 
-            const sprite = await this._superTilemapItemFactory.createTilemapItem(tilemapItemData);
+            const sprite = await this._TilemapItemFactory.createTilemapItem(tilemapItemData);
             sprite.label = `Tile (${row.toString().padStart(2, '0')},${column.toString().padStart(2, '0')})`;
 
             sprite.x = tilemapItemData.x;
@@ -202,7 +202,7 @@ export class SuperTilemap extends Gixi.ActorContainer implements IInitializableA
 
         //console.log("Object type: " + tilemapItemData.type); // Log the type for debugging
 
-        const sprite = await this._superTilemapItemFactory.createTilemapItem(tilemapItemData);
+        const sprite = await this._TilemapItemFactory.createTilemapItem(tilemapItemData);
         sprite.label = `Object (${object.id})`;
 
         sprite.x = tilemapItemData.x;
@@ -215,7 +215,7 @@ export class SuperTilemap extends Gixi.ActorContainer implements IInitializableA
 
   // Event Handlers -------------------------------
   public isCollision(playerX: number, playerY: number, playerWidth: number, playerHeight: number): boolean {
-    return this._superTilemapCollisionSystem.isCollision(playerX, playerY, playerWidth, playerHeight);
+    return this._TilemapCollisionSystem.isCollision(playerX, playerY, playerWidth, playerHeight);
   }
 
   public override async onAdded() {

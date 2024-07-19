@@ -1,19 +1,20 @@
 import * as PIXI from 'pixi.js';
-import { SuperTilemap, TilemapData } from '@src/scripts/library/core/super/superTilemap/SuperTilemap';
-import { SuperApp } from '../SuperApp';
+import { SuperApp } from '../../super/SuperApp';
+import { TilemapData } from '..';
+import { Tilemap } from './Tilemap';
 
-export class SuperTilemapCollisionSystem {
+export class TilemapCollisionSystem {
     private collisionMap!: boolean[][];
     private _superApp: SuperApp;
-    private _superTilemap: SuperTilemap;
+    private _Tilemap: Tilemap;
 
-    constructor(superApp: SuperApp, superTilemap: SuperTilemap) {
+    constructor(superApp: SuperApp, Tilemap: Tilemap) {
         this._superApp = superApp;
-        this._superTilemap = superTilemap;
+        this._Tilemap = Tilemap;
     }
 
     public async initializeAsync() {
-        this.collisionMap = this.createCollisionMap(this._superTilemap.tilemapData);
+        this.collisionMap = this.createCollisionMap(this._Tilemap.tilemapData);
     }
 
     private createCollisionMap(tilemapData: TilemapData): boolean[][] {
@@ -67,21 +68,21 @@ export class SuperTilemapCollisionSystem {
         const globalPos = new PIXI.Point();
         this._superApp.app.stage.toGlobal(localPos, globalPos);
 
-        const tileWidth = this._superTilemap.tilemapData.tilewidth;
-        const tileHeight = this._superTilemap.tilemapData.tileheight;
+        const tileWidth = this._Tilemap.tilemapData.tilewidth;
+        const tileHeight = this._Tilemap.tilemapData.tileheight;
 
-        const startX = Math.floor((globalPos.x - this._superTilemap.x) / tileWidth);
-        const endX = Math.ceil((globalPos.x - this._superTilemap.x + width) / tileWidth);
-        const startY = Math.floor((globalPos.y - this._superTilemap.y) / tileHeight);
-        const endY = Math.ceil((globalPos.y - this._superTilemap.y + height) / tileHeight);
+        const startX = Math.floor((globalPos.x - this._Tilemap.x) / tileWidth);
+        const endX = Math.ceil((globalPos.x - this._Tilemap.x + width) / tileWidth);
+        const startY = Math.floor((globalPos.y - this._Tilemap.y) / tileHeight);
+        const endY = Math.ceil((globalPos.y - this._Tilemap.y + height) / tileHeight);
 
         const localTileX = Math.floor(localPos.x / tileWidth);
         const localTileY = Math.floor(localPos.y / tileHeight);
-        const globalTileX = Math.floor((globalPos.x - this._superTilemap.x) / tileWidth);
-        const globalTileY = Math.floor((globalPos.y - this._superTilemap.y) / tileHeight);
+        const globalTileX = Math.floor((globalPos.x - this._Tilemap.x) / tileWidth);
+        const globalTileY = Math.floor((globalPos.y - this._Tilemap.y) / tileHeight);
 
         const tilemapGlobalPos = new PIXI.Point();
-        this._superTilemap.toGlobal(new PIXI.Point(0, 0), tilemapGlobalPos);
+        this._Tilemap.toGlobal(new PIXI.Point(0, 0), tilemapGlobalPos);
 
         // console.log(`Player local position: (${localPos.x}, ${localPos.y}) with dimensions (${width}, ${height})`);
         // console.log(`Player local tile position: (${localTileX}, ${localTileY})`);

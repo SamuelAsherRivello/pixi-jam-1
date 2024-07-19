@@ -1,14 +1,14 @@
-import { SuperApp } from '@src/scripts/library/core/super/SuperApp';
 import { SuperSprite, SuperSpriteConfiguration } from '@src/scripts/library/core/super/SuperSprite';
 import { Player } from '@src/scripts/library/treasureHunter2D/Player';
-import { SuperTilemapObject } from '@src/scripts/library/core/super/superTilemap/SuperTilemapObject';
-import { Ticker } from 'pixi.js';
+import { Container, Ticker } from 'pixi.js';
+import { TilemapObject } from '../../core/gixi/tilemap/TilemapObject';
+import { SuperApp } from '../../core/super/SuperApp';
 
 /**
  * Represents a coin in the game.
  * 
  */
-export class ChestSuperTilemapObject extends SuperTilemapObject {
+export class ChestTilemapObject extends TilemapObject {
 
 
 
@@ -25,7 +25,7 @@ export class ChestSuperTilemapObject extends SuperTilemapObject {
 
         // Redeclare anything from super 
         // that you want differently here
-        this.label = (ChestSuperTilemapObject).name;
+        this.label = (ChestTilemapObject).name;
     }
 
     public override async initializeAsync() {
@@ -50,12 +50,25 @@ export class ChestSuperTilemapObject extends SuperTilemapObject {
 
     // Event Handlers -------------------------------
 
-    public override onCollision(superSprites: SuperSprite[]): void {
+    public override onCollision(superSprites: Container[]): void {
+
+
+        //not working.... so copy from coin. Coin works.
+
+
+
+
+
+
+
+
+
 
         if (!this._isCollidable) {
             return;
         }
 
+        console.log('ChestTilemapObject.onCollision()');
         superSprites.forEach((superSprite) => {
             if (superSprite instanceof Player) {
                 this._isCollidable = false;
@@ -63,4 +76,5 @@ export class ChestSuperTilemapObject extends SuperTilemapObject {
             }
         });
     }
+
 }

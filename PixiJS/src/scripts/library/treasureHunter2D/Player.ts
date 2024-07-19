@@ -1,35 +1,32 @@
 import * as PIXI from 'pixi.js';
 import { SuperApp } from '@src/scripts/library/core/super/SuperApp';
-import { SuperSprite, SuperSpriteConfiguration } from '@src/scripts/library/core/super/SuperSprite';
-import { Gixi } from '../core/gixi/ActorContainer';
-import { SuperTilemap } from '../core/super/superTilemap/SuperTilemap';
+import { Tilemap } from '../core/gixi/tilemap/Tilemap';
+import { ActorStatic, ActorStaticConfiguration } from '../core/gixi/ActorStatic';
 
 /**
  * Represents a coin in the game.
  * 
  */
-export class Player extends Gixi.ActorContainer {
+export class Player extends ActorStatic {
 
 
     // Properties -----------------------------------
 
 
     // Fields ---------------------------------------
-    private _superTilemap: SuperTilemap;
-    private _superSprite: SuperSprite;
+    private _Tilemap: Tilemap;
 
     // Initialization -------------------------------
-    constructor(superApp: SuperApp, superTilemap: SuperTilemap, superSpriteConfiguration?: Partial<SuperSpriteConfiguration>) {
+    constructor(superApp: SuperApp, Tilemap: Tilemap, actorStaticConfiguration?: Partial<ActorStaticConfiguration>) {
 
-        super(superApp, superSpriteConfiguration);
-        this._superTilemap = superTilemap;
-        this._superSprite = new SuperSprite(this._superApp, superSpriteConfiguration);
-        this._superApp.addToStage(this._superSprite, this);
+        super(superApp, actorStaticConfiguration);
+        this._Tilemap = Tilemap;
 
 
         // Redeclare anything from super 
         // that you want differently here
         this.label = (Player).name;
+        this._superSprite.anchor.set(0, 0);
 
     }
 
@@ -38,8 +35,6 @@ export class Player extends Gixi.ActorContainer {
 
         // Super
         super.initializeAsync();
-        await this._superSprite.initializeAsync();
-
 
         // Local
         //Do any additional initialization here
@@ -50,7 +45,7 @@ export class Player extends Gixi.ActorContainer {
 
 
     //TODO: Utilize this to block movement
-    private isCollision() {
+    private isCollisionWithTilemap() {
 
         //show all 4 values in the log string
         let x = Math.round(this.position.x);
@@ -58,7 +53,7 @@ export class Player extends Gixi.ActorContainer {
         let width = 32;
         let height = 32;
 
-        let isCollision = this._superTilemap.isCollision(x, y, width, height);
+        let isCollision = this._Tilemap.isCollision(x, y, width, height);
 
         // Internally the map uses globals, so we do NOT need to convert
         //let globalPos = this.toGlobal(this.position);
@@ -84,19 +79,19 @@ export class Player extends Gixi.ActorContainer {
         let moveVector: PIXI.Point = new PIXI.Point(0, 0);
 
         if (this._superApp.systems.inputSystem.isKeyDown('a')) {
-            this.isCollision();
+            this.isCollisionWithTilemap();
             moveVector.x += -1;
         }
         if (this._superApp.systems.inputSystem.isKeyDown('d')) {
-            this.isCollision();
+            this.isCollisionWithTilemap();
             moveVector.x += 1;
         }
         if (this._superApp.systems.inputSystem.isKeyDown('w')) {
-            this.isCollision();
+            this.isCollisionWithTilemap();
             moveVector.y += -1;
         }
         if (this._superApp.systems.inputSystem.isKeyDown('s')) {
-            this.isCollision();
+            this.isCollisionWithTilemap();
             moveVector.y += 1;
         }
 

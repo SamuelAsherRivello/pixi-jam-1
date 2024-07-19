@@ -58,6 +58,65 @@ export class SuperSprite extends PIXI.Sprite implements IInitializableAsync {
 
 
 
+
+
+
+  /*
+  
+  
+  
+  
+  
+  
+  
+  
+         //TODO: Remove this class? Migrate some of its functionality into static sprite and then remove this
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   // Initialization -------------------------------
   constructor(superApp: SuperApp,
     configuration?: Partial<SuperSpriteConfiguration>) {

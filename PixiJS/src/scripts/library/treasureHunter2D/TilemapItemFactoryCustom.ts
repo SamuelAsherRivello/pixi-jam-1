@@ -1,9 +1,9 @@
 import { SuperApp } from "../core/super/SuperApp";
-import { ISuperTilemapItemFactory, LayerType, TilemapItemData } from "../core/super/superTilemap/SuperTilemap";
+import { ITilemapItemFactory, LayerType, TilemapItemData } from "../core/gixi/tilemap/Tilemap";
 import * as PIXI from 'pixi.js';
-import { ChestSuperTilemapObject } from "./objects/ChestSuperTilemapObject";
+import { ChestTilemapObject } from "./objects/ChestTilemapObject";
 
-export class CustomSuperTilemapItemFactory implements ISuperTilemapItemFactory {
+export class TilemapItemFactoryCustom implements ITilemapItemFactory {
 
   // Fields ---------------------------------------
   private _superApp: SuperApp;
@@ -14,7 +14,7 @@ export class CustomSuperTilemapItemFactory implements ISuperTilemapItemFactory {
   }
 
   // Methods --------------------------------------
-  public async createTilemapItem(tilemapItemData: TilemapItemData): Promise<PIXI.Sprite> {
+  public async createTilemapItem(tilemapItemData: TilemapItemData): Promise<PIXI.Container> {
 
     switch (tilemapItemData.layerType) {
 
@@ -24,9 +24,9 @@ export class CustomSuperTilemapItemFactory implements ISuperTilemapItemFactory {
       case LayerType.ObjectGroup:
 
         //console.log(`createTilemapItem: (${tilemapItemData.row},${tilemapItemData.column}) ` + tilemapItemData.type);
-        if (tilemapItemData.type == (ChestSuperTilemapObject).name) {
+        if (tilemapItemData.type == (ChestTilemapObject).name) {
 
-          return new ChestSuperTilemapObject(this._superApp, { texture: tilemapItemData.texture });
+          return new ChestTilemapObject(this._superApp, { texture: tilemapItemData.texture });
         }
         return new PIXI.Sprite(tilemapItemData.texture);
 
