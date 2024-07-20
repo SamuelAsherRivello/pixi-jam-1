@@ -1,5 +1,6 @@
 import { SuperText } from "@src/scripts/client/core/super/SuperText";
 import { GixiApplication } from "@src/scripts/client/gixi/GixiApplication";
+import { Ticker } from "pixi.js";
 
 export class InstructionsSuperText extends SuperText {
 
@@ -25,5 +26,14 @@ export class InstructionsSuperText extends SuperText {
         let r2 = Math.round(this.resolution * 100) / 100;
         //[Resolution: ${r1}, ${r2}
 
+    }
+
+
+    public override onTick(ticker: Ticker): void {
+
+        //Super
+        super.onTick(ticker);
+
+        //Local
     }
 }

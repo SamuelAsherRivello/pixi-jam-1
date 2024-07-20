@@ -148,6 +148,7 @@ async function onInitializeCompleted(gixiApp: GixiApplication) {
       "left");
   gixiApp.addToStage(instructionsText);
 
+
   const scoreText: ScoreSuperText =
     new ScoreSuperText(
       gixiApp,
