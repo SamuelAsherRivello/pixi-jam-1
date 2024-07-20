@@ -1,10 +1,15 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+import path from 'path';
+import { fileURLToPath } from 'url';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
-module.exports = (env) => {
+// Use fileURLToPath to get the file path of the current module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export default (env) => {
   const plugins = [
     new HtmlWebpackPlugin({
       template: './public/index.html',
@@ -26,7 +31,7 @@ module.exports = (env) => {
 
   return {
     entry: {
-      main: './src/scripts/index.ts',
+      main: './src/scripts/client/index.ts',
       styles: './src/css/styles.css',
     },
     output: {
@@ -64,7 +69,7 @@ module.exports = (env) => {
       hints: false,
     },
     devServer: {
-      port: 3000,
+      port: 3000, // Change to a different port, e.g., 3001
       static: {
         directory: path.resolve(__dirname, 'dist'),
       },

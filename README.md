@@ -3,9 +3,28 @@
 This repo includes Html5 examples using [PixiJS](https://pixijs.com/) and [TypeScript](https://www.typescriptlang.org/).
 
 
-### Play
+### Play (Old, Broken Build)
 
 * [https://samuelasherrivello.github.io/pixi-jam-1/PixiJS/dist/index.html](https://samuelasherrivello.github.io/pixi-jam-1/PixiJS/dist/index.html)
+
+
+### Build
+
+**Client Instructions - WIP**
+
+```
+> npm install
+
+> npm run build
+
+> npm run start
+```
+
+**Server Instructions - WIP**
+
+```
+> npm run server-start
+```
 
 
 ### More
