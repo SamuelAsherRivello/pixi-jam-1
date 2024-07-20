@@ -114,6 +114,7 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
         const isShift: boolean = this._app.systems.inputSystem.isKeyDown('m')
 
         if (this._app.systems.inputSystem.isKeyDown('a')) {
+            //ACTION!
             moveVector.x += -1;
         }
         if (this._app.systems.inputSystem.isKeyDown('d')) {
@@ -131,12 +132,22 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
 
             //ACTION!
             this._app.systems.audioSystem.play("./assets/audio/Click01.wav");
+
+            //DO something here like attack
         }
 
         if (this._app.systems.inputSystem.isKeyDownThisFrame('f')) {
 
             //FULLSCREEN
             this._app.isFullscreen = !this._app.isFullscreen;
+            this._app.systems.audioSystem.play("./assets/audio/Click01.wav");
+        }
+
+        if (this._app.systems.inputSystem.isKeyDownThisFrame('r')) {
+
+            //FULLSCREEN
+            this._app.systems.audioSystem.play("./assets/audio/Click01.wav");
+            document.location.reload();
         }
 
         const movementSpeed = (isShift ? 10.0 : 3.0);

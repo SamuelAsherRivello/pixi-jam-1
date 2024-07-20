@@ -17,10 +17,13 @@ export class InstructionsSuperText extends SuperText {
         //HACK: UPDATE SIZE
         this.style.fontSize = 15 + 7 / app.app.renderer.resolution
 
+
+        this.text = `Arrows / WASD To Move\nEnter / Spacebar For Attack\nF For Fullscreen\nR For Restart\nM For Move Fast`;
+
         //TEMP: SHOW DEBUGGING
         let r1 = Math.round(app.app.renderer.resolution * 100) / 100;
         let r2 = Math.round(this.resolution * 100) / 100;
-        this.text = `Arrows / WASD To Move\nEnter / Spacebar For Attack\nF For Fullscreen\n\n[Resolution: ${r1}, ${r2}]`;
+        //[Resolution: ${r1}, ${r2}
 
     }
 }
