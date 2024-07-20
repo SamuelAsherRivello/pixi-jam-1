@@ -80,21 +80,18 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
 
 
     //TODO: Utilize this to block movement
-    private isCollisionWithTilemap() {
+    private isCollisionWithTilemap(x: number, y: number): boolean {
 
         //show all 4 values in the log string
-        let x = Math.round(this.position.x);
-        let y = Math.round(this.position.y);
-        let width = 32;
-        let height = 32;
-
-        let isCollision = this._Tilemap.isCollision(x, y, width, height);
+        const width = 32;
+        const height = 32;
+        const isCollision = this._Tilemap.isCollision(x, y, width, height);
 
         // Internally the map uses globals, so we do NOT need to convert
         //let globalPos = this.toGlobal(this.position);
 
         if (isCollision) {
-            console.log(`isCollisionWithTilemap (x=${x}, y=${y}) = ${isCollision}`);
+            //console.log(`isCollisionWithTilemap (x=${x}, y=${y}) = ${isCollision}`);
         }
         else {
             //console.log(`isCollisionWithTilemap (x=${x}, y=${y}) = ${isCollision}`);
@@ -117,19 +114,15 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
         const isShift: boolean = this._app.systems.inputSystem.isKeyDown('m')
 
         if (this._app.systems.inputSystem.isKeyDown('a')) {
-            this.isCollisionWithTilemap();
             moveVector.x += -1;
         }
         if (this._app.systems.inputSystem.isKeyDown('d')) {
-            this.isCollisionWithTilemap();
             moveVector.x += 1;
         }
         if (this._app.systems.inputSystem.isKeyDown('w')) {
-            this.isCollisionWithTilemap();
             moveVector.y += -1;
         }
         if (this._app.systems.inputSystem.isKeyDown('s')) {
-            this.isCollisionWithTilemap();
             moveVector.y += 1;
         }
 
@@ -147,8 +140,18 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
         }
 
         const movementSpeed = (isShift ? 10.0 : 3.0);
-        this.position.x += moveVector.x * ticker.deltaTime * movementSpeed;
-        this.position.y += moveVector.y * ticker.deltaTime * movementSpeed;
+        const nextX = this.position.x + moveVector.x * ticker.deltaTime * movementSpeed;
+        const nextY = this.position.y + moveVector.y * ticker.deltaTime * movementSpeed;
+
+        //TODO: Sanity check this logic to slide along walls
+        if (moveVector.x !== 0 && !this.isCollisionWithTilemap(nextX, this.position.y)) {
+            this.position.x = nextX;
+        }
+
+        if (moveVector.y !== 0 && !this.isCollisionWithTilemap(this.position.x, nextY)) {
+            this.position.y = nextY;
+        }
+
     }
 
 
