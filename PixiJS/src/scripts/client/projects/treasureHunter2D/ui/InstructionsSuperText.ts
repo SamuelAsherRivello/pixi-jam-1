@@ -12,8 +12,8 @@ export class InstructionsSuperText extends SuperText {
     public override onResize(app: GixiApplication): void {
 
         //UPDATE POSITION
-        this.x = app.configuration.data.ScreenUIMarginX;
-        this.y = app.configuration.data.ScreenUIMarginY;
+        this.x = app.configuration.data.screenUIMarginX;
+        this.y = app.configuration.data.screenUIMarginY;
 
         //HACK: UPDATE SIZE
         this.style.fontSize = 15 + 7 / app.app.renderer.resolution

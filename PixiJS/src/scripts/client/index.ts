@@ -10,6 +10,7 @@ import { InstructionsSuperText } from '@src/scripts/client/projects/treasureHunt
 import { ScoreSuperText } from '@src/scripts/client/projects/treasureHunter2D/ui/ScoreSuperText';
 import { Player } from '@src/scripts/client/projects/treasureHunter2D/Player';
 import { TilemapItemFactoryCustom } from './projects/treasureHunter2D/tileMap/TilemapItemFactoryCustom';
+import { Observable } from './core/observables/Observable';
 
 
 
@@ -17,24 +18,37 @@ import { TilemapItemFactoryCustom } from './projects/treasureHunter2D/tileMap/Ti
 // PIXI Configuration
 /////////////////////////////
 PIXI.AbstractRenderer.defaultOptions.roundPixels = true; // Crisp pixels
-PIXI.AbstractRenderer.defaultOptions.resolution = window.devicePixelRatio || 1; // Crisp pixels
+PIXI.AbstractRenderer.defaultOptions.resolution = window.devicePixelRatio || 2; // Crisp pixels
 
 
 /////////////////////////////
 // Project Configuration
 /////////////////////////////
-const gixiAppData: any = {
-  LogoImageUrl: 'assets/images/pixijs-logo-32x32.png',
-  TilemapDataUrl: 'assets/tilemaps/TreasureHunter2D.tmj',
-  PlayerTextureUrl: 'assets/images/player-default-sprite.png',
-  CoinsCollected: 0,
-  CoinsMax: 5,
-  ScreenUIMarginX: 10,
-  ScreenUIMarginY: 10,
+export interface ITreasurHunterData {
+  logoImageUrl: string;
+  tilemapDataUrl: string;
+  playerTextureUrl: string;
+  coinsCollected: Observable<number>;
+  coinsMax: Observable<number>;
+  screenUIMarginX: number;
+  screenUIMarginY: number;
+}
+
+const treasureHunterData: ITreasurHunterData = {
+  logoImageUrl: 'assets/images/pixijs-logo-32x32.png',
+  tilemapDataUrl: 'assets/tilemaps/TreasureHunter2D.tmj',
+  playerTextureUrl: 'assets/images/player-default-sprite.png',
+  coinsCollected: new Observable<number>(0),
+  coinsMax: new Observable<number>(0),
+  screenUIMarginX: 10,
+  screenUIMarginY: 10,
 };
 
+let scoreText: ScoreSuperText;
+let instructionsText: InstructionsSuperText;
 let player: Player;
 let tempWorldOrigin: PIXI.Graphics;
+
 
 
 /////////////////////////////
@@ -49,11 +63,13 @@ const gixiAppConfiguration: GixiApplicationConfiguration = {
   minFPS: 1,
   maxFPS: 240,
   backgroundColor: 0x87867a,
-  data: gixiAppData
+
+  //TODO: Maybe consider to change
+  //1. From   0-1 data storage like     GixiApp.configuration.data...
+  //2. To     0-n model storage like    GixiApp.modelLocator.GetItem<TreasurHunterModel>(treasurHunterModel);
+  data: treasureHunterData
 }
 const gixiAppConst = new GixiApplication('pixi-application-canvas', gixiAppConfiguration);
-
-
 
 
 /////////////////////////////
@@ -82,7 +98,7 @@ async function onInitializeCompleted(gixiApp: GixiApplication) {
   /////////////////////////////
   const tilemap = new Tilemap(
     gixiApp,
-    gixiAppData.TilemapDataUrl,
+    treasureHunterData.tilemapDataUrl,
     new TilemapItemFactoryCustom(gixiApp)
   );
 
@@ -110,7 +126,7 @@ async function onInitializeCompleted(gixiApp: GixiApplication) {
   /////////////////////////////
   // Create Player
   /////////////////////////////
-  player = new Player(gixiApp, tilemap, { textureUrl: gixiAppData.PlayerTextureUrl as string });
+  player = new Player(gixiApp, tilemap, { textureUrl: treasureHunterData.playerTextureUrl as string });
   gixiApp.addToViewport(player);
   player.x = gixiApp.getScreenCenterpoint().x;
   player.y = gixiApp.getScreenCenterpoint().y;
@@ -140,7 +156,7 @@ async function onInitializeCompleted(gixiApp: GixiApplication) {
   /////////////////////////////
   // Create Text
   /////////////////////////////
-  const instructionsText: InstructionsSuperText =
+  instructionsText =
     new InstructionsSuperText(
       gixiApp,
       'SEE INSIDE CLASS',
@@ -149,13 +165,15 @@ async function onInitializeCompleted(gixiApp: GixiApplication) {
   gixiApp.addToStage(instructionsText);
 
 
-  const scoreText: ScoreSuperText =
+  scoreText =
     new ScoreSuperText(
       gixiApp,
-      `Coins ${gixiApp.configuration.data?.CoinsCollected}/${gixiApp.configuration.data?.CoinsMax}`,
+      `Coins ${gixiApp.configuration.data?.coinsCollected}/${gixiApp.configuration.data?.coinsMax}`,
       30,
       "right");
   gixiApp.addToStage(scoreText);
+
+
 
   /////////////////////////////
   // Update Systems Every Frame
@@ -166,6 +184,29 @@ async function onInitializeCompleted(gixiApp: GixiApplication) {
     Actions.tick(ticker.deltaTime);
     stats.end();
   });
+
+
+  /////////////////////////////
+  // Setup Gameplay
+  /////////////////////////////
+  function onRefreshScore() {
+
+
+    scoreText.text = `Coins ${treasureHunterData.coinsCollected.Value}/${treasureHunterData.coinsMax.Value}`;
+
+    //Strong typing is optional, but recommended
+    const myGixiAppData: ITreasurHunterData =
+      (gixiApp.configuration.data as ITreasurHunterData);
+
+    if (myGixiAppData.coinsCollected.Value >= myGixiAppData.coinsMax.Value) {
+      gixiApp.reload();
+    }
+  }
+  onRefreshScore();
+
+  treasureHunterData.coinsCollected.OnValueChanged.on(onRefreshScore);
+  treasureHunterData.coinsMax.OnValueChanged.on(onRefreshScore);
+
 
 
 }
@@ -188,4 +229,6 @@ gixiAppConst.addListener(GixiApplication.EVENT_INITIALIZE_ERROR, onInitializeErr
 
 (async () => {
   await gixiAppConst.initializeAsync();
+
+
 })();

@@ -78,6 +78,7 @@ class Systems implements IInitializableAsync {
 export class GixiApplication extends EventEmitter implements IInitializableAsync {
 
 
+
   // Constants ------------------------------------
   public static readonly EVENT_INITIALIZE_COMPLETE: string = 'initializeComplete';
   public static readonly EVENT_INITIALIZE_ERROR: string = 'initializeError';
@@ -109,6 +110,11 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
     else {
       document.fullscreenEnabled && document.exitFullscreen();
     }
+  }
+
+  //TODO: Move to new SceneSystem class? = YES!
+  public reload() {
+    document.location.reload();
   }
 
   public get systems(): Systems {

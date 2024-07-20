@@ -4,6 +4,7 @@ import { CoinTilemapObject } from './tileMapObjects/CoinTilemapObject';
 import { GixiApplication } from '@src/scripts/client/gixi/GixiApplication';
 import { ITilemapItemFactory, LayerType, TilemapItemData } from '@src/scripts/client/gixi/tilemap/Tilemap';
 import { ActorStaticConfiguration } from '@src/scripts/client/gixi';
+import { ITreasurHunterData } from '@src/scripts/client';
 
 export class TilemapItemFactoryCustom implements ITilemapItemFactory {
 
@@ -17,6 +18,10 @@ export class TilemapItemFactoryCustom implements ITilemapItemFactory {
 
   // Methods --------------------------------------
   public async createTilemapItem(tilemapItemData: TilemapItemData): Promise<PIXI.Container> {
+
+    //Strong typing is optional, but recommended
+    const myGixiAppData: ITreasurHunterData =
+      (this._app.configuration.data as ITreasurHunterData);
 
 
     switch (tilemapItemData.layerType) {
@@ -41,6 +46,8 @@ export class TilemapItemFactoryCustom implements ITilemapItemFactory {
           return new ChestTilemapObject(this._app, configuration);
         }
         else if (tilemapItemData.type == (CoinTilemapObject).name) {
+
+          myGixiAppData.coinsMax.Value++;
           return new CoinTilemapObject(this._app);
 
         }

@@ -61,12 +61,3 @@ export class Observable<TValue> {
         (this.OnValueChanged as RmcEvent<TValue | undefined, TValue>).refresh(this._previousValue, this._currentValue);
     }
 }
-
-// Example Usage
-const observable = new Observable<number>(10);
-observable.OnValueChanged.on((prev, curr) => {
-    console.log(`Value changed from ${prev} to ${curr}`);
-});
-
-observable.Value = 20; // Output: Value changed from 10 to 20
-observable.refreshValueChanged(); // Output: Value changed from 10 to 20

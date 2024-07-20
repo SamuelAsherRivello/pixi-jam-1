@@ -6,6 +6,7 @@ import { ChestTilemapObject } from './tileMap/tileMapObjects/ChestTilemapObject'
 import { ActorStatic, ActorStaticConfiguration } from '../../gixi/ActorStatic';
 import { Tilemap } from '../../gixi/tilemap/Tilemap';
 import { ICollisionSystemBody } from '../../gixi/interfaces/ICollisionSystemBody';
+import { ITreasurHunterData } from '../..';
 
 /**
  * Configuration
@@ -147,7 +148,8 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
 
             //FULLSCREEN
             this._app.systems.audioSystem.play("./assets/audio/Click01.wav");
-            document.location.reload();
+            this._app.reload();
+
         }
 
         const movementSpeed = (isShift ? 10.0 : 3.0);
@@ -180,9 +182,14 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
             //console.log("player is colliding with...");
             //console.log(collision.name);
 
+            //Strong typing is optional, but recommended
+            const myGixiAppData: ITreasurHunterData =
+                (this._app.configuration.data as ITreasurHunterData);
+
             if (collision instanceof CoinTilemapObject) {
                 if (!collision.isCollected) {
                     collision.collect();
+                    myGixiAppData.coinsCollected.Value++;
                     return;
                 }
             }
