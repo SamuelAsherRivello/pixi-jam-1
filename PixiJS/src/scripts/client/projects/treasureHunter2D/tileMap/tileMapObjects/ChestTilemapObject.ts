@@ -12,7 +12,9 @@ import { ICollisionSystemBody } from '../../../../gixi/interfaces/ICollisionSyst
 export class ChestTilemapObject extends ActorStatic implements ICollisionSystemBody {
 
     // Properties -----------------------------------
-
+    public get canCollisionBeChecked(): boolean {
+        return true;
+    }
 
     // Fields ---------------------------------------
 
@@ -21,7 +23,7 @@ export class ChestTilemapObject extends ActorStatic implements ICollisionSystemB
     constructor(app: GixiApplication, configuration?: Partial<ActorStaticConfiguration>) {
 
         if (configuration) {
-            configuration.isCollidable = false;
+            configuration.canCollisionCheck = false;
         }
 
 
@@ -31,6 +33,7 @@ export class ChestTilemapObject extends ActorStatic implements ICollisionSystemB
         // that you want differently here
         this.label = (ChestTilemapObject).name;
     }
+
 
     public override async initializeAsync() {
 

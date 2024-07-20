@@ -77,7 +77,7 @@ export interface ActorAnimatedConfiguration extends ActorContainerConfiguration 
 }
 
 const ActorAnimatedConfigurationDefault: ActorAnimatedConfiguration = {
-    isCollidable: true,
+    canCollisionCheck: true,
     isTickable: true,
     isResizable: true
 }

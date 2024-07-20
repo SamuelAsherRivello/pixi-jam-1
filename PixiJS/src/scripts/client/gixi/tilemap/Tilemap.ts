@@ -74,7 +74,7 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
   constructor(app: GixiApplication, tilemapDataUrl: string, TilemapItemFactory: ITilemapItemFactory) {
 
     const configuration: ActorContainerConfiguration = {
-      isCollidable: false,
+      canCollisionCheck: false,
       isTickable: false,
       isResizable: false
     }

@@ -4,7 +4,7 @@
 export interface IActorConfiguration {
 
     // Properties -----------------------------------
-    isCollidable: boolean;
+    canCollisionCheck: boolean;
     isTickable: boolean;
     isResizable: boolean;
 

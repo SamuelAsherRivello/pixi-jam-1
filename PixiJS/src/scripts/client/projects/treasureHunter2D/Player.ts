@@ -16,7 +16,7 @@ export interface PlayerConfiguration extends ActorStaticConfiguration {
 const PlayerConfigurationDefault: PlayerConfiguration = {
     textureUrl: '',
     texture: PIXI.Texture.EMPTY,
-    isCollidable: true,
+    canCollisionCheck: true,
     isTickable: true,
     isResizable: true
 }
@@ -29,6 +29,9 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
 
 
     // Properties -----------------------------------
+    public get canCollisionBeChecked(): boolean {
+        return true;
+    }
 
 
     // Fields ---------------------------------------
@@ -152,15 +155,16 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
     public override onCollision(collisions: PIXI.Container[]): void {
 
 
-        if (!this._app.systems.inputSystem.isKeyDownThisFrame('Enter')) {
-            return;
-        }
+        //TEMP: ENABLE THIS TO TEST - only do collisions on button click
+        // if (!this._app.systems.inputSystem.isKeyDownThisFrame('Enter')) {
+        //     return;
+        // }
 
         collisions.forEach((collision) => {
 
             //Note the label is NOT always the class name
-            console.log("player is colliding with...");
-            console.log(collision.name);
+            //console.log("player is colliding with...");
+            //console.log(collision.name);
 
             if (collision instanceof CoinTilemapObject) {
                 if (!collision.isCollected) {

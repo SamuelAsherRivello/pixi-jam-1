@@ -16,7 +16,7 @@ export interface ActorStaticConfiguration extends ActorContainerConfiguration {
 const ActorStaticConfigurationDefault: ActorStaticConfiguration = {
     textureUrl: '',
     texture: PIXI.Texture.EMPTY,
-    isCollidable: true,
+    canCollisionCheck: true,
     isTickable: true,
     isResizable: true
 }

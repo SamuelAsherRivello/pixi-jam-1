@@ -13,7 +13,7 @@ export interface ActorContainerConfiguration extends IActorConfiguration {
 }
 
 const ActorContainerConfigurationDefault: ActorContainerConfiguration = {
-  isCollidable: true,
+  canCollisionCheck: true,
   isTickable: true,
   isResizable: true
 }
@@ -31,8 +31,8 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
     return this._configuration;
   }
 
-  public get isCollidable(): boolean {
-    return this._isCollidable;
+  public get canCollisionCheck(): boolean {
+    return this._canCollisionCheck;
   }
 
   public isChild(): boolean {
@@ -43,7 +43,7 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
   private _isDestroyed: boolean = false;
   protected _configuration: ActorContainerConfiguration;
   protected _isInitialized: boolean = false;
-  protected _isCollidable: boolean = true;
+  protected _canCollisionCheck: boolean = true;
   protected _app: GixiApplication;
 
 
@@ -55,8 +55,6 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
     super();
     this._configuration = { ...ActorContainerConfigurationDefault, ...configuration };
     this._app = app;
-
-    console.log("player 444 is : " + this.isCollidable)
 
     // Tick
     if (this.configuration.isTickable) {
@@ -122,12 +120,7 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
   public onTick(ticker: PIXI.Ticker): void {
 
     // Empty implementation to be overridden
-
-    // if (this.label == "Player") {
-    //   console.log("Player is isCollidable" + this.isCollidable);
-    // }
-
-    if (!this.isCollidable || !this.configuration.isCollidable) {
+    if (!this.canCollisionCheck) {
       return;
     }
 

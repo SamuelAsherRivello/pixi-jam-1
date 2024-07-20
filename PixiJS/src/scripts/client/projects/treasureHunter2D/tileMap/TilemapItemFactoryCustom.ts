@@ -33,7 +33,7 @@ export class TilemapItemFactoryCustom implements ITilemapItemFactory {
           const configuration: ActorStaticConfiguration = {
             textureUrl: '',
             texture: tilemapItemData.texture,
-            isCollidable: false,
+            canCollisionCheck: false,
             isTickable: true,
             isResizable: false
           }

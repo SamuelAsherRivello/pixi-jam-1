@@ -29,7 +29,7 @@ export class GixiUtility {
 //HACK: You can't check interfaces at rutnime in typescript so 
 //we do a lookup on a manual set of properties that we expect to exist
 export const ICollisionSystemBodyInterfaceLookup: InterfaceLookup<ICollisionSystemBody> = {
-  isCollidable: true,
+  canCollisionBeChecked: true,
 };
 
 type InterfaceLookup<T> = {

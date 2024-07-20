@@ -100,7 +100,7 @@ export class CollisionSystem extends SystemBase {
             return (
                 child !== me &&
                 hasICollisionSystemBody &&
-                child.isCollidable &&
+                child.canCollisionBeChecked &&
                 this.isCollidingWith(me, child as PIXI.Container)
             );
         }) as PIXI.Container[];

@@ -13,6 +13,9 @@ export class CoinTilemapObject extends ActorAnimated implements ICollisionSystem
 
 
     // Properties -----------------------------------
+    public get canCollisionBeChecked(): boolean {
+        return true;
+    }
 
 
     // Fields ---------------------------------------
@@ -22,7 +25,7 @@ export class CoinTilemapObject extends ActorAnimated implements ICollisionSystem
     constructor(app: GixiApplication) {
 
         const configuration: ActorAnimatedConfiguration = {
-            isCollidable: false,
+            canCollisionCheck: false,
             isTickable: false,
             isResizable: false
         }

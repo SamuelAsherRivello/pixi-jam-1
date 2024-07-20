@@ -9,7 +9,7 @@ export interface IActor {
 
     // Properties -----------------------------------
     configuration: IActorConfiguration;
-    isCollidable: boolean;
+    canCollisionCheck: boolean;
 
     // Methods --------------------------------------
     isChild(): boolean;
