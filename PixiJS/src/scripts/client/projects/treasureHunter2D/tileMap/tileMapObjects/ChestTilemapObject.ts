@@ -3,12 +3,13 @@ import { GixiApplication } from '@src/scripts/client/gixi/GixiApplication';
 import { Actions, Interpolations } from 'pixi-actions';
 import { DropShadowFilter } from 'pixi-filters';
 import { Container, Ticker } from 'pixi.js';
+import { ICollisionSystemBody } from '../../../../gixi/interfaces/ICollisionSystemBody';
 
 /**
  * Represents a coin in the game.
  * 
  */
-export class ChestTilemapObject extends ActorStatic {
+export class ChestTilemapObject extends ActorStatic implements ICollisionSystemBody {
 
     // Properties -----------------------------------
 
@@ -18,6 +19,11 @@ export class ChestTilemapObject extends ActorStatic {
 
     // Initialization -------------------------------
     constructor(app: GixiApplication, configuration?: Partial<ActorStaticConfiguration>) {
+
+        if (configuration) {
+            configuration.isCollidable = false;
+        }
+
 
         super(app, configuration);
 

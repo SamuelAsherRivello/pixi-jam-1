@@ -16,12 +16,12 @@ io.on('connection', (socket) => {
     let secondsElapsed = 0;
 
     // Send initial ping immediately
-    socket.emit('message', `Ping From Server after ${secondsElapsed} total seconds`);
+    socket.emit('message', `from Server ${secondsElapsed} seconds`);
 
     // Send a message to the client every 5 seconds
     const intervalId = setInterval(() => {
         secondsElapsed += 5;
-        socket.emit('message', `Ping From Server after ${secondsElapsed} total seconds`);
+        socket.emit('message', `from Server ${secondsElapsed} seconds`);
     }, 5000);
 
     socket.on('message', (msg) => {

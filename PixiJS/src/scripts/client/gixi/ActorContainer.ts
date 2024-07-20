@@ -56,6 +56,8 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
     this._configuration = { ...ActorContainerConfigurationDefault, ...configuration };
     this._app = app;
 
+    console.log("player 444 is : " + this.isCollidable)
+
     // Tick
     if (this.configuration.isTickable) {
       this._app.app.ticker.add(this.onTickInternal.bind(this));
@@ -121,11 +123,15 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
 
     // Empty implementation to be overridden
 
-    if (!this.isCollidable) {
+    // if (this.label == "Player") {
+    //   console.log("Player is isCollidable" + this.isCollidable);
+    // }
+
+    if (!this.isCollidable || !this.configuration.isCollidable) {
       return;
     }
 
-    const collisions = this._app.systems.collisionSystem.getCollisions(this);
+    const collisions = this._app.systems.collisionSystem.stageContainersCollidingWith(this);
 
     if (collisions.length) {
       this.onCollision(collisions);

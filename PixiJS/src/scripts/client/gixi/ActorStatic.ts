@@ -42,6 +42,7 @@ export class ActorStatic extends ActorContainer implements IInitializableAsync, 
 
         super(app, { ...ActorStaticConfigurationDefault, ...configuration });
 
+
         if (!GixiUtility.textureIsNullOrEmpty(this.configuration?.texture) &&
             !GixiUtility.stringIsNullOrEmpty(this.configuration?.textureUrl)) {
             throw new Error("You cannot set both texture and textureUrl in the configuration");

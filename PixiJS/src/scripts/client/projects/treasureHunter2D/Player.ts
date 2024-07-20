@@ -5,6 +5,7 @@ import { CoinTilemapObject } from './tileMap/tileMapObjects/CoinTilemapObject';
 import { ChestTilemapObject } from './tileMap/tileMapObjects/ChestTilemapObject';
 import { ActorStatic, ActorStaticConfiguration } from '../../gixi/ActorStatic';
 import { Tilemap } from '../../gixi/tilemap/Tilemap';
+import { ICollisionSystemBody } from '../../gixi/interfaces/ICollisionSystemBody';
 
 /**
  * Configuration
@@ -24,7 +25,7 @@ const PlayerConfigurationDefault: PlayerConfiguration = {
  * Represents a coin in the game.
  * 
  */
-export class Player extends ActorStatic {
+export class Player extends ActorStatic implements ICollisionSystemBody {
 
 
     // Properties -----------------------------------
@@ -37,6 +38,7 @@ export class Player extends ActorStatic {
     constructor(app: GixiApplication, Tilemap: Tilemap, configuration?: Partial<PlayerConfiguration>) {
 
         super(app, { ...PlayerConfigurationDefault, ...configuration });
+
         this._Tilemap = Tilemap;
 
         // Redeclare anything from super 
@@ -149,9 +151,17 @@ export class Player extends ActorStatic {
 
     public override onCollision(collisions: PIXI.Container[]): void {
 
+
+        if (!this._app.systems.inputSystem.isKeyDownThisFrame('Enter')) {
+            return;
+        }
+
         collisions.forEach((collision) => {
 
-            console.log("collision2: " + collision.label)
+            //Note the label is NOT always the class name
+            console.log("player is colliding with...");
+            console.log(collision.name);
+
             if (collision instanceof CoinTilemapObject) {
                 if (!collision.isCollected) {
                     collision.collect();
@@ -165,6 +175,7 @@ export class Player extends ActorStatic {
                     return;
                 }
             }
+
         });
     }
 }

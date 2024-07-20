@@ -1,6 +1,7 @@
 import { ActorAnimatedConfiguration } from '@src/scripts/client/gixi';
 import { ActorAnimated } from '@src/scripts/client/gixi/ActorAnimated';
 import { GixiApplication } from '@src/scripts/client/gixi/GixiApplication';
+import { ICollisionSystemBody } from '@src/scripts/client/gixi/interfaces/ICollisionSystemBody';
 import { Actions, Interpolations } from 'pixi-actions';
 import { DropShadowFilter, GlowFilter } from 'pixi-filters';
 
@@ -8,7 +9,7 @@ import { DropShadowFilter, GlowFilter } from 'pixi-filters';
  * Represents a coin in the game.
  * 
  */
-export class CoinTilemapObject extends ActorAnimated {
+export class CoinTilemapObject extends ActorAnimated implements ICollisionSystemBody {
 
 
     // Properties -----------------------------------
