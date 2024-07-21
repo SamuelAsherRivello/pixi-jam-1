@@ -5,6 +5,9 @@ import { GixiApplication } from '@src/scripts/client/gixi/GixiApplication';
 import { ITilemapItemFactory, LayerType, TilemapItemData } from '@src/scripts/client/gixi/tilemap/Tilemap';
 import { ActorStaticConfiguration } from '@src/scripts/client/gixi';
 import { ITreasurHunterData } from '@src/scripts/client';
+import { PlayerSpawnpointTilemapObject } from './tileMapObjects/PlayerSpawnpointTilemapObject';
+import { EnemySpawnpointTilemapObject } from './tileMapObjects/EnemySpawnpointTilemapObject';
+import { Tilemap } from '../../../gixi/tilemap/Tilemap';
 
 export class TilemapItemFactoryCustom implements ITilemapItemFactory {
 
@@ -12,12 +15,12 @@ export class TilemapItemFactoryCustom implements ITilemapItemFactory {
   private _app: GixiApplication;
 
   // Initialization -------------------------------
-  constructor(app: GixiApplication) {
+  constructor(app: GixiApplication,) {
     this._app = app;
   }
 
   // Methods --------------------------------------
-  public async createTilemapItem(tilemapItemData: TilemapItemData): Promise<PIXI.Container> {
+  public async createTilemapItem(tilemap: Tilemap, tilemapItemData: TilemapItemData): Promise<PIXI.Container> {
 
     //Strong typing is optional, but recommended
     const myGixiAppData: ITreasurHunterData =
@@ -33,32 +36,56 @@ export class TilemapItemFactoryCustom implements ITilemapItemFactory {
 
         //console.log(`createTilemapItem: (${tilemapItemData.row},${tilemapItemData.column}) ` + tilemapItemData.type);
 
-        if (tilemapItemData.type == (ChestTilemapObject).name) {
+        switch (tilemapItemData.type) {
 
-          const configuration: ActorStaticConfiguration = {
-            textureUrl: '',
-            texture: tilemapItemData.texture,
-            canCollisionCheck: false,
-            isTickable: true,
-            isResizable: false
-          }
 
-          return new ChestTilemapObject(this._app, configuration);
+          //////////////////////////////////////////
+          case (ChestTilemapObject).name:
+
+            const configuration: ActorStaticConfiguration = {
+              textureUrl: '',
+              texture: tilemapItemData.texture,
+              canCollisionCheck: false,
+              isTickable: true,
+              isResizable: false
+            }
+            return new ChestTilemapObject(this._app, configuration);
+
+
+          //////////////////////////////////////////
+          case (CoinTilemapObject).name:
+            myGixiAppData.coinsMax.Value++;
+            return new CoinTilemapObject(this._app);
+
+
+          //////////////////////////////////////////
+          case (PlayerSpawnpointTilemapObject).name:
+            let playerSpawnpointTilemapObject = new PlayerSpawnpointTilemapObject(this._app, { texture: tilemapItemData.texture });
+            playerSpawnpointTilemapObject.alpha = 0.1;
+
+
+            //TODO: HACK - make this show up on the "P" icon of the map
+            console.log("Tilemap positions player with #hack.")
+            let p = new PIXI.Point(tilemapItemData.x / 2 - 116, tilemapItemData.y / 2 + 8); //hack
+            this._app.configuration.data.playerSpawnpoint = tilemap.toGlobal(p); //hack
+            return playerSpawnpointTilemapObject;
+
+
+
+          //////////////////////////////////////////
+          case (EnemySpawnpointTilemapObject).name:
+            let enemySpawnpointTilemapObject = new EnemySpawnpointTilemapObject(this._app, { texture: tilemapItemData.texture });
+            enemySpawnpointTilemapObject.alpha = 0.1;
+            this._app.configuration.data.enemySpawnpoint = enemySpawnpointTilemapObject.position;
+            return enemySpawnpointTilemapObject;
+
+
+
+          //////////////////////////////////////////
+          default:
+            return new PIXI.Sprite(tilemapItemData.texture);
+
         }
-        else if (tilemapItemData.type == (CoinTilemapObject).name) {
-
-          myGixiAppData.coinsMax.Value++;
-          return new CoinTilemapObject(this._app);
-
-        }
-
-
-
-        CoinTilemapObject
-        return new PIXI.Sprite(tilemapItemData.texture);
-
-      default:
-        throw new Error('Invalid layer type');
     }
   }
 }

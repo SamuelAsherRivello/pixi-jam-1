@@ -11,6 +11,8 @@ import { ScoreSuperText } from '@src/scripts/client/projects/treasureHunter2D/ui
 import { Player } from '@src/scripts/client/projects/treasureHunter2D/Player';
 import { TilemapItemFactoryCustom } from './projects/treasureHunter2D/tileMap/TilemapItemFactoryCustom';
 import { Observable } from './core/observables/Observable';
+import { Container } from 'pixi.js';
+import { DebugMarker } from './projects/treasureHunter2D/DebugMarker';
 
 
 /////////////////////////////
@@ -31,6 +33,8 @@ export interface ITreasurHunterData {
   coinsMax: Observable<number>;
   screenUIMarginX: number;
   screenUIMarginY: number;
+  playerSpawnpoint: PIXI.Point;
+  enemySpawnpoint: PIXI.Point;
 }
 
 const treasureHunterData: ITreasurHunterData = {
@@ -41,13 +45,16 @@ const treasureHunterData: ITreasurHunterData = {
   coinsMax: new Observable<number>(0),
   screenUIMarginX: 10,
   screenUIMarginY: 10,
+  playerSpawnpoint: new PIXI.Point(0, 0), //Will be set by tilemap
+  enemySpawnpoint: new PIXI.Point(0, 0), //Will be set by tilemap
 };
 
 let scoreText: ScoreSuperText;
 let instructionsText: InstructionsSuperText;
 let player: Player;
-let tempWorldOrigin: PIXI.Graphics;
-
+let tempScreenCenterpoint: DebugMarker
+let tempWorldOrigin: DebugMarker
+let tempMapOrigin: DebugMarker
 
 
 /////////////////////////////
@@ -108,18 +115,19 @@ async function onInitializeCompleted(gixiApp: GixiApplication) {
   tilemap.y = gixiApp.getScreenCenterpoint().y - tilemap.height / 2;
 
   /////////////////////////////
-  // Temp:  World centerpoint
-  //        For reference
+  // DebugMarkers
   /////////////////////////////
-  tempWorldOrigin = new PIXI.Graphics()
-    .rect(0, 0, 32, 32)
-    .fill({
-      color: 0xffffff,
-      alpha: 0.5
-    });
-  gixiApp.addToViewport(tempWorldOrigin);
-  tempWorldOrigin.x = gixiApp.getScreenCenterpoint().x;
-  tempWorldOrigin.y = gixiApp.getScreenCenterpoint().y;
+  tempWorldOrigin = new DebugMarker(gixiApp, "World(0,0)");
+  gixiApp.addToViewport(tempWorldOrigin); //NOTE: addToViewpoint vs addToStage?
+  tempWorldOrigin.position = new PIXI.Point();
+
+  tempScreenCenterpoint = new DebugMarker(gixiApp, "Screen(C,C)");
+  gixiApp.addToViewport(tempScreenCenterpoint); //NOTE: addToViewpoint vs addToStage?
+  tempScreenCenterpoint.position = gixiApp.getScreenCenterpoint();
+
+  tempMapOrigin = new DebugMarker(gixiApp, "Tilemap(0,0)");
+  gixiApp.addToViewport(tempMapOrigin); //NOTE: addToViewpoint vs addToStage?
+  tempMapOrigin.position = tilemap.position;
 
 
   /////////////////////////////
@@ -127,9 +135,7 @@ async function onInitializeCompleted(gixiApp: GixiApplication) {
   /////////////////////////////
   player = new Player(gixiApp, tilemap, { textureUrl: treasureHunterData.playerTextureUrl as string });
   gixiApp.addToViewport(player);
-  player.x = gixiApp.getScreenCenterpoint().x;
-  player.y = gixiApp.getScreenCenterpoint().y;
-
+  player.position = gixiApp.configuration.data.playerSpawnpoint;
 
 
   /////////////////////////////

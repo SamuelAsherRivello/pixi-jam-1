@@ -55,7 +55,7 @@ export enum LayerType {
 }
 
 export interface ITilemapItemFactory {
-  createTilemapItem(tilemapItemData: TilemapItemData): Promise<PIXI.Container>;
+  createTilemapItem(tilemap: Tilemap, tilemapItemData: TilemapItemData): Promise<PIXI.Container>;
 }
 
 
@@ -195,7 +195,7 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
               type: this.getTileType(tileset, localTileIndex) || ""
             };
 
-            const sprite = await this._TilemapItemFactory.createTilemapItem(tilemapItemData);
+            const sprite = await this._TilemapItemFactory.createTilemapItem(this, tilemapItemData);
             sprite.label = `Tile (${row.toString().padStart(2, '0')},${column.toString().padStart(2, '0')})`;
 
             sprite.x = tilemapItemData.x;
@@ -245,7 +245,7 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
           type: typeResult
         };
 
-        const sprite = await this._TilemapItemFactory.createTilemapItem(tilemapItemData);
+        const sprite = await this._TilemapItemFactory.createTilemapItem(this, tilemapItemData);
         sprite.label = `Object (${object.id})`;
 
         sprite.x = tilemapItemData.x;

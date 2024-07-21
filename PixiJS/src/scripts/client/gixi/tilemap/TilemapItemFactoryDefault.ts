@@ -1,6 +1,6 @@
 import { ITilemapItemFactory, TilemapItemData } from "..";
 import * as PIXI from 'pixi.js';
-import { LayerType } from './Tilemap';
+import { LayerType, Tilemap } from './Tilemap';
 import { GixiApplication } from "../GixiApplication";
 
 export class TilemapItemFactoryDefault implements ITilemapItemFactory {
@@ -14,7 +14,7 @@ export class TilemapItemFactoryDefault implements ITilemapItemFactory {
     }
 
     // Methods --------------------------------------
-    public async createTilemapItem(tilemapItemData: TilemapItemData): Promise<PIXI.Container> {
+    public async createTilemapItem(tilemap: Tilemap, tilemapItemData: TilemapItemData): Promise<PIXI.Container> {
 
 
         switch (tilemapItemData.layerType) {

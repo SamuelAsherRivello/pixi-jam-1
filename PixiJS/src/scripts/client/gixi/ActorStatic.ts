@@ -70,9 +70,12 @@ export class ActorStatic extends ActorContainer implements IInitializableAsync, 
             this._sprite = new PIXI.Sprite(texture);
         }
 
-        this._sprite.label = this.label;
-        this.addChild(this._sprite);
-        this._sprite.anchor.set(0.5, 0.5);
+        if (this._sprite) {
+            this._sprite.label = this.label;
+            this.addChild(this._sprite);
+            this._sprite.anchor.set(0.5, 0.5);
+        }
+
 
         // Local
         //Do any additional initialization here
