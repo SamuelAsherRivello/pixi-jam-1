@@ -146,8 +146,11 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
     /////////////////////////////
     super();
     this._canvasId = canvasId;
-    //
-    this.app = new PIXI.Application();
+
+
+    //TODO: The console logs out the renderer upon init. 
+    //      Note its forever "WebGL". I want WebGPU. - srivello
+    this.app = new PIXI.Application<PIXI.WebGPURenderer<HTMLCanvasElement>>();
     this._configuration = { ...GixiApplicationConfigurationDefault, ...configuration };
     this._systems = new Systems(this);
 
@@ -177,6 +180,14 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
         height: this.configuration.heightInitial,
         resizeTo: window,
 
+
+        antialias: true,
+        backgroundAlpha: 1,
+        powerPreference: 'high-performance',
+
+        // FORCE WEBGPU - This works, but it throws errors (fixable?)
+        //preference: "webgpu",
+
         // EVENTS
         eventMode: 'passive',
         eventFeatures: {
@@ -195,7 +206,12 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
       this.app.ticker.minFPS = this.configuration.minFPS;
       this.app.ticker.maxFPS = this.configuration.maxFPS;
 
-      console.log(`PIXI.Application.init() success! PixiJS v${PIXI.VERSION} with ${this.GetRendererTypeAsString(this.app.renderer.type)} `);
+      let possible: string = "WebGL";
+      if (navigator.gpu) {
+        possible = "(WebGL, WebGPU)";
+      }
+      console.log(`PIXI.Application.init() success! PixiJS v${PIXI.VERSION} ...\nRendering Supported : ${possible}. Rendering Active : ${this.GetRendererTypeAsString(this.app.renderer.type)}.`);
+
 
       /////////////////////////////
       // Create Viewport
@@ -244,12 +260,21 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
   // Methods ------------------------------
   private GetRendererTypeAsString(type: number) {
     let rendererType: string = "Unknown";
-    if (this.app.renderer.type === PIXI.RendererType.WEBGL) {
-      rendererType = 'WebGL';
-    } else if (this.app.renderer.type === PIXI.RendererType.WEBGPU) {
-      rendererType = 'WebGPU';
+    switch (type) {
+      case PIXI.RendererType.WEBGL:
+        rendererType = 'WebGL';
+        break;
+      case PIXI.RendererType.WEBGPU:
+        rendererType = 'WebGPU';
+        break;
+      case PIXI.RendererType.BOTH:
+        rendererType = 'BOTH';
+        break;
+      default:
+        rendererType = 'Unknown';
+        break;
     }
-    return rendererType
+    return rendererType;
   }
 
   // Add to camera-controlled scene tree

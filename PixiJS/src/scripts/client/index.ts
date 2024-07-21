@@ -13,7 +13,6 @@ import { TilemapItemFactoryCustom } from './projects/treasureHunter2D/tileMap/Ti
 import { Observable } from './core/observables/Observable';
 
 
-
 /////////////////////////////
 // PIXI Configuration
 /////////////////////////////
