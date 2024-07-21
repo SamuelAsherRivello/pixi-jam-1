@@ -4,6 +4,7 @@ import { Actions, Interpolations } from 'pixi-actions';
 import { DropShadowFilter } from 'pixi-filters';
 import { Ticker } from 'pixi.js';
 import { ICollisionSystemBody } from '../../../../gixi/interfaces/ICollisionSystemBody';
+import { TreasureHunter2DConstants } from '../../TreasureHunter2DConstants';
 
 /**
  * Represents a coin in the game.
@@ -60,33 +61,24 @@ export class ChestTilemapObject extends ActorStatic implements ICollisionSystemB
     }
 
     private destroyAfterAnimation() {
-        let action = Actions.sequence(
 
-            Actions.delay(0),
-            Actions.runFunc(() => {
-                // BEFORE Animation: Call something?
+        let action1 = TreasureHunter2DConstants.Animations.spinAndShrink(
+            this,
+            0,
+            20,
+            () => {
+                // onStart
                 this._app.systems.audioSystem.play("./assets/audio/Chime02.mp3");
-            }),
-            Actions.parallel(
+            },
+            () => {
 
-                Actions.rotateTo(this,
-                    1,
-                    20,
-                    Interpolations.smooth2),
-
-                Actions.scaleTo(this,
-                    0,
-                    0,
-                    20,
-                    Interpolations.smooth2),
-
-            ),
-            Actions.runFunc(() => {
-                // AFTER Animation: Call something?
+                // onComplete
                 this.destroy();
-            }),
+            }
+
         );
-        action.play();
+
+        action1.play();
 
     }
 

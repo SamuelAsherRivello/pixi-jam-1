@@ -21,6 +21,7 @@ export interface IMultiplayerSystem extends ISystemBase {
 export class MultiplayerSystem extends SystemBase implements IMultiplayerSystem {
 
     // Fields ---------------------------------------
+    public isDebug: boolean = false;
 
     // Initialization -------------------------------
     constructor(app: GixiApplication) {
@@ -91,6 +92,11 @@ export class MultiplayerSystem extends SystemBase implements IMultiplayerSystem 
     // Methods ------------------------------
 
     private consoleLog(msg: string) {
+
+        if (!this.isDebug) {
+            return;
+
+        }
         console.log(`[${(MultiplayerSystem).name}] ${msg}`);
     }
 }

@@ -4,6 +4,7 @@ import { GixiApplication } from '@src/scripts/client/gixi/GixiApplication';
 import { ICollisionSystemBody } from '@src/scripts/client/gixi/interfaces/ICollisionSystemBody';
 import { Actions, Interpolations } from 'pixi-actions';
 import { DropShadowFilter, GlowFilter } from 'pixi-filters';
+import { TreasureHunter2DConstants } from '../../TreasureHunter2DConstants';
 
 /**
  * Represents a coin in the game.
@@ -65,35 +66,24 @@ export class CoinTilemapObject extends ActorAnimated implements ICollisionSystem
 
 
     public destroyAfterAnimation() {
-        let action = Actions.sequence(
 
-            Actions.delay(0),
-            Actions.runFunc(() => {
-                // BEFORE Animation: Call something?
+        let action1 = TreasureHunter2DConstants.Animations.riseAndGrow(
+            this,
+            0,
+            20,
+            () => {
+                // onStart
                 this._app.systems.audioSystem.play("./assets/audio/Chime01.mp3");
-            }),
-            Actions.parallel(
+            },
+            () => {
 
-                Actions.moveTo(this,
-                    this.x,
-                    this.y - 32,
-                    20,
-                    Interpolations.smooth2),
-
-                Actions.scaleTo(this,
-                    2,
-                    2,
-                    20,
-                    Interpolations.smooth2),
-
-            ),
-            Actions.runFunc(() => {
-                // AFTER Animation: Call something?
+                // onComplete
                 this.destroy();
-            }),
-        );
-        action.play();
+            }
 
+        );
+
+        action1.play();
 
     }
 
