@@ -1,10 +1,26 @@
 import { GixiApplication } from "../GixiApplication";
+import { ISystemBase } from "./base/SystemBase";
 import { SystemBase } from "./base/SystemBase";
+
+
+/**
+ * 
+ */
+export interface IInputSystem extends ISystemBase {
+
+    // Properties -----------------------------------
+
+    // Methods --------------------------------------
+    isKeyDown(keycode: string): boolean;
+    isKeyDownThisFrame(keycode: string): boolean;
+
+}
+
 
 /**
  * Handles keyboard input and maintains the state of keys.
  */
-export class InputSystem extends SystemBase {
+export class InputSystem extends SystemBase implements IInputSystem {
 
     // Fields ---------------------------------------
     private _keyStateDictionary: Map<string, KeyState>;

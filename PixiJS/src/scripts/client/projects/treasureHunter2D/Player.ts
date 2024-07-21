@@ -137,6 +137,7 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
             //DO something here like attack
         }
 
+
         if (this._app.systems.inputSystem.isKeyDownThisFrame('f')) {
 
             //FULLSCREEN

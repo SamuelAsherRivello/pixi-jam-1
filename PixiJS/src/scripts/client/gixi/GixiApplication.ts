@@ -3,11 +3,11 @@ import { Viewport } from 'pixi-viewport';
 import { EventEmitter } from 'events';
 import { SuperText } from '../core/super/SuperText';
 import { IInitializableAsync } from './interfaces/IInitializeAsync';
-import { CollisionSystem } from './systems/CollisionSystem';
+import { CollisionSystem, ICollisionSystem } from './systems/CollisionSystem';
 import { ActorContainer } from './ActorContainer';
-import { InputSystem } from './systems/InputSystem';
-import { AudioSystem } from './systems/AudioSystem';
-import { MultiplayerSystem } from './systems/MultiplayerSystem';
+import { IInputSystem, InputSystem } from './systems/InputSystem';
+import { AudioSystem, IAudioSystem } from './systems/AudioSystem';
+import { IMultiplayerSystem, MultiplayerSystem } from './systems/MultiplayerSystem';
 
 /**
  * Configuration
@@ -39,10 +39,10 @@ class Systems implements IInitializableAsync {
   }
 
   // Fields ---------------------------------------
-  public collisionSystem: CollisionSystem;
-  public inputSystem: InputSystem;
-  public audioSystem: AudioSystem;
-  public multiplayerSystem: MultiplayerSystem;
+  public collisionSystem: ICollisionSystem;
+  public inputSystem: IInputSystem;
+  public audioSystem: IAudioSystem;
+  public multiplayerSystem: IMultiplayerSystem;
   private _isInitialized: boolean = false;
 
   // Initialization -------------------------------

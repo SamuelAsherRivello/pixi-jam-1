@@ -2,7 +2,7 @@ import { ActorStatic, ActorStaticConfiguration } from '@src/scripts/client/gixi/
 import { GixiApplication } from '@src/scripts/client/gixi/GixiApplication';
 import { Actions, Interpolations } from 'pixi-actions';
 import { DropShadowFilter } from 'pixi-filters';
-import { Container, Ticker } from 'pixi.js';
+import { Ticker } from 'pixi.js';
 import { ICollisionSystemBody } from '../../../../gixi/interfaces/ICollisionSystemBody';
 
 /**

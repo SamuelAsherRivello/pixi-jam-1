@@ -1,16 +1,29 @@
-import { GixiApplication } from "../GixiApplication";
 import * as PIXI from 'pixi.js';
+import { GixiApplication } from "../GixiApplication";
 import { SystemBase } from "./base/SystemBase";
-import { ActorContainer } from "../ActorContainer";
-import { Viewport } from "pixi-viewport";
 import { ICollisionSystemBody } from '../interfaces/ICollisionSystemBody';
 import { GixiUtility, ICollisionSystemBodyInterfaceLookup } from "../GixiUtility";
+import { ISystemBase } from "./base/SystemBase";
+import { ActorContainer } from '../ActorContainer';
+
+
+/**
+ * 
+ */
+export interface ICollisionSystem extends ISystemBase {
+
+    // Properties -----------------------------------
+
+    // Methods --------------------------------------
+    stageContainersCollidingWith(me: PIXI.Container): PIXI.Container[];
+}
+
 
 /**
  * CollisionSystem is responsible for detecting collisions between PIXI containers.
  * It extends the SystemBase class and provides methods to get colliding sprites.
  */
-export class CollisionSystem extends SystemBase {
+export class CollisionSystem extends SystemBase implements ICollisionSystem {
 
     // Properties -------------------------------
 

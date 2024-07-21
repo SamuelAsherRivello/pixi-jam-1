@@ -1,11 +1,25 @@
-import { IMediaInstance, Sound, sound } from "@pixi/sound";
+import { Sound, sound } from "@pixi/sound";
 import { GixiApplication } from "../GixiApplication";
 import { SystemBase } from "./base/SystemBase";
+import { ISystemBase } from "./base/SystemBase";
+
+
+/**
+ * 
+ */
+export interface IAudioSystem extends ISystemBase {
+
+    // Properties -----------------------------------
+
+    // Methods --------------------------------------
+    play(filename: string): void;
+    playAsync(filename: string): Promise<any>;
+}
 
 /**
  * Handles keyboard input and maintains the state of keys.
  */
-export class AudioSystem extends SystemBase {
+export class AudioSystem extends SystemBase implements IAudioSystem {
 
     // Properties -----------------------------------
 
@@ -59,17 +73,17 @@ export class AudioSystem extends SystemBase {
 
     /**
      * Play a sound file.
-     * @param fileName 
+     * @param filename 
      */
-    public async play(fileName: string) {
-        this.playAsync(fileName);
+    public async play(filename: string) {
+        this.playAsync(filename);
     }
 
     /**
      * Play a sound file.
-     * @param fileName 
+     * @param filename 
      */
-    public async playAsync(fileName: string) {
+    public async playAsync(filename: string) {
         if (!this._audioContextResumed) {
             console.warn('Audio context not resumed yet. Cannot play sound.');
             return;
@@ -77,7 +91,7 @@ export class AudioSystem extends SystemBase {
 
         // Play the sound when needed
         let x: Sound = Sound.from({
-            url: fileName,
+            url: filename,
             preload: true,
             autoPlay: false,
         });

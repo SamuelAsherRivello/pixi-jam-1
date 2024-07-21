@@ -1,10 +1,21 @@
 import { GixiApplication } from "../../GixiApplication";
 import { IInitializableAsync } from "../../interfaces/IInitializeAsync";
 
+
 /**
  * 
  */
-export class SystemBase implements IInitializableAsync {
+export interface ISystemBase extends IInitializableAsync {
+
+    // Properties -----------------------------------
+
+    // Methods --------------------------------------
+}
+
+/**
+ * 
+ */
+export class SystemBase implements ISystemBase {
 
     // Properties -----------------------------------
     get isInitialized(): boolean {
