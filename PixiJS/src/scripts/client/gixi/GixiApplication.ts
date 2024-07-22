@@ -8,6 +8,8 @@ import { IInputSystem, InputSystem } from './systems/InputSystem';
 import { AudioSystem, IAudioSystem } from './systems/AudioSystem';
 import { IMultiplayerSystem, MultiplayerSystem } from './systems/MultiplayerSystem';
 import { GixiText } from './GixiText';
+import { ITilemapCollisionSystem, TilemapCollisionSystem } from './systems/TilemapCollisionSystem';
+import { Tilemap } from './tilemap/Tilemap';
 
 /**
  * Configuration
@@ -39,6 +41,7 @@ class Systems implements IInitializableAsync {
   }
 
   // Fields ---------------------------------------
+  public tilemapCollisionSystem: ITilemapCollisionSystem;
   public collisionSystem: ICollisionSystem;
   public inputSystem: IInputSystem;
   public audioSystem: IAudioSystem;
@@ -48,6 +51,7 @@ class Systems implements IInitializableAsync {
   // Initialization -------------------------------
   constructor(app: GixiApplication) {
     this.collisionSystem = new CollisionSystem(app);
+    this.tilemapCollisionSystem = new TilemapCollisionSystem(app);
     this.inputSystem = new InputSystem(app);
     this.audioSystem = new AudioSystem(app);
     this.multiplayerSystem = new MultiplayerSystem(app);

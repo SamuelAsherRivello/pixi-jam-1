@@ -257,8 +257,8 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
   }
 
   // Event Handlers -------------------------------
-  public isCollision(playerX: number, playerY: number, playerWidth: number, playerHeight: number): boolean {
-    return this._TilemapCollisionSystem.isCollision(playerX, playerY, playerWidth, playerHeight);
+  public isCollision(x: number, y: number, width: number, height: number): boolean {
+    return this._TilemapCollisionSystem.isCollision(x, y, width, height);
   }
 
   public override async onAdded() {

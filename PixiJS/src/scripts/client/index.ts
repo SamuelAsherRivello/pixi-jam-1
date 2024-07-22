@@ -116,6 +116,10 @@ async function onInitializeCompleted(gixiApp: GixiApplication) {
   tilemap.x = gixiApp.getScreenCenterpoint().x - tilemap.width / 2;
   tilemap.y = gixiApp.getScreenCenterpoint().y - tilemap.height / 2;
 
+  //Add tilemap to system. One of (the only?) systems that has lazy dependencies. ok?
+  //TODO: maybe replace with gixiApp.systems.AddSystem<ITilemapCollisionSystem>(new Blah())
+  gixiApp.systems.tilemapCollisionSystem.setTilemap(tilemap);
+
   /////////////////////////////
   // DebugMarkers
   /////////////////////////////
@@ -143,7 +147,7 @@ async function onInitializeCompleted(gixiApp: GixiApplication) {
   /////////////////////////////
   // Create Player
   /////////////////////////////
-  player = new Player(gixiApp, tilemap, { textureUrl: treasureHunterData.playerTextureUrl });
+  player = new Player(gixiApp, { textureUrl: treasureHunterData.playerTextureUrl });
   gixiApp.addToViewport(player);
   player.position = gixiApp.configuration.data.playerSpawnpoint;
 

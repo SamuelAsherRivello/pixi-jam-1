@@ -91,9 +91,6 @@ export class ActorAnimated extends ActorContainer implements IInitializableAsync
 
 
     // Properties -----------------------------------
-    public override get configuration(): ActorAnimatedConfiguration {
-        return this._configuration as ActorAnimatedConfiguration;
-    }
 
     // Fields ---------------------------------------
     protected _multiAnimatedSprite!: MultiAnimatedSprite;

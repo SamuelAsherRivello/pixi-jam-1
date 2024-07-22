@@ -36,14 +36,11 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
 
 
     // Fields ---------------------------------------
-    private _Tilemap: Tilemap;
 
     // Initialization -------------------------------
-    constructor(app: GixiApplication, Tilemap: Tilemap, configuration?: Partial<PlayerConfiguration>) {
+    constructor(app: GixiApplication, configuration?: Partial<PlayerConfiguration>) {
 
         super(app, { ...PlayerConfigurationDefault, ...configuration });
-
-        this._Tilemap = Tilemap;
 
         // Redeclare anything from super 
         // that you want differently here
@@ -86,7 +83,7 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
         //show all 4 values in the log string
         const width = 32;
         const height = 32;
-        const isCollision = this._Tilemap.isCollision(x, y, width, height);
+        const isCollision = this._app.systems.tilemapCollisionSystem.isCollision(x, y, width, height);
 
         // Internally the map uses globals, so we do NOT need to convert
         //let globalPos = this.toGlobal(this.position);
