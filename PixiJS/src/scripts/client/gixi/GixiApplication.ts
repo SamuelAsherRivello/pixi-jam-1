@@ -1,13 +1,13 @@
 import * as PIXI from 'pixi.js';
 import { Viewport } from 'pixi-viewport';
 import { EventEmitter } from 'events';
-import { SuperText } from '../core/super/SuperText';
 import { IInitializableAsync } from './interfaces/IInitializeAsync';
 import { CollisionSystem, ICollisionSystem } from './systems/CollisionSystem';
 import { ActorContainer } from './ActorContainer';
 import { IInputSystem, InputSystem } from './systems/InputSystem';
 import { AudioSystem, IAudioSystem } from './systems/AudioSystem';
 import { IMultiplayerSystem, MultiplayerSystem } from './systems/MultiplayerSystem';
+import { GixiText } from './GixiText';
 
 /**
  * Configuration
@@ -278,13 +278,13 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
   }
 
   // Add to camera-controlled scene tree
-  public addToViewport(obj: PIXI.Container | PIXI.Sprite | SuperText): any {
+  public addToViewport(obj: PIXI.Container | PIXI.Sprite): any {
 
     this.requireIsInitialized();
 
     this.viewport.addChild(obj);
 
-    if (obj instanceof ActorContainer || obj instanceof SuperText) {
+    if (obj instanceof ActorContainer) {
       obj.onAdded();
     }
 
@@ -293,13 +293,13 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
   }
 
   // Remove from camera-controlled scene tree
-  public removeFromViewport(obj: PIXI.Container | PIXI.Sprite | SuperText): any {
+  public removeFromViewport(obj: PIXI.Container | PIXI.Sprite): any {
 
     this.requireIsInitialized();
 
     this.viewport.removeChild(obj);
 
-    if (obj instanceof ActorContainer || obj instanceof SuperText) {
+    if (obj instanceof ActorContainer) {
       obj.onRemoved();
     }
 
@@ -307,7 +307,7 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
   }
 
   // Add to basic scene tree
-  public addToStage(obj: PIXI.Container | PIXI.Sprite | SuperText, parent?: PIXI.Sprite | ActorContainer): any {
+  public addToStage(obj: PIXI.Container | PIXI.Sprite, parent?: PIXI.Sprite | ActorContainer): any {
 
     this.requireIsInitialized();
 
@@ -317,7 +317,7 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
       parent.addChild(obj);
     }
 
-    if (obj instanceof ActorContainer || obj instanceof SuperText) {
+    if (obj instanceof ActorContainer) {
       obj.onAdded();
     }
 
@@ -326,7 +326,7 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
 
 
   // Remove from basic scene tree
-  public removeFromStage(obj: PIXI.Container | PIXI.Sprite | SuperText, parent?: PIXI.Sprite | ActorContainer): any {
+  public removeFromStage(obj: PIXI.Container | PIXI.Sprite, parent?: PIXI.Sprite | ActorContainer): any {
 
     this.requireIsInitialized();
 
@@ -337,7 +337,7 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
       parent.removeChild(obj);
     }
 
-    if (obj instanceof ActorContainer || obj instanceof SuperText) {
+    if (obj instanceof ActorContainer) {
       obj.onRemoved();
     }
 

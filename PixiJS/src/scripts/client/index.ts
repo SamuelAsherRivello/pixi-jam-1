@@ -1,18 +1,19 @@
 //PIXI
 import * as PIXI from 'pixi.js';
 import Stats from 'stats.js';
-import { Actions, Interpolations } from 'pixi-actions';
+import { Actions } from 'pixi-actions';
 import { GixiApplication, GixiApplicationConfiguration } from './gixi/GixiApplication';
 import { Tilemap } from './gixi/tilemap/Tilemap';
 
 //TREASURE HUNTER 2D
-import { InstructionsSuperText } from '@src/scripts/client/projects/treasureHunter2D/ui/InstructionsSuperText';
-import { ScoreSuperText } from '@src/scripts/client/projects/treasureHunter2D/ui/ScoreSuperText';
+import { InstructionsText } from '@src/scripts/client/projects/treasureHunter2D/ui/InstructionsText';
+import { ScoreText } from '@src/scripts/client/projects/treasureHunter2D/ui/ScoreText';
 import { Player } from '@src/scripts/client/projects/treasureHunter2D/Player';
 import { TilemapItemFactoryCustom } from './projects/treasureHunter2D/tileMap/TilemapItemFactoryCustom';
 import { Observable } from './core/observables/Observable';
-import { Container } from 'pixi.js';
 import { DebugMarker } from './projects/treasureHunter2D/DebugMarker';
+import { DropShadowFilter } from 'pixi-filters';
+import { text } from 'stream/consumers';
 
 
 /////////////////////////////
@@ -49,8 +50,8 @@ const treasureHunterData: ITreasurHunterData = {
   enemySpawnpoint: new PIXI.Point(0, 0), //Will be set by tilemap
 };
 
-let scoreText: ScoreSuperText;
-let instructionsText: InstructionsSuperText;
+let scoreText: ScoreText;
+let instructionsText: InstructionsText;
 let player: Player;
 let tempScreenCenterpoint: DebugMarker
 let tempWorldOrigin: DebugMarker
@@ -161,21 +162,19 @@ async function onInitializeCompleted(gixiApp: GixiApplication) {
   /////////////////////////////
   // Create Text
   /////////////////////////////
-  instructionsText =
-    new InstructionsSuperText(
-      gixiApp,
-      'SEE INSIDE CLASS',
-      30,
-      "left");
+
+  const textStyle = new PIXI.TextStyle();
+  textStyle.fontFamily = 'Arial';
+  textStyle.fontSize = 40;
+  textStyle.fill = '#ffffff';
+
+  //See in class for : text/position
+  let instructions = `Arrows / WASD To Move\nEnter / Spacebar For Attack\nF For Fullscreen\nR For Restart\nM For Move Fast`;
+  instructionsText = new InstructionsText(gixiApp, instructions, { textStyle: textStyle });
   gixiApp.addToStage(instructionsText);
 
-
-  scoreText =
-    new ScoreSuperText(
-      gixiApp,
-      `Coins ${gixiApp.configuration.data?.coinsCollected}/${gixiApp.configuration.data?.coinsMax}`,
-      30,
-      "right");
+  //See in class for : text/position
+  scoreText = new ScoreText(gixiApp, "Replace Later", { textStyle: textStyle });
   gixiApp.addToStage(scoreText);
 
 
@@ -196,8 +195,7 @@ async function onInitializeCompleted(gixiApp: GixiApplication) {
   /////////////////////////////
   function onRefreshScore() {
 
-
-    scoreText.text = `Coins ${treasureHunterData.coinsCollected.Value}/${treasureHunterData.coinsMax.Value}`;
+    scoreText.textString = `Coins ${treasureHunterData.coinsCollected.Value}/${treasureHunterData.coinsMax.Value}`;
 
     //Strong typing is optional, but recommended
     const myGixiAppData: ITreasurHunterData =

@@ -1,7 +1,7 @@
-import { SuperText } from "@src/scripts/client/core/super/SuperText";
 import { GixiApplication } from "@src/scripts/client/gixi/GixiApplication";
+import { GixiText } from "@src/scripts/client/gixi/GixiText";
 
-export class ScoreSuperText extends SuperText {
+export class InstructionsText extends GixiText {
 
     // Fields ---------------------------------------
 
@@ -11,13 +11,13 @@ export class ScoreSuperText extends SuperText {
     public override onResize(app: GixiApplication): void {
 
         //UPDATE POSITION
-        this.x = app.app.screen.width - this.width - app.configuration.data.screenUIMarginX;
+        this.x = app.configuration.data.screenUIMarginX;
         this.y = app.configuration.data.screenUIMarginY;
 
-        this.text = "hello world";
-
         //HACK: UPDATE SIZE
-        this.style.fontSize = 15 + 7 / app.app.renderer.resolution
+        this._text.style.fontSize = 15 + 7 / app.app.renderer.resolution
+
 
     }
+
 }
