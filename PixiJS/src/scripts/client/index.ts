@@ -12,8 +12,7 @@ import { Player } from '@src/scripts/client/projects/treasureHunter2D/Player';
 import { TilemapItemFactoryCustom } from './projects/treasureHunter2D/tileMap/TilemapItemFactoryCustom';
 import { Observable } from './core/observables/Observable';
 import { DebugMarker } from './projects/treasureHunter2D/DebugMarker';
-import { DropShadowFilter } from 'pixi-filters';
-import { text } from 'stream/consumers';
+import { Enemy } from './projects/treasureHunter2D/Enemy';
 
 
 /////////////////////////////
@@ -30,6 +29,7 @@ export interface ITreasurHunterData {
   logoImageUrl: string;
   tilemapDataUrl: string;
   playerTextureUrl: string;
+  enemyTextureUrl: string;
   coinsCollected: Observable<number>;
   coinsMax: Observable<number>;
   screenUIMarginX: number;
@@ -42,6 +42,7 @@ const treasureHunterData: ITreasurHunterData = {
   logoImageUrl: 'assets/images/pixijs-logo-32x32.png',
   tilemapDataUrl: 'assets/tilemaps/TreasureHunter2D.tmj',
   playerTextureUrl: 'assets/images/player-default-sprite.png',
+  enemyTextureUrl: 'assets/images/enemy-default-sprite.png',
   coinsCollected: new Observable<number>(0),
   coinsMax: new Observable<number>(0),
   screenUIMarginX: 10,
@@ -132,9 +133,17 @@ async function onInitializeCompleted(gixiApp: GixiApplication) {
 
 
   /////////////////////////////
+  // Create Enemy
+  /////////////////////////////
+  const enemy = new Enemy(gixiApp, { textureUrl: treasureHunterData.enemyTextureUrl });
+  gixiApp.addToViewport(enemy);
+  enemy.position = gixiApp.configuration.data.enemySpawnpoint;
+
+
+  /////////////////////////////
   // Create Player
   /////////////////////////////
-  player = new Player(gixiApp, tilemap, { textureUrl: treasureHunterData.playerTextureUrl as string });
+  player = new Player(gixiApp, tilemap, { textureUrl: treasureHunterData.playerTextureUrl });
   gixiApp.addToViewport(player);
   player.position = gixiApp.configuration.data.playerSpawnpoint;
 

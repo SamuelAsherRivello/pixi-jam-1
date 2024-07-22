@@ -13,6 +13,7 @@ import { ActorContainer } from '../ActorContainer';
 export interface ICollisionSystem extends ISystemBase {
 
     // Properties -----------------------------------
+    stageContainers: PIXI.Container[];
 
     // Methods --------------------------------------
     stageContainersCollidingWith(me: PIXI.Container): PIXI.Container[];
@@ -28,7 +29,7 @@ export class CollisionSystem extends SystemBase implements ICollisionSystem {
     // Properties -------------------------------
 
     // CHEAP TO CALL
-    public stageContainers(): PIXI.Container[] {
+    public get stageContainers(): PIXI.Container[] {
         return this._stageContainers;
     }
 
