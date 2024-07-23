@@ -10,6 +10,7 @@ export class GixiUtility {
 
 
 
+
   // Properties -----------------------------------
 
   // Fields ---------------------------------------
@@ -34,9 +35,34 @@ export class GixiUtility {
   }
 
   public static setAnchorAndAdjustPosition(sprite: PIXI.Sprite, point: PIXI.Point) {
+
+    //For ex. 0.5/0.5 will move the anchor to the center of the sprite
+    //and adjust the art to keep the sprite in the same position
     sprite.anchor.set(point.x, point.y);
-    sprite.position.set(sprite.width, sprite.height);
+    const dx = - (sprite.parent.width * point.x);
+    const dy = - (sprite.parent.height * point.y)
+    sprite.position.set(
+      sprite.position.x + dx,
+      sprite.position.y + dy);
   }
+
+  static setAnchorAndAdjustPositionAndParent(
+    parent: PIXI.Container<PIXI.ContainerChild>,
+    sprite: PIXI.Sprite,
+    point: PIXI.Point) {
+
+    //Move Child
+    GixiUtility.setAnchorAndAdjustPosition(sprite, point);
+
+    //Move parent
+    const dx = (parent.width * point.x * 2);
+    const dy = (parent.height * point.y * 2)
+    parent.position.set(
+      parent.position.x + dx,
+      parent.position.y + dy);
+
+  }
+
 
 }
 

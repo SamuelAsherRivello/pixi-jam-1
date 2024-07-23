@@ -51,6 +51,12 @@ export class TilemapItemFactoryCustom implements ITilemapItemFactory {
               isTickable: true,
               isResizable: false
             }
+
+            //NOTE: TilemapItemData is passed by reference.
+            //      So for some objects, I adjust the position 
+            //      which the Tilemap.ts will use for placement
+            tilemapItemData.x += tilemapItemData.width;
+            tilemapItemData.y += tilemapItemData.height;
             return new ChestTilemapObject(this._app, configuration);
 
 
@@ -58,6 +64,12 @@ export class TilemapItemFactoryCustom implements ITilemapItemFactory {
           case (CoinTilemapObject).name:
 
             myGixiAppData.coinsMax.Value++;
+
+            //NOTE: TilemapItemData is passed by reference.
+            //      So for some objects, I adjust the position 
+            //      which the Tilemap.ts will use for placement
+            tilemapItemData.x += tilemapItemData.width;
+            tilemapItemData.y += tilemapItemData.height;
             return new CoinTilemapObject(this._app);
 
 

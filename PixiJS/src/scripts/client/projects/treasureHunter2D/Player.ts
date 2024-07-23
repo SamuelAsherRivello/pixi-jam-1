@@ -89,9 +89,8 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
     private isCollisionWithTilemap(x: number, y: number): boolean {
 
         //show all 4 values in the log string
-        const width = 32;
-        const height = 32;
-        const isCollision = this._app.systemManager.getItem(TilemapCollisionSystem).isCollision(x, y, width, height);
+        const isCollision = this._app.systemManager.getItem(TilemapCollisionSystem).isCollision
+            (x, y, this.width, this.height);
 
         // Internally the map uses globals, so we do NOT need to convert
         //let globalPos = this.toGlobal(this.position);
@@ -175,7 +174,7 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
 
         }
 
-        if (this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame('p')) {
+        if (this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame('o')) {
 
             //Clear Data
             this._app.systemManager.getItem(AudioSystem).play("./assets/audio/Click01.wav");
@@ -183,6 +182,16 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
 
             //And reload
             this._app.reload();
+
+        }
+
+        if (this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame('p')) {
+
+            //Clear Data
+            this._app.systemManager.getItem(AudioSystem).play("./assets/audio/Click01.wav");
+
+            //And reload
+            this._app.app.ticker.started = !this._app.app.ticker.started;
 
         }
 

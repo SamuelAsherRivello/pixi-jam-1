@@ -41,6 +41,8 @@ export interface Property {
 export interface TilemapItemData {
   x: number;
   y: number;
+  width: number;
+  height: number;
   row: number;
   column: number;
   texture: PIXI.Texture;
@@ -188,6 +190,8 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
             const tilemapItemData: TilemapItemData = {
               x: column * tileset.tilewidth,
               y: row * tileset.tileheight,
+              width: tileset.tilewidth,
+              height: tileset.tileheight,
               row: row,
               column: column,
               texture: tileTexture,
@@ -238,6 +242,8 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
         const tilemapItemData: TilemapItemData = {
           x: object.x,
           y: object.y - tileset.tileheight,
+          width: tileset.tilewidth,
+          height: tileset.tileheight,
           row: unsetValue,
           column: unsetValue,
           texture: tileTexture,

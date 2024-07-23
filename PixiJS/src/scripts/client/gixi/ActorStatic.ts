@@ -74,9 +74,9 @@ export class ActorStatic extends ActorContainer implements IInitializableAsync, 
             this._sprite.label = this.label;
             this.addChild(this._sprite);
 
-            // Center the anchor and position
-            // to help with this.rotation++;
-            GixiUtility.setAnchorAndAdjustPosition(this._sprite, new PIXI.Point(0.5, 0.5));
+            //await new Promise(resolve => setTimeout(resolve, 100));
+            GixiUtility.setAnchorAndAdjustPositionAndParent(this, this._sprite, new PIXI.Point(0.5, 0.5));
+
 
         }
 

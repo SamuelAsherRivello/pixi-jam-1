@@ -148,7 +148,8 @@ export class TreasureHunter2D extends GixiApplication {
     instructionsString += 'F For Fullscreen\n';
     instructionsString += 'R For Restart\n';
     instructionsString += 'M For Move Fast\n';
-    instructionsString += 'P For Clear Data\n';
+    instructionsString += 'O For Clear Data\n';
+    instructionsString += 'P For Pause (Unpause is broken)\n';
     this._instructionsText = new InstructionsText(this, instructionsString, { textStyle: instructionsTextStyle });
     this.addToStage(this._instructionsText);
 

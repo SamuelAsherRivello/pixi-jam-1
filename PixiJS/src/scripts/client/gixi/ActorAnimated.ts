@@ -1,5 +1,6 @@
 import { ActorContainer, ActorContainerConfiguration } from './ActorContainer';
 import { GixiApplication } from './GixiApplication';
+import { GixiUtility } from './GixiUtility';
 import { IActor } from './base/IActor';
 import { IInitializableAsync } from './base/IInitializeAsync';
 import * as PIXI from 'pixi.js';
@@ -44,15 +45,18 @@ class MultiAnimatedSprite {
 
         this._animationNameToAnimatedSprite.forEach((value: PIXI.AnimatedSprite, key: string) => {
 
+            value.label = (MultiAnimatedSprite).name;
+            parent.addChild(value);
+
+            // 1 of 2
             //NOTE: The parent center and/or the value center may not be proper
             //TODO: Go to index.ts and try to put a coin at a specific world position and then be sure it looks good
             value.setSize(size.x, size.y);
-            value.label = (MultiAnimatedSprite).name;
 
-
-
-            value.anchor.set(0.5, 0.5);
-            parent.addChild(value);
+            // 2 of 2
+            // Center the anchor and position
+            // to help with this.rotation++;
+            GixiUtility.setAnchorAndAdjustPosition(value, new PIXI.Point(0.5, 0.5));
         });
     }
 
