@@ -19,6 +19,7 @@ export interface ITreasureHunterData {
   coinsMax: Observable<number>;
   timeElapsed: Observable<number>;
   timeElapsedBest: Observable<number>;
+  health: Observable<number>;
   screenUIMarginX: number;
   screenUIMarginY: number;
   playerSpawnpoint: PIXI.Point;
@@ -35,6 +36,7 @@ const treasureHunterData: ITreasureHunterData = {
   coinsMax: new Observable<number>(0),
   timeElapsed: new Observable<number>(0),
   timeElapsedBest: new Observable<number>(0),
+  health: new Observable<number>(100),
   screenUIMarginX: 10,
   screenUIMarginY: 10,
   playerSpawnpoint: new PIXI.Point(0, 0),

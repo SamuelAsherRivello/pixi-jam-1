@@ -181,7 +181,9 @@ export class TreasureHunter2D extends GixiApplication {
     // Events
     /////////////////////////////
     this._treasureHunterData.coinsCollected.OnValueChanged.on(this.CoinsCollected_OnValueChanged.bind(this));
+    //
     this._treasureHunterData.coinsMax.OnValueChanged.on(this.onRefreshUI.bind(this));
+    this._treasureHunterData.health.OnValueChanged.on(this.onRefreshUI.bind(this));
     this._treasureHunterData.timeElapsed.OnValueChanged.on(this.onRefreshUI.bind(this));
     this._treasureHunterData.timeElapsedBest.OnValueChanged.on(this.onRefreshUI.bind(this));
     this.onRefreshUI();
@@ -206,13 +208,16 @@ export class TreasureHunter2D extends GixiApplication {
 
     const coinsCollected: string = GixiUtility.FormatNumber(this._treasureHunterData.coinsCollected.Value, 2);
     const coinsMax: string = GixiUtility.FormatNumber(this._treasureHunterData.coinsMax.Value, 2);
-    const timeElapsed: string = GixiUtility.FormatNumber(this._treasureHunterData.timeElapsed.Value, 4);
-    const timeElapsedBest: string = GixiUtility.FormatNumber(this._treasureHunterData.timeElapsedBest.Value, 4);
+    const timeElapsed: string = GixiUtility.FormatNumber(Math.round(this._treasureHunterData.timeElapsed.Value), 4);
+    const timeElapsedBest: string = GixiUtility.FormatNumber(Math.round(this._treasureHunterData.timeElapsedBest.Value), 4);
+    const health: string = GixiUtility.FormatNumber(Math.round(this._treasureHunterData.health.Value), 4);
+
 
     let textString = "";
-    textString += `Coins ${coinsCollected}/${coinsMax}\n`;
-    textString += `Time ${timeElapsed}\n`;
     textString += `Best Time ${timeElapsedBest}\n`;
+    textString += `Time ${timeElapsed}\n`;
+    textString += `Coins ${coinsCollected}/${coinsMax}\n`;
+    textString += `Health ${health}\n`;
     this._scoreText.textString = textString;
   }
 

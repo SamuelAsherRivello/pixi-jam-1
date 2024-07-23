@@ -64,7 +64,7 @@ export class ChestTilemapObject extends ActorStatic implements ICollisionSystemB
     private destroyAfterAnimation() {
 
         let action1 = TreasureHunter2DConstants.Animations.spinAndShrink(
-            this,
+            this._sprite,
             0,
             20,
             () => {

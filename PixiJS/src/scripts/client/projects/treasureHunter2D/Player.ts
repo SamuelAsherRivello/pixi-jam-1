@@ -10,6 +10,7 @@ import { AudioSystem } from '../../gixi/systems/AudioSystem';
 import { InputSystem } from '../../gixi/systems/InputSystem';
 import { TilemapCollisionSystem } from '../../gixi/systems/TilemapCollisionSystem';
 import { LocalDiskStorageSystem } from '../../gixi/systems/LocalDiskStorageSystem';
+import { Enemy } from './Enemy';
 
 /**
  * Configuration
@@ -39,6 +40,10 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
 
 
     // Fields ---------------------------------------
+    private timeAtLastTakeDamageMS: number = 0; //start at max, so immediate damage
+    private healthDeltaPerEnemyHit: number = -10;
+    private static readonly timeBetweenTakeDamageMS: number = 2000;
+
 
     // Initialization -------------------------------
     constructor(app: GixiApplication, configuration?: Partial<PlayerConfiguration>) {
@@ -98,10 +103,27 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
             //console.log(`isCollisionWithTilemap (x=${x}, y=${y}) = ${isCollision}`);
         }
 
-
         return isCollision;
 
     }
+
+
+
+    public takeDamage(deltaHealth: number) {
+        const currentTime = this._app.app.ticker.lastTime;
+        const timeSinceLastTakeDamage = currentTime - this.timeAtLastTakeDamageMS;
+
+        if (timeSinceLastTakeDamage > Player.timeBetweenTakeDamageMS) {
+            this._app.systemManager.getItem(AudioSystem).play("./assets/audio/Hit01.mp3");
+
+            // Update the time of the last damage taken
+            this.timeAtLastTakeDamageMS = currentTime;
+
+            // Update health value
+            this._app.configuration.data.health.Value = Math.max(0, this._app.configuration.data.health.Value + deltaHealth);
+        }
+    }
+
 
     // Event Handlers -------------------------------
 
@@ -214,7 +236,13 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
                 }
             }
 
+            if (collision instanceof Enemy) {
+
+                this.takeDamage(this.healthDeltaPerEnemyHit);
+            }
+
         });
     }
+
 }
 
