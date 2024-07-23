@@ -27,6 +27,7 @@ export class CoinTilemapObject extends ActorAnimated implements ICollisionSystem
     constructor(app: GixiApplication) {
 
         const configuration: ActorAnimatedConfiguration = {
+            spriteSheetURL: 'assets/images/AnimatedCoin/animated_coin.png',
             canCollisionCheck: false,
             isTickable: false,
             isResizable: false

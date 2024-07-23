@@ -1,9 +1,7 @@
-import { Locator, LocatorContructor } from "../../core/locators/Locator";
-import { GixiApplication } from "../GixiApplication";
 import { AudioSystem } from "../systems/AudioSystem";
-import { ISystemBase } from "../systems/base/SystemBase";
 import { CollisionSystem } from "../systems/CollisionSystem";
 import { InputSystem } from "../systems/InputSystem";
+import { LocalDiskStorageSystem } from "../systems/LocalDiskStorageSystem";
 import { MultiplayerSystem } from "../systems/MultiplayerSystem";
 import { TilemapCollisionSystem } from "../systems/TilemapCollisionSystem";
 import { ISystemManager } from "./base/ISystemManager";
@@ -40,13 +38,14 @@ export class SystemManagerDefault extends SystemManagerBase implements ISystemMa
         this._locator.addItem(InputSystem, new InputSystem(this._app));
         this._locator.addItem(AudioSystem, new AudioSystem(this._app));
         this._locator.addItem(MultiplayerSystem, new MultiplayerSystem(this._app));
-
+        this._locator.addItem(LocalDiskStorageSystem, new LocalDiskStorageSystem(this._app));
         const systems = [
             this._locator.getItem(CollisionSystem),
             this._locator.getItem(TilemapCollisionSystem),
             this._locator.getItem(InputSystem),
             this._locator.getItem(AudioSystem),
             this._locator.getItem(MultiplayerSystem),
+            this._locator.getItem(LocalDiskStorageSystem),
         ];
 
         await Promise.all(systems.map(system => system.initializeAsync()));

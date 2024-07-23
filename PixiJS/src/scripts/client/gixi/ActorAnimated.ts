@@ -74,9 +74,13 @@ class MultiAnimatedSprite {
  * Configuration
  */
 export interface ActorAnimatedConfiguration extends ActorContainerConfiguration {
+    //add the urls that define 'i am a coin' here
+    spriteSheetURL: string
 }
 
 const ActorAnimatedConfigurationDefault: ActorAnimatedConfiguration = {
+    //populate urls here or pass them into the ActorAnimated constructor
+    spriteSheetURL: "",
     canCollisionCheck: true,
     isTickable: true,
     isResizable: true
@@ -91,6 +95,9 @@ export class ActorAnimated extends ActorContainer implements IInitializableAsync
 
 
     // Properties -----------------------------------
+    public override get configuration(): ActorAnimatedConfiguration {
+        return this._configuration as ActorAnimatedConfiguration;
+    }
 
     // Fields ---------------------------------------
     protected _multiAnimatedSprite!: MultiAnimatedSprite;
@@ -120,7 +127,7 @@ export class ActorAnimated extends ActorContainer implements IInitializableAsync
         //2. Do some error checking here 
         //      (See how ActorStatic does it.)
         //3. Update this snippet below as needed. Done!    
-        const animatedTextureURL = 'assets/images/AnimatedCoin/animated_coin.png';
+        const animatedTextureURL = this.configuration.spriteSheetURL;
         const animatedTextureJSONURL = 'assets/images/AnimatedCoin/animated_coin.json';
         this._multiAnimatedSprite = new MultiAnimatedSprite(animatedTextureURL, animatedTextureJSONURL);
         await this._multiAnimatedSprite.initializeAndReparent(this._app, this);

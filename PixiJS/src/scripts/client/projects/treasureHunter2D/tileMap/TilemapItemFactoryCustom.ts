@@ -65,8 +65,8 @@ export class TilemapItemFactoryCustom implements ITilemapItemFactory {
 
             //TODO: HACK - make this show up on the "P" icon of the map
             console.log("#hack Tilemap positions player poorly.")
-            let p = new PIXI.Point(tilemapItemData.x / 2 - 116, tilemapItemData.y / 2 + 8); //hack
-            this._app.configuration.data.playerSpawnpoint = tilemap.toGlobal(p); //hack
+            let p = new PIXI.Point(tilemapItemData.x, tilemapItemData.y); //hack
+            this._app.configuration.data.playerSpawnpoint = this._app.app.stage.toGlobal(p); //hack
             return playerSpawnpointTilemapObject;
 
 

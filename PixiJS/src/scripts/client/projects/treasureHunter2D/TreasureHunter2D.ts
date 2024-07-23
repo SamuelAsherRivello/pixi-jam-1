@@ -11,6 +11,7 @@ import { Enemy } from './Enemy';
 import { ITreasureHunterData } from '../../client';
 import { TilemapCollisionSystem } from '../../gixi/systems/TilemapCollisionSystem';
 import { DebugMarker } from '../../gixi/debugging/DebugMarker';
+import { LocalDiskStorageSystem } from '../../gixi/systems/LocalDiskStorageSystem';
 
 
 
@@ -107,6 +108,25 @@ export class TreasureHunter2D extends GixiApplication {
       acceleration: 1,
       radius: 20
     });
+
+
+    /////////////////////////////
+    // Local Disk Storage 
+    /////////////////////////////
+    const hasData: boolean =
+      this.systemManager.getItem(LocalDiskStorageSystem).hasData("test");
+
+    console.log("hasData: " + hasData);
+    if (!hasData) {
+      this.systemManager.getItem(LocalDiskStorageSystem).saveData("test", "fun");
+    }
+    else {
+      const value = this.systemManager.getItem(LocalDiskStorageSystem).getData("test");
+      console.log("value: " + value);
+    }
+
+
+
 
     /////////////////////////////
     // Create Text
