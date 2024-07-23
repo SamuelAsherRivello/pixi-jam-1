@@ -1,2 +1,4 @@
 .DS_Store
 /PixiJS/node_modules
+/PixiJS/dist/*
+/PixiJS/dist

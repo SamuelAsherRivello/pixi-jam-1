@@ -107,7 +107,6 @@ export class Enemy extends ActorStatic implements ICollisionSystemBody {
 
         if (!this.target) {
             this.target = this.getStageContainersOfTypePlayer()[0];
-            console.log("Found : " + this.target);
         }
 
         if (!this.target) {

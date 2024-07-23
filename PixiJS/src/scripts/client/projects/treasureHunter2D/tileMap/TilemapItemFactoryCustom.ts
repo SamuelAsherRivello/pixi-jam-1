@@ -4,10 +4,10 @@ import { CoinTilemapObject } from './tileMapObjects/CoinTilemapObject';
 import { GixiApplication } from '@src/scripts/client/gixi/GixiApplication';
 import { ITilemapItemFactory, LayerType, TilemapItemData } from '@src/scripts/client/gixi/tilemap/Tilemap';
 import { ActorStaticConfiguration } from '@src/scripts/client/gixi';
-import { ITreasurHunterData } from '@src/scripts/client';
 import { PlayerSpawnpointTilemapObject } from './tileMapObjects/PlayerSpawnpointTilemapObject';
 import { EnemySpawnpointTilemapObject } from './tileMapObjects/EnemySpawnpointTilemapObject';
 import { Tilemap } from '../../../gixi/tilemap/Tilemap';
+import { ITreasureHunterData } from '@src/scripts/client/client';
 
 export class TilemapItemFactoryCustom implements ITilemapItemFactory {
 
@@ -23,8 +23,8 @@ export class TilemapItemFactoryCustom implements ITilemapItemFactory {
   public async createTilemapItem(tilemap: Tilemap, tilemapItemData: TilemapItemData): Promise<PIXI.Container> {
 
     //Strong typing is optional, but recommended
-    const myGixiAppData: ITreasurHunterData =
-      (this._app.configuration.data as ITreasurHunterData);
+    const myGixiAppData: ITreasureHunterData =
+      (this._app.configuration.data as ITreasureHunterData);
 
 
     switch (tilemapItemData.layerType) {

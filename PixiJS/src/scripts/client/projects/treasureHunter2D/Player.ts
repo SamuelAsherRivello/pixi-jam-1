@@ -4,9 +4,8 @@ import { DropShadowFilter } from 'pixi-filters';
 import { CoinTilemapObject } from './tileMap/tileMapObjects/CoinTilemapObject';
 import { ChestTilemapObject } from './tileMap/tileMapObjects/ChestTilemapObject';
 import { ActorStatic, ActorStaticConfiguration } from '../../gixi/ActorStatic';
-import { Tilemap } from '../../gixi/tilemap/Tilemap';
 import { ICollisionSystemBody } from '../../gixi/interfaces/ICollisionSystemBody';
-import { ITreasurHunterData } from '../..';
+import { ITreasureHunterData } from '../../client';
 
 /**
  * Configuration
@@ -174,6 +173,7 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
         //     return;
         // }
 
+
         collisions.forEach((collision) => {
 
             //Note the label is NOT always the class name
@@ -181,8 +181,8 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
             //console.log(collision.name);
 
             //Strong typing is optional, but recommended
-            const myGixiAppData: ITreasurHunterData =
-                (this._app.configuration.data as ITreasurHunterData);
+            const myGixiAppData: ITreasureHunterData =
+                (this._app.configuration.data as ITreasureHunterData);
 
             if (collision instanceof CoinTilemapObject) {
                 if (!collision.isCollected) {

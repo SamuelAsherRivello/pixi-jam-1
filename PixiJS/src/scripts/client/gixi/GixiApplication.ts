@@ -214,7 +214,7 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
       if (navigator.gpu) {
         possible = "(WebGL, WebGPU)";
       }
-      console.log(`PIXI.Application.init() success! PixiJS v${PIXI.VERSION} ...\nRendering Supported : ${possible}. Rendering Active : ${this.GetRendererTypeAsString(this.app.renderer.type)}.`);
+      console.log(`PIXI.Application.initializeAsync() success! PixiJS v${PIXI.VERSION} ...\nRendering Supported : ${possible}. Rendering Active : ${this.GetRendererTypeAsString(this.app.renderer.type)}.`);
 
 
       /////////////////////////////
@@ -245,9 +245,10 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
       this.viewport.label = "Viewport"; //TODO: Why "Et Viewport"?
 
     } catch (error) {
-      console.log(`PIXI.Application.init() failed! PixiJS v${PIXI.VERSION} with ${this.GetRendererTypeAsString(this.app.renderer.type)} `);
 
+      console.log(`PIXI.Application.initializeAsync() failed! PixiJS v${PIXI.VERSION} with ${this.GetRendererTypeAsString(this.app.renderer.type)} `);
       this.emit(GixiApplication.EVENT_INITIALIZE_ERROR, error);
+
     }
 
 

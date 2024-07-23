@@ -31,7 +31,7 @@ export default (env) => {
 
   return {
     entry: {
-      main: './src/scripts/client/index.ts',
+      main: './src/scripts/client/client.ts',
       styles: './src/css/styles.css',
     },
     output: {

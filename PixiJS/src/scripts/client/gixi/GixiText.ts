@@ -52,7 +52,7 @@ export class GixiText extends ActorContainer implements IInitializableAsync, IAc
 
         const textOptions: PIXI.TextOptions = {
             style: this.configuration.textStyle,
-            resolution: 2 // TODO: Best value? Ensure text is sharp
+            resolution: 2 // TODO: Fix. Text is not too sharp. Is it this value?
         };
 
         this._text = new PIXI.Text(textOptions);
