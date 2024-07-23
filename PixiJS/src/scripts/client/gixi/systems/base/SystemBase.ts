@@ -1,5 +1,5 @@
 import { GixiApplication } from "../../GixiApplication";
-import { IInitializableAsync } from "../../interfaces/IInitializeAsync";
+import { IInitializableAsync } from "../../base/IInitializeAsync";
 
 
 /**
@@ -10,6 +10,7 @@ export interface ISystemBase extends IInitializableAsync {
     // Properties -----------------------------------
 
     // Methods --------------------------------------
+
 }
 
 /**

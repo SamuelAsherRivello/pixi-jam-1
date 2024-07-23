@@ -7,6 +7,7 @@ import { io } from 'socket.io-client';
 /**
  * 
  */
+//TODO: I think all systems are keyed by class not interface, so is there any point of having IMultiplayerSystem?
 export interface IMultiplayerSystem extends ISystemBase {
 
     // Properties -----------------------------------

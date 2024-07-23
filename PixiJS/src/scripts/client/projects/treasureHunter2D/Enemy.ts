@@ -2,9 +2,9 @@ import * as PIXI from 'pixi.js';
 import { GixiApplication } from '@src/scripts/client/gixi/GixiApplication';
 import { DropShadowFilter } from 'pixi-filters';
 import { ActorStatic, ActorStaticConfiguration } from '../../gixi/ActorStatic';
-import { Tilemap } from '../../gixi/tilemap/Tilemap';
-import { ICollisionSystemBody } from '../../gixi/interfaces/ICollisionSystemBody';
+import { ICollisionSystemBody } from '../../gixi/base/ICollisionSystemBody';
 import { Player } from './Player';
+import { CollisionSystem } from '../../gixi/systems/CollisionSystem';
 
 /**
  * Configuration
@@ -73,7 +73,7 @@ export class Enemy extends ActorStatic implements ICollisionSystemBody {
 
     // Methods --------------------------------------
     private getStageContainersOfTypePlayer(): Player[] {
-        return this._app.systems.collisionSystem.stageContainers.filter(child => child instanceof Player);
+        return this._app.systemManager.getItem(CollisionSystem).stageContainers.filter(child => child instanceof Player);
     }
 
 

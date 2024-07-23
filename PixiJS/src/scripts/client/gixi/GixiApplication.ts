@@ -1,15 +1,10 @@
 import * as PIXI from 'pixi.js';
 import { Viewport } from 'pixi-viewport';
 import { EventEmitter } from 'events';
-import { IInitializableAsync } from './interfaces/IInitializeAsync';
-import { CollisionSystem, ICollisionSystem } from './systems/CollisionSystem';
+import { IInitializableAsync } from './base/IInitializeAsync';
 import { ActorContainer } from './ActorContainer';
-import { IInputSystem, InputSystem } from './systems/InputSystem';
-import { AudioSystem, IAudioSystem } from './systems/AudioSystem';
-import { IMultiplayerSystem, MultiplayerSystem } from './systems/MultiplayerSystem';
-import { GixiText } from './GixiText';
-import { ITilemapCollisionSystem, TilemapCollisionSystem } from './systems/TilemapCollisionSystem';
-import { Tilemap } from './tilemap/Tilemap';
+import { SystemManagerDefault as SystemManagerDefault } from './systemManager/SystemManagerDefault';
+import { ISystemManager } from './systemManager/base/ISystemManager';
 
 /**
  * Configuration
@@ -20,6 +15,7 @@ export interface GixiApplicationConfiguration {
   backgroundColor: number;
   minFPS: number,
   maxFPS: number,
+  systemManager: ISystemManager;
   data: { [key: string]: any };
 }
 
@@ -29,58 +25,16 @@ const GixiApplicationConfigurationDefault: GixiApplicationConfiguration = {
   minFPS: 1,
   maxFPS: 240,
   backgroundColor: 0x1099bb,
+  systemManager: new SystemManagerDefault(),
   data: {}
 }
 
-
-class Systems implements IInitializableAsync {
-
-  // Properties -----------------------------------
-  get isInitialized(): boolean {
-    return this._isInitialized;
-  }
-
-  // Fields ---------------------------------------
-  public tilemapCollisionSystem: ITilemapCollisionSystem;
-  public collisionSystem: ICollisionSystem;
-  public inputSystem: IInputSystem;
-  public audioSystem: IAudioSystem;
-  public multiplayerSystem: IMultiplayerSystem;
-  private _isInitialized: boolean = false;
-
-  // Initialization -------------------------------
-  constructor(app: GixiApplication) {
-    this.collisionSystem = new CollisionSystem(app);
-    this.tilemapCollisionSystem = new TilemapCollisionSystem(app);
-    this.inputSystem = new InputSystem(app);
-    this.audioSystem = new AudioSystem(app);
-    this.multiplayerSystem = new MultiplayerSystem(app);
-  }
-
-  public async initializeAsync(): Promise<any> {
-    return await Promise.all([
-      this.collisionSystem.initializeAsync(),
-      this.inputSystem.initializeAsync(),
-      this.audioSystem.initializeAsync(),
-      this.multiplayerSystem.initializeAsync()
-    ]);
-  }
-
-  requireIsInitialized() {
-    if (!this.isInitialized) {
-      throw new Error('Systems are not initialized.');
-    }
-  }
-
-  // Methods -------------------------------
-}
 
 
 /**
  * Wrapper class for initializing and managing a PixiJS application.
  */
 export class GixiApplication extends EventEmitter implements IInitializableAsync {
-
 
 
   // Constants ------------------------------------
@@ -116,13 +70,13 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
     }
   }
 
-  //TODO: Move to new SceneSystem class? = YES!
+  //TODO: Move to new SceneSystem or ApplicationSystem class? = YES!
   public reload() {
     document.location.reload();
   }
 
-  public get systems(): Systems {
-    return this._systems;
+  public get systemManager(): ISystemManager {
+    return this._systemManager;
   }
 
   public get configuration(): GixiApplicationConfiguration {
@@ -136,7 +90,7 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
   //
   private _canvasId: string;
   private _isInitialized = false;
-  private _systems: Systems;
+  private _systemManager: ISystemManager;
   private _isFullscreen: boolean = false;
 
   // Initialization -------------------------------
@@ -156,7 +110,8 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
     //      Note its forever "WebGL". I want WebGPU. - srivello
     this.app = new PIXI.Application<PIXI.WebGPURenderer<HTMLCanvasElement>>();
     this._configuration = { ...GixiApplicationConfigurationDefault, ...configuration };
-    this._systems = new Systems(this);
+    this._systemManager = this._configuration.systemManager;
+
 
     // Every SuperSprite instance listens to App
     // So this number must be >= to the number of SuperSprite instances
@@ -174,7 +129,8 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
 
     this._isInitialized = true;
 
-    await this._systems.initializeAsync();
+    this._systemManager.App = this;
+    await this._systemManager.initializeAsync();
 
     try {
       await this.app.init({
@@ -223,8 +179,8 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
       this.viewport = new Viewport({
         screenWidth: this.app.screen.width,
         screenHeight: this.app.screen.height,
-        worldWidth: 3000,   //not sure
-        worldHeight: 3000,  //not sure
+        worldWidth: 3000,   //TODO: not sure what value is best?
+        worldHeight: 3000,  //TODO: not sure what value is best?
 
         // the interaction module is important for wheel to work properly 
         // when renderer.view is placed or scaled

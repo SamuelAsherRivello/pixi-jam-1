@@ -7,9 +7,10 @@ import { InstructionsText } from '@src/scripts/client/projects/treasureHunter2D/
 import { ScoreText } from '@src/scripts/client/projects/treasureHunter2D/ui/ScoreText';
 import { Player } from '@src/scripts/client/projects/treasureHunter2D/Player';
 import { TilemapItemFactoryCustom } from './tileMap/TilemapItemFactoryCustom';
-import { DebugMarker } from './DebugMarker';
 import { Enemy } from './Enemy';
 import { ITreasureHunterData } from '../../client';
+import { TilemapCollisionSystem } from '../../gixi/systems/TilemapCollisionSystem';
+import { DebugMarker } from '../../gixi/debugging/DebugMarker';
 
 
 
@@ -67,7 +68,7 @@ export class TreasureHunter2D extends GixiApplication {
     this.addToViewport(tilemap);
     tilemap.x = this.getScreenCenterpoint().x - tilemap.width / 2;
     tilemap.y = this.getScreenCenterpoint().y - tilemap.height / 2;
-    this.systems.tilemapCollisionSystem.setTilemap(tilemap);
+    this.systemManager.getItem(TilemapCollisionSystem).setTilemap(tilemap);
 
     /////////////////////////////
     // DebugMarkers

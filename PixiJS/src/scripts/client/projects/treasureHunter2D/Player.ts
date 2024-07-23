@@ -4,8 +4,11 @@ import { DropShadowFilter } from 'pixi-filters';
 import { CoinTilemapObject } from './tileMap/tileMapObjects/CoinTilemapObject';
 import { ChestTilemapObject } from './tileMap/tileMapObjects/ChestTilemapObject';
 import { ActorStatic, ActorStaticConfiguration } from '../../gixi/ActorStatic';
-import { ICollisionSystemBody } from '../../gixi/interfaces/ICollisionSystemBody';
+import { ICollisionSystemBody } from '../../gixi/base/ICollisionSystemBody';
 import { ITreasureHunterData } from '../../client';
+import { AudioSystem } from '../../gixi/systems/AudioSystem';
+import { InputSystem } from '../../gixi/systems/InputSystem';
+import { TilemapCollisionSystem } from '../../gixi/systems/TilemapCollisionSystem';
 
 /**
  * Configuration
@@ -82,7 +85,7 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
         //show all 4 values in the log string
         const width = 32;
         const height = 32;
-        const isCollision = this._app.systems.tilemapCollisionSystem.isCollision(x, y, width, height);
+        const isCollision = this._app.systemManager.getItem(TilemapCollisionSystem).isCollision(x, y, width, height);
 
         // Internally the map uses globals, so we do NOT need to convert
         //let globalPos = this.toGlobal(this.position);
@@ -108,43 +111,43 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
         let moveVector: PIXI.Point = new PIXI.Point(0, 0);
 
         //TODO: Change to be either/both shift keys
-        const isShift: boolean = this._app.systems.inputSystem.isKeyDown('m')
+        const isShift: boolean = this._app.systemManager.getItem(InputSystem).isKeyDown('m')
 
-        if (this._app.systems.inputSystem.isKeyDown('a')) {
+        if (this._app.systemManager.getItem(InputSystem).isKeyDown('a')) {
             //ACTION!
             moveVector.x += -1;
         }
-        if (this._app.systems.inputSystem.isKeyDown('d')) {
+        if (this._app.systemManager.getItem(InputSystem).isKeyDown('d')) {
             moveVector.x += 1;
         }
-        if (this._app.systems.inputSystem.isKeyDown('w')) {
+        if (this._app.systemManager.getItem(InputSystem).isKeyDown('w')) {
             moveVector.y += -1;
         }
-        if (this._app.systems.inputSystem.isKeyDown('s')) {
+        if (this._app.systemManager.getItem(InputSystem).isKeyDown('s')) {
             moveVector.y += 1;
         }
 
-        if (this._app.systems.inputSystem.isKeyDownThisFrame('Enter') ||         //works
-            this._app.systems.inputSystem.isKeyDownThisFrame('Spacebar')) {      //does work. TODO: WHy?
+        if (this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame('Enter') ||         //works
+            this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame('Spacebar')) {      //does work. TODO: WHy?
 
             //ACTION!
-            this._app.systems.audioSystem.play("./assets/audio/Click01.wav");
+            this._app.systemManager.getItem(AudioSystem).play("./assets/audio/Click01.wav");
 
             //DO something here like attack
         }
 
 
-        if (this._app.systems.inputSystem.isKeyDownThisFrame('f')) {
+        if (this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame('f')) {
 
             //FULLSCREEN
             this._app.isFullscreen = !this._app.isFullscreen;
-            this._app.systems.audioSystem.play("./assets/audio/Click01.wav");
+            this._app.systemManager.getItem(AudioSystem).play("./assets/audio/Click01.wav");
         }
 
-        if (this._app.systems.inputSystem.isKeyDownThisFrame('r')) {
+        if (this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame('r')) {
 
             //FULLSCREEN
-            this._app.systems.audioSystem.play("./assets/audio/Click01.wav");
+            this._app.systemManager.getItem(AudioSystem).play("./assets/audio/Click01.wav");
             this._app.reload();
 
         }

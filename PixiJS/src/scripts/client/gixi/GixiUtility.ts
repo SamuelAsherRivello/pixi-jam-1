@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { ICollisionSystemBody } from './interfaces/ICollisionSystemBody';
+import { ICollisionSystemBody } from './base/ICollisionSystemBody';
 
 /**
  * Common functionality

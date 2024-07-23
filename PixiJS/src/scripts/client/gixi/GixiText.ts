@@ -1,7 +1,7 @@
 import { ActorContainer, ActorContainerConfiguration } from "./ActorContainer";
 import { GixiApplication } from "./GixiApplication";
-import { IActor } from "./interfaces/IActor";
-import { IInitializableAsync } from "./interfaces/IInitializeAsync";
+import { IActor } from "./base/IActor";
+import { IInitializableAsync } from "./base/IInitializeAsync";
 import * as PIXI from 'pixi.js';
 
 /**

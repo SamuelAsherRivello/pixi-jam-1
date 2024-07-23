@@ -10,25 +10,29 @@ import {
     LayerType,
     ITilemapItemFactory,
 } from './tilemap/Tilemap';
+
+
 import { ActorContainer, ActorContainerConfiguration } from './ActorContainer';
-import { TilemapCollisionSystem } from './tilemap/TilemapCollisionSystem';
 import { TilemapItemFactoryDefault } from './tilemap/TilemapItemFactoryDefault';
 import { ActorStatic, ActorStaticConfiguration } from './ActorStatic';
 import { ActorAnimated, ActorAnimatedConfiguration } from './ActorAnimated';
 import { GixiApplication } from './GixiApplication';
 import { GixiUtility } from './GixiUtility';
-import { IActorConfiguration } from './interfaces/IActorConfiguration';
+import { IActorConfiguration } from './base/IActorConfiguration';
+import { TilemapDetails } from './tilemap/TilemapDetails';
+import { GixiText } from './GixiText';
 
 // Classes - GIXI
 export const GIXI = {
     ActorContainer,
     Tilemap,
-    TilemapCollisionSystem,
+    TilemapDetails: TilemapDetails,
     TilemapItemFactoryDefault,
     ActorStatic,
     ActorAnimated,
     GixiApplication,
     GixiUtility,
+    GixiText
 };
 
 // Non-Classes - Not Yet GIXI - TODO: Add to GIXI somehow. Not sure
@@ -43,6 +47,6 @@ export type {
     IActorConfiguration,
     ActorContainerConfiguration,
     ActorAnimatedConfiguration,
-    ActorStaticConfiguration
+    ActorStaticConfiguration,
 };
 

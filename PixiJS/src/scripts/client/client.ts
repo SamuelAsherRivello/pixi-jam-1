@@ -1,5 +1,6 @@
 import { Observable } from './core/observables/Observable';
 import { GixiApplicationConfiguration } from './gixi/GixiApplication';
+import { SystemManagerDefault } from './gixi/systemManager/SystemManagerDefault';
 import { TreasureHunter2D } from './projects/treasureHunter2D/TreasureHunter2D';
 import * as PIXI from 'pixi.js';
 
@@ -33,15 +34,20 @@ const treasureHunterData: ITreasureHunterData = {
   enemySpawnpoint: new PIXI.Point(0, 0),
 };
 
+
 /////////////////////////////
 // Application Configuration
 /////////////////////////////
+
+//TODO: Make a subtype that is game specific so you can populate
+//      zero or more properties instead of all
 export const gixiAppConfiguration: GixiApplicationConfiguration = {
   widthInitial: 1920,
   heightInitial: 1080,
   minFPS: 1,
   maxFPS: 240,
   backgroundColor: 0x87867a,
+  systemManager: new SystemManagerDefault(),
   data: treasureHunterData
 };
 

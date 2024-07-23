@@ -3,8 +3,9 @@ import { GixiApplication } from '@src/scripts/client/gixi/GixiApplication';
 import { Actions, Interpolations } from 'pixi-actions';
 import { DropShadowFilter } from 'pixi-filters';
 import { Ticker } from 'pixi.js';
-import { ICollisionSystemBody } from '../../../../gixi/interfaces/ICollisionSystemBody';
+import { ICollisionSystemBody } from '../../../../gixi/base/ICollisionSystemBody';
 import { TreasureHunter2DConstants } from '../../TreasureHunter2DConstants';
+import { AudioSystem } from '@src/scripts/client/gixi/systems/AudioSystem';
 
 /**
  * Represents a coin in the game.
@@ -68,7 +69,7 @@ export class ChestTilemapObject extends ActorStatic implements ICollisionSystemB
             20,
             () => {
                 // onStart
-                this._app.systems.audioSystem.play("./assets/audio/Chime02.mp3");
+                this._app.systemManager.getItem(AudioSystem).play("./assets/audio/Chime02.mp3");
             },
             () => {
 

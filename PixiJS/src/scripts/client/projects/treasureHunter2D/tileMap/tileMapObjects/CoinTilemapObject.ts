@@ -1,10 +1,11 @@
 import { ActorAnimatedConfiguration } from '@src/scripts/client/gixi';
 import { ActorAnimated } from '@src/scripts/client/gixi/ActorAnimated';
 import { GixiApplication } from '@src/scripts/client/gixi/GixiApplication';
-import { ICollisionSystemBody } from '@src/scripts/client/gixi/interfaces/ICollisionSystemBody';
+import { ICollisionSystemBody } from '@src/scripts/client/gixi/base/ICollisionSystemBody';
 import { Actions, Interpolations } from 'pixi-actions';
 import { DropShadowFilter, GlowFilter } from 'pixi-filters';
 import { TreasureHunter2DConstants } from '../../TreasureHunter2DConstants';
+import { AudioSystem } from '@src/scripts/client/gixi/systems/AudioSystem';
 
 /**
  * Represents a coin in the game.
@@ -73,7 +74,7 @@ export class CoinTilemapObject extends ActorAnimated implements ICollisionSystem
             20,
             () => {
                 // onStart
-                this._app.systems.audioSystem.play("./assets/audio/Chime01.mp3");
+                this._app.systemManager.getItem(AudioSystem).play("./assets/audio/Chime01.mp3");
             },
             () => {
 

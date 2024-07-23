@@ -1,9 +1,9 @@
 import * as PIXI from 'pixi.js';
 import { GixiApplication } from '@src/scripts/client/gixi/GixiApplication';
 import { GixiUtility } from '../GixiUtility';
-import { IInitializableAsync } from '../interfaces/IInitializeAsync';
+import { IInitializableAsync } from '../base/IInitializeAsync';
 import { ActorContainer, ActorContainerConfiguration } from '../ActorContainer';
-import { TilemapCollisionSystem } from './TilemapCollisionSystem';
+import { TilemapDetails } from './TilemapDetails';
 
 export interface TilemapData {
   width: number;
@@ -67,7 +67,7 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
   // Fields ---------------------------------------
   private _tilemapDataUrl: string;
   private _TilemapItemFactory: ITilemapItemFactory;
-  private _TilemapCollisionSystem: TilemapCollisionSystem;
+  private _TilemapCollisionSystem: TilemapDetails;
   private _tilemapData!: TilemapData;
 
   // Initialization -------------------------------
@@ -82,7 +82,7 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
 
     this._tilemapDataUrl = tilemapDataUrl;
     this._TilemapItemFactory = TilemapItemFactory;
-    this._TilemapCollisionSystem = new TilemapCollisionSystem(this._app, this);
+    this._TilemapCollisionSystem = new TilemapDetails(this._app, this);
 
 
     // OPTIMIZATION

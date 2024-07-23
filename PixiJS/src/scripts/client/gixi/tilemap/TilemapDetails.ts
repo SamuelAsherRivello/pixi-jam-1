@@ -3,7 +3,7 @@ import { GixiApplication } from '../GixiApplication';
 import { TilemapData } from '..';
 import { Tilemap } from './Tilemap';
 
-export class TilemapCollisionSystem {
+export class TilemapDetails {
     private collisionMap!: boolean[][];
     private _app: GixiApplication;
     private _Tilemap: Tilemap;

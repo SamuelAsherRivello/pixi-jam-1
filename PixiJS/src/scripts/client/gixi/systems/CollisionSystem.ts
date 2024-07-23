@@ -1,10 +1,9 @@
 import * as PIXI from 'pixi.js';
 import { GixiApplication } from "../GixiApplication";
 import { SystemBase } from "./base/SystemBase";
-import { ICollisionSystemBody } from '../interfaces/ICollisionSystemBody';
+import { ICollisionSystemBody } from '../base/ICollisionSystemBody';
 import { GixiUtility, ICollisionSystemBodyInterfaceLookup } from "../GixiUtility";
 import { ISystemBase } from "./base/SystemBase";
-import { ActorContainer } from '../ActorContainer';
 
 
 /**

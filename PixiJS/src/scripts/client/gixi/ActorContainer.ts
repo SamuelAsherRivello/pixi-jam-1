@@ -1,8 +1,9 @@
 import * as PIXI from 'pixi.js';
-import { IInitializableAsync } from './interfaces/IInitializeAsync';
+import { IInitializableAsync } from './base/IInitializeAsync';
 import { GixiApplication } from './GixiApplication';
-import { IActor } from './interfaces/IActor';
-import { IActorConfiguration } from './interfaces/IActorConfiguration';
+import { IActor } from './base/IActor';
+import { IActorConfiguration } from './base/IActorConfiguration';
+import { CollisionSystem } from './systems/CollisionSystem';
 
 
 /**
@@ -124,7 +125,7 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
       return;
     }
 
-    const collisions = this._app.systems.collisionSystem.stageContainersCollidingWith(this);
+    const collisions = this._app.systemManager.getItem(CollisionSystem).stageContainersCollidingWith(this);
 
     if (collisions.length) {
       this.onCollision(collisions);
