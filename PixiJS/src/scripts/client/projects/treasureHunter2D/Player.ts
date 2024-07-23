@@ -199,14 +199,19 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
         const nextX = this.position.x + moveVector.x * ticker.deltaTime * movementSpeed;
         const nextY = this.position.y + moveVector.y * ticker.deltaTime * movementSpeed;
 
-        //TODO: Sanity check this logic to slide along walls
-        if (moveVector.x !== 0 && !this.isCollisionWithTilemap(nextX, this.position.y)) {
+        // Half-width and half-height adjustments
+        const halfWidth = this.width / 2;
+        const halfHeight = this.height / 2;
+
+        // Adjusted collision checks
+        if (moveVector.x !== 0 && !this.isCollisionWithTilemap(nextX + (moveVector.x > 0 ? halfWidth : -halfWidth), this.position.y)) {
             this.position.x = nextX;
         }
 
-        if (moveVector.y !== 0 && !this.isCollisionWithTilemap(this.position.x, nextY)) {
+        if (moveVector.y !== 0 && !this.isCollisionWithTilemap(this.position.x, nextY + (moveVector.y > 0 ? -this.height / 2 : -halfHeight))) {
             this.position.y = nextY;
         }
+
 
     }
 
