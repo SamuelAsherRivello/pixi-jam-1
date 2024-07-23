@@ -63,10 +63,13 @@ export class TilemapItemFactoryCustom implements ITilemapItemFactory {
             let playerSpawnpointTilemapObject = new PlayerSpawnpointTilemapObject(this._app, { texture: tilemapItemData.texture });
             playerSpawnpointTilemapObject.alpha = 0.1;
 
-            //TODO: HACK - make this show up on the "P" icon of the map
             console.log("#hack Tilemap positions player poorly.")
-            let p = new PIXI.Point(tilemapItemData.x, tilemapItemData.y); //hack
-            this._app.configuration.data.playerSpawnpoint = this._app.app.stage.toGlobal(p); //hack
+
+            const playerSpawnpoint = new PIXI.Point(
+              this._app.getScreenCenterpoint().x - 64,
+              this._app.getScreenCenterpoint().y,
+            )
+            this._app.configuration.data.playerSpawnpoint = playerSpawnpoint;
             return playerSpawnpointTilemapObject;
 
 
@@ -77,7 +80,12 @@ export class TilemapItemFactoryCustom implements ITilemapItemFactory {
             enemySpawnpointTilemapObject.alpha = 0.1;
 
             console.log("#hack Tilemap positions enemy poorly.")
-            this._app.configuration.data.enemySpawnerSpawnpoint = new PIXI.Point(400, 400);
+
+            const enemySpawnerSpawnpoint = new PIXI.Point(
+              this._app.getScreenCenterpoint().x + 64,
+              this._app.getScreenCenterpoint().y,
+            )
+            this._app.configuration.data.enemySpawnerSpawnpoint = enemySpawnerSpawnpoint;
 
             return enemySpawnpointTilemapObject;
 
