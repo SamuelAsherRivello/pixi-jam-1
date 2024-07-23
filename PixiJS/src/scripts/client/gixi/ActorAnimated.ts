@@ -2,9 +2,7 @@ import { ActorContainer, ActorContainerConfiguration } from './ActorContainer';
 import { GixiApplication } from './GixiApplication';
 import { IActor } from './base/IActor';
 import { IInitializableAsync } from './base/IInitializeAsync';
-import { GixiUtility } from './GixiUtility';
 import * as PIXI from 'pixi.js';
-import { GlowFilter } from 'pixi-filters';
 
 
 

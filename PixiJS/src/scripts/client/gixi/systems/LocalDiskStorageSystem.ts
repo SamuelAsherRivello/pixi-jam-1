@@ -33,9 +33,16 @@ export class LocalDiskStorageSystem extends SystemBase implements ILocalDiskStor
         localStorage.setItem(key, JSON.stringify(data));
     }
 
-    public getData<T>(key: string): T | null {
+    public getData<T>(key: string): T {
+
+        if (!this.hasData(key)) {
+            throw new Error(`LocalDiskStorageSystem: Key ${key} not found`);
+        }
         const data = localStorage.getItem(key);
-        return data ? JSON.parse(data) as T : null;
+        if (!data) {
+            throw new Error(`LocalDiskStorageSystem: Key ${key} not found`);
+        }
+        return JSON.parse(data) as T;
     }
 
     public deleteData(key: string): void {

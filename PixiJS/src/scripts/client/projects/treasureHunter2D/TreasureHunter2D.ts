@@ -12,6 +12,7 @@ import { ITreasureHunterData } from '../../client';
 import { TilemapCollisionSystem } from '../../gixi/systems/TilemapCollisionSystem';
 import { DebugMarker } from '../../gixi/debugging/DebugMarker';
 import { LocalDiskStorageSystem } from '../../gixi/systems/LocalDiskStorageSystem';
+import { GixiUtility } from '../../gixi/GixiUtility';
 
 
 
@@ -113,52 +114,95 @@ export class TreasureHunter2D extends GixiApplication {
     /////////////////////////////
     // Local Disk Storage 
     /////////////////////////////
-    const hasData: boolean =
-      this.systemManager.getItem(LocalDiskStorageSystem).hasData("test");
+    const hasData: boolean = this.systemManager.getItem(LocalDiskStorageSystem).hasData("timeElapsedBest");
 
-    console.log("hasData: " + hasData);
-    if (!hasData) {
-      this.systemManager.getItem(LocalDiskStorageSystem).saveData("test", "fun");
-    }
-    else {
-      const value = this.systemManager.getItem(LocalDiskStorageSystem).getData("test");
-      console.log("value: " + value);
+    if (hasData) {
+      const timeElapsedBest = this.systemManager.getItem(LocalDiskStorageSystem).getData<number>("timeElapsedBest");
+      this._treasureHunterData.timeElapsedBest.Value = timeElapsedBest;
     }
 
 
-
-
     /////////////////////////////
-    // Create Text
+    // Create Text - Instructions
     /////////////////////////////
-    const textStyle = new PIXI.TextStyle();
-    textStyle.fontFamily = 'Arial';
-    textStyle.fontSize = 40;
-    textStyle.fill = '#ffffff';
-
-    let instructions = `Arrows / WASD To Move\nEnter / Spacebar For Attack\nF For Fullscreen\nR For Restart\nM For Move Fast`;
-    this._instructionsText = new InstructionsText(this, instructions, { textStyle: textStyle });
+    const instructionsTextStyle = new PIXI.TextStyle();
+    instructionsTextStyle.fontFamily = 'Arial';
+    instructionsTextStyle.fontSize = 40;
+    instructionsTextStyle.fill = '#ffffff';
+    instructionsTextStyle.align = 'left';
+    //
+    let instructionsString = '';
+    instructionsString += 'Arrows / WASD To Move\n';
+    instructionsString += 'Enter / Spacebar For Attack\n';
+    instructionsString += 'F For Fullscreen\n';
+    instructionsString += 'R For Restart\n';
+    instructionsString += 'M For Move Fast\n';
+    instructionsString += 'P For Clear Data\n';
+    this._instructionsText = new InstructionsText(this, instructionsString, { textStyle: instructionsTextStyle });
     this.addToStage(this._instructionsText);
 
-    this._scoreText = new ScoreText(this, "Replace Later", { textStyle: textStyle });
+
+    /////////////////////////////
+    // Create Text - Score
+    /////////////////////////////
+    const scoreTextStyle = new PIXI.TextStyle();
+    scoreTextStyle.fontFamily = 'Arial';
+    scoreTextStyle.fontSize = 40;
+    scoreTextStyle.fill = '#ffffff';
+    scoreTextStyle.align = 'right';
+    //
+    let scoreString = "replace later";
+    this._scoreText = new ScoreText(this, scoreString, { textStyle: scoreTextStyle });
     this.addToStage(this._scoreText);
 
+
+    /////////////////////////////
+    // Setup Ticker
+    /////////////////////////////
     this.app.ticker.add((ticker) => {
       this._stats.begin();
       Actions.tick(ticker.deltaTime);
+      this._treasureHunterData.timeElapsed.Value = Math.floor(ticker.lastTime / 1000);
       this._stats.end();
     });
 
-    this._treasureHunterData.coinsCollected.OnValueChanged.on(this.onRefreshScore.bind(this));
-    this._treasureHunterData.coinsMax.OnValueChanged.on(this.onRefreshScore.bind(this));
-    this.onRefreshScore();
+    /////////////////////////////
+    // Events
+    /////////////////////////////
+    this._treasureHunterData.coinsCollected.OnValueChanged.on(this.CoinsCollected_OnValueChanged.bind(this));
+    this._treasureHunterData.coinsMax.OnValueChanged.on(this.onRefreshUI.bind(this));
+    this._treasureHunterData.timeElapsed.OnValueChanged.on(this.onRefreshUI.bind(this));
+    this._treasureHunterData.timeElapsedBest.OnValueChanged.on(this.onRefreshUI.bind(this));
+    this.onRefreshUI();
   }
 
-  private onRefreshScore() {
-    this._scoreText.textString = `Coins ${this._treasureHunterData.coinsCollected.Value}/${this._treasureHunterData.coinsMax.Value}`;
+
+  /////////////////////////////
+  // Event Handlers
+  /////////////////////////////
+  private CoinsCollected_OnValueChanged() {
+
+    this.onRefreshUI();
+
+    console.log(this._treasureHunterData.coinsCollected.Value);
     if (this._treasureHunterData.coinsCollected.Value >= this._treasureHunterData.coinsMax.Value) {
+      this.systemManager.getItem(LocalDiskStorageSystem).saveData("timeElapsedBest", this._treasureHunterData.timeElapsed.Value);
       this.reload();
     }
+  }
+
+  private onRefreshUI() {
+
+    const coinsCollected: string = GixiUtility.FormatNumber(this._treasureHunterData.coinsCollected.Value, 2);
+    const coinsMax: string = GixiUtility.FormatNumber(this._treasureHunterData.coinsMax.Value, 2);
+    const timeElapsed: string = GixiUtility.FormatNumber(this._treasureHunterData.timeElapsed.Value, 4);
+    const timeElapsedBest: string = GixiUtility.FormatNumber(this._treasureHunterData.timeElapsedBest.Value, 4);
+
+    let textString = "";
+    textString += `Coins ${coinsCollected}/${coinsMax}\n`;
+    textString += `Time ${timeElapsed}\n`;
+    textString += `Best Time ${timeElapsedBest}\n`;
+    this._scoreText.textString = textString;
   }
 
   // Event Handlers -------------------------------

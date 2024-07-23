@@ -15,6 +15,8 @@ export interface ITreasureHunterData {
   enemyTextureUrl: string;
   coinsCollected: Observable<number>;
   coinsMax: Observable<number>;
+  timeElapsed: Observable<number>;
+  timeElapsedBest: Observable<number>;
   screenUIMarginX: number;
   screenUIMarginY: number;
   playerSpawnpoint: PIXI.Point;
@@ -28,6 +30,8 @@ const treasureHunterData: ITreasureHunterData = {
   enemyTextureUrl: 'assets/images/enemy-default-sprite.png',
   coinsCollected: new Observable<number>(0),
   coinsMax: new Observable<number>(0),
+  timeElapsed: new Observable<number>(0),
+  timeElapsedBest: new Observable<number>(0),
   screenUIMarginX: 10,
   screenUIMarginY: 10,
   playerSpawnpoint: new PIXI.Point(0, 0),

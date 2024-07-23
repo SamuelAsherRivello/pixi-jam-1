@@ -9,6 +9,7 @@ import { ITreasureHunterData } from '../../client';
 import { AudioSystem } from '../../gixi/systems/AudioSystem';
 import { InputSystem } from '../../gixi/systems/InputSystem';
 import { TilemapCollisionSystem } from '../../gixi/systems/TilemapCollisionSystem';
+import { LocalDiskStorageSystem } from '../../gixi/systems/LocalDiskStorageSystem';
 
 /**
  * Configuration
@@ -130,7 +131,7 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
         if (this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame('Enter') ||         //works
             this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame('Spacebar')) {      //does work. TODO: WHy?
 
-            //ACTION!
+            //Action!
             this._app.systemManager.getItem(AudioSystem).play("./assets/audio/Click01.wav");
 
             //DO something here like attack
@@ -139,15 +140,26 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
 
         if (this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame('f')) {
 
-            //FULLSCREEN
+            //Fullscreen
             this._app.isFullscreen = !this._app.isFullscreen;
             this._app.systemManager.getItem(AudioSystem).play("./assets/audio/Click01.wav");
         }
 
         if (this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame('r')) {
 
-            //FULLSCREEN
+            //Reload page
             this._app.systemManager.getItem(AudioSystem).play("./assets/audio/Click01.wav");
+            this._app.reload();
+
+        }
+
+        if (this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame('p')) {
+
+            //Clear Data
+            this._app.systemManager.getItem(AudioSystem).play("./assets/audio/Click01.wav");
+            this._app.systemManager.getItem(LocalDiskStorageSystem).clearAllData();
+
+            //And reload
             this._app.reload();
 
         }

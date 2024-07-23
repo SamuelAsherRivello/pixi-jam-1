@@ -6,6 +6,7 @@ import { ICollisionSystemBody } from './base/ICollisionSystemBody';
  */
 export class GixiUtility {
 
+
   // Properties -----------------------------------
 
   // Fields ---------------------------------------
@@ -23,6 +24,12 @@ export class GixiUtility {
     const properties = Object.keys(propertyChecker) as (keyof T)[];
     return properties.every(prop => prop in obj);
   }
+
+  public static FormatNumber(value: number, maxLeadingZeros: number): string {
+    const leadingZeros = '0'.repeat(maxLeadingZeros);
+    return (leadingZeros + value).slice(-maxLeadingZeros);
+  }
+
 }
 
 
