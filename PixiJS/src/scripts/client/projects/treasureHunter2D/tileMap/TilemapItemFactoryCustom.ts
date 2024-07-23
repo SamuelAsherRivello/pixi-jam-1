@@ -77,7 +77,7 @@ export class TilemapItemFactoryCustom implements ITilemapItemFactory {
             enemySpawnpointTilemapObject.alpha = 0.1;
 
             console.log("#hack Tilemap positions enemy poorly.")
-            this._app.configuration.data.enemySpawnpoint = new PIXI.Point(400, 400);
+            this._app.configuration.data.enemySpawnerSpawnpoint = new PIXI.Point(400, 400);
 
             return enemySpawnpointTilemapObject;
 

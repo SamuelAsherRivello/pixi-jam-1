@@ -1,6 +1,7 @@
 import { Observable } from './core/observables/Observable';
 import { GixiApplicationConfiguration } from './gixi/GixiApplication';
 import { SystemManagerDefault } from './gixi/systemManager/SystemManagerDefault';
+import { Tilemap } from './gixi/tilemap/Tilemap';
 import { TreasureHunter2D } from './projects/treasureHunter2D/TreasureHunter2D';
 import * as PIXI from 'pixi.js';
 
@@ -12,6 +13,7 @@ export interface ITreasureHunterData {
   logoImageUrl: string;
   tilemapDataUrl: string;
   playerTextureUrl: string;
+  enemySpawnerTextureUrl: string;
   enemyTextureUrl: string;
   coinsCollected: Observable<number>;
   coinsMax: Observable<number>;
@@ -20,14 +22,15 @@ export interface ITreasureHunterData {
   screenUIMarginX: number;
   screenUIMarginY: number;
   playerSpawnpoint: PIXI.Point;
-  enemySpawnpoint: PIXI.Point;
+  enemySpawnerSpawnpoint: PIXI.Point;
 }
 
 const treasureHunterData: ITreasureHunterData = {
   logoImageUrl: 'assets/images/pixijs-logo-32x32.png',
   tilemapDataUrl: 'assets/tilemaps/TreasureHunter2D.tmj',
-  playerTextureUrl: 'assets/images/player-default-sprite.png',
-  enemyTextureUrl: 'assets/images/enemy-default-sprite.png',
+  playerTextureUrl: 'assets/images/player.png',
+  enemySpawnerTextureUrl: 'assets/images/enemy-spawner.png',
+  enemyTextureUrl: 'assets/images/enemy.png',
   coinsCollected: new Observable<number>(0),
   coinsMax: new Observable<number>(0),
   timeElapsed: new Observable<number>(0),
@@ -35,9 +38,8 @@ const treasureHunterData: ITreasureHunterData = {
   screenUIMarginX: 10,
   screenUIMarginY: 10,
   playerSpawnpoint: new PIXI.Point(0, 0),
-  enemySpawnpoint: new PIXI.Point(0, 0),
+  enemySpawnerSpawnpoint: new PIXI.Point(0, 0),
 };
-
 
 /////////////////////////////
 // Application Configuration

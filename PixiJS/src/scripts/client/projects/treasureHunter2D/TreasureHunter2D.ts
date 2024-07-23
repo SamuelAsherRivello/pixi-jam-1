@@ -13,6 +13,7 @@ import { TilemapCollisionSystem } from '../../gixi/systems/TilemapCollisionSyste
 import { DebugMarker } from '../../gixi/debugging/DebugMarker';
 import { LocalDiskStorageSystem } from '../../gixi/systems/LocalDiskStorageSystem';
 import { GixiUtility } from '../../gixi/GixiUtility';
+import { EnemySpawner, EnemySpawnerConfiguration } from './EnemySpawner';
 
 
 
@@ -88,11 +89,21 @@ export class TreasureHunter2D extends GixiApplication {
     this._tempMapOrigin.position = tilemap.position;
 
     /////////////////////////////
-    // Create Enemy
+    // Create Enemy Spawner
     /////////////////////////////
-    const enemy = new Enemy(this, { textureUrl: this._treasureHunterData.enemyTextureUrl });
-    this.addToViewport(enemy);
-    enemy.position = this.configuration.data.enemySpawnpoint;
+    const enemySpawnerConfiguration: EnemySpawnerConfiguration = {
+      perEnemytextureUrl: this._treasureHunterData.enemyTextureUrl,
+      timeBetweenSpawnsMS: 4000,
+      maxToSpawn: 3,
+      textureUrl: this._treasureHunterData.enemySpawnerTextureUrl,
+      texture: PIXI.Texture.EMPTY,
+      canCollisionCheck: false,
+      isTickable: true,
+      isResizable: false
+    }
+    const enemySpawner = new EnemySpawner(this, enemySpawnerConfiguration);
+    this.addToViewport(enemySpawner);
+    enemySpawner.position = this.configuration.data.enemySpawnerSpawnpoint;
 
     /////////////////////////////
     // Create Player
