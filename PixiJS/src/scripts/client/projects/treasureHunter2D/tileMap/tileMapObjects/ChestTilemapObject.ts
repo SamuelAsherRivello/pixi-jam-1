@@ -58,7 +58,7 @@ export class ChestTilemapObject extends ActorStatic implements ICollisionSystemB
         super.onTick(ticker);
 
         // Local
-        this.rotation += 0.01 * ticker.deltaTime;
+        this._sprite.rotation += 0.01 * ticker.deltaTime;
     }
 
     private destroyAfterAnimation() {

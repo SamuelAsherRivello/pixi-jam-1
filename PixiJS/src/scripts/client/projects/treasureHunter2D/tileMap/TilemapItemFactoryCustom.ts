@@ -8,6 +8,7 @@ import { PlayerSpawnpointTilemapObject } from './tileMapObjects/PlayerSpawnpoint
 import { EnemySpawnpointTilemapObject } from './tileMapObjects/EnemySpawnpointTilemapObject';
 import { Tilemap } from '../../../gixi/tilemap/Tilemap';
 import { ITreasureHunterData } from '@src/scripts/client/client';
+import { DebugMarker } from '@src/scripts/client/gixi/debugging/DebugMarker';
 
 export class TilemapItemFactoryCustom implements ITilemapItemFactory {
 
@@ -42,6 +43,7 @@ export class TilemapItemFactoryCustom implements ITilemapItemFactory {
           //////////////////////////////////////////
           case (ChestTilemapObject).name:
 
+
             const configuration: ActorStaticConfiguration = {
               textureUrl: '',
               texture: tilemapItemData.texture,
@@ -54,6 +56,7 @@ export class TilemapItemFactoryCustom implements ITilemapItemFactory {
 
           //////////////////////////////////////////
           case (CoinTilemapObject).name:
+
             myGixiAppData.coinsMax.Value++;
             return new CoinTilemapObject(this._app);
 

@@ -7,6 +7,9 @@ import { ICollisionSystemBody } from './base/ICollisionSystemBody';
 export class GixiUtility {
 
 
+
+
+
   // Properties -----------------------------------
 
   // Fields ---------------------------------------
@@ -28,6 +31,11 @@ export class GixiUtility {
   public static FormatNumber(value: number, maxLeadingZeros: number): string {
     const leadingZeros = '0'.repeat(maxLeadingZeros);
     return (leadingZeros + value).slice(-maxLeadingZeros);
+  }
+
+  public static setAnchorAndAdjustPosition(sprite: PIXI.Sprite, point: PIXI.Point) {
+    sprite.anchor.set(point.x, point.y);
+    sprite.position.set(sprite.width, sprite.height);
   }
 
 }
