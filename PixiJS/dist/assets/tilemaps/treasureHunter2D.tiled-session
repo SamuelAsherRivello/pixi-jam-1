@@ -6,6 +6,7 @@
     "activeFile": "TreasureAdventureMap.tmx",
     "expandedProjectPaths": [
     ],
+    "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "GrassTileset.tsx": {
             "scaleInDock": 1,
@@ -20,6 +21,14 @@
             "viewCenter": {
                 "x": 801.1805213969503,
                 "y": 801.1805213969504
+            }
+        },
+        "TreasureHunter2D_TestSmallerMap.tmx": {
+            "scale": 0.125,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 1804,
+                "y": 1884
             }
         }
     },

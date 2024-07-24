@@ -3,26 +3,10 @@ import { SystemBase } from "./base/SystemBase";
 import { ISystemBase } from "./base/SystemBase";
 import { Tilemap } from '../tilemap/Tilemap';
 
-
-/**
- * 
- */
-export interface ITilemapCollisionSystem extends ISystemBase {
-
-    // Properties -----------------------------------
-
-    // Methods --------------------------------------
-    setTilemap(tilemap: Tilemap): any;
-
-    //TODO: Generalize this. Ex... something like "anyTilesAtPositionHavePropertyOf("Collision")
-    isCollision(x: number, y: number, width: number, height: number): boolean;
-}
-
-
 /**
  * TilemapCollisionSystem handles lookups for tilemap info
  */
-export class TilemapCollisionSystem extends SystemBase implements ITilemapCollisionSystem {
+export class TilemapCollisionSystem extends SystemBase implements ISystemBase {
 
     // Properties -------------------------------
 

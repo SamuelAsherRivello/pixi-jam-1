@@ -5,21 +5,9 @@ import { ISystemBase } from "./base/SystemBase";
 
 
 /**
- * 
- */
-export interface IAudioSystem extends ISystemBase {
-
-    // Properties -----------------------------------
-
-    // Methods --------------------------------------
-    play(filename: string): void;
-    playAsync(filename: string): Promise<any>;
-}
-
-/**
  * Handles keyboard input and maintains the state of keys.
  */
-export class AudioSystem extends SystemBase implements IAudioSystem {
+export class AudioSystem extends SystemBase implements ISystemBase {
 
     // Properties -----------------------------------
 

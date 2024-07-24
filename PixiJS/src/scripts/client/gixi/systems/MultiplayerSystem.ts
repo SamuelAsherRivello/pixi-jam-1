@@ -5,21 +5,9 @@ import { SystemBase } from "./base/SystemBase";
 import { io } from 'socket.io-client';
 
 /**
- * 
- */
-//TODO: I think all systems are keyed by class not interface, so is there any point of having IMultiplayerSystem?
-export interface IMultiplayerSystem extends ISystemBase {
-
-    // Properties -----------------------------------
-
-    // Methods --------------------------------------
-}
-
-
-/**
  * Handles keyboard input and maintains the state of keys.
  */
-export class MultiplayerSystem extends SystemBase implements IMultiplayerSystem {
+export class MultiplayerSystem extends SystemBase implements ISystemBase {
 
     // Fields ---------------------------------------
     public isDebug: boolean = false;

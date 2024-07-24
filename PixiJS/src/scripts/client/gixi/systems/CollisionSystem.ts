@@ -7,23 +7,10 @@ import { ISystemBase } from "./base/SystemBase";
 
 
 /**
- * 
- */
-export interface ICollisionSystem extends ISystemBase {
-
-    // Properties -----------------------------------
-    stageContainers: PIXI.Container[];
-
-    // Methods --------------------------------------
-    stageContainersCollidingWith(me: PIXI.Container): PIXI.Container[];
-}
-
-
-/**
  * CollisionSystem is responsible for detecting collisions between PIXI containers.
  * It extends the SystemBase class and provides methods to get colliding sprites.
  */
-export class CollisionSystem extends SystemBase implements ICollisionSystem {
+export class CollisionSystem extends SystemBase implements ISystemBase {
 
     // Properties -------------------------------
 

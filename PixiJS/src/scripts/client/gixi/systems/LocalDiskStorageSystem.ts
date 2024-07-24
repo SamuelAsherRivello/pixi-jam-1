@@ -2,21 +2,11 @@ import { GixiApplication } from "../GixiApplication";
 import { SystemBase } from "./base/SystemBase";
 import { ISystemBase } from "./base/SystemBase";
 
-/**
- * Interface for LocalDiskStorageSystem
- */
-export interface ILocalDiskStorageSystem extends ISystemBase {
-    saveData<T>(key: string, data: T): void;
-    getData<T>(key: string): T | null;
-    deleteData(key: string): void;
-    clearAllData(): void;
-    hasData(key: string): boolean;
-}
 
 /** 
  * LocalDiskStorageSystem handles local storage operations
  */
-export class LocalDiskStorageSystem extends SystemBase implements ILocalDiskStorageSystem {
+export class LocalDiskStorageSystem extends SystemBase implements ISystemBase {
     constructor(app: GixiApplication) {
         super(app);
     }

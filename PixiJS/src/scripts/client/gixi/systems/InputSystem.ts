@@ -3,17 +3,9 @@ import { ISystemBase } from "./base/SystemBase";
 import { SystemBase } from "./base/SystemBase";
 
 /**
- * Interface for InputSystem
- */
-export interface IInputSystem extends ISystemBase {
-    isKeyDown(keyCode: number): boolean;
-    isKeyDownThisFrame(keyCode: number): boolean;
-}
-
-/**
  * Handles keyboard input and maintains the state of keys.
  */
-export class InputSystem extends SystemBase implements IInputSystem {
+export class InputSystem extends SystemBase implements ISystemBase {
     // Fields ---------------------------------------
     private _keyStateDictionary: Map<number, KeyState>;
 

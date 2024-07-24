@@ -33,6 +33,14 @@ export class SystemManagerDefault extends SystemManagerBase implements ISystemMa
 
 
         //Local
+
+        //I learned that I can't use interfaces as the key for locator. So...
+        //TODO: organize this area better. Do something like
+        //this._locator.addItem(CollisionSystemBase, new CollisionSystemDefault(this._app));
+        //or
+        //this._locator.addItem(CollisionSystem //which is the base class , new CollisionSystemDefault(this._app));
+
+        //
         this._locator.addItem(CollisionSystem, new CollisionSystem(this._app));
         this._locator.addItem(TilemapCollisionSystem, new TilemapCollisionSystem(this._app));
         this._locator.addItem(InputSystem, new InputSystem(this._app));
