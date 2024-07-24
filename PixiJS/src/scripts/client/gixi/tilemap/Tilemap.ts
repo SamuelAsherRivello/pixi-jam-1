@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { GixiApplication } from '@src/scripts/client/gixi/GixiApplication';
+import { GixiApplication } from '@client/gixi/GixiApplication';
 import { GixiUtility } from '../GixiUtility';
 import { IInitializableAsync } from '../base/IInitializeAsync';
 import { ActorContainer, ActorContainerConfiguration } from '../ActorContainer';

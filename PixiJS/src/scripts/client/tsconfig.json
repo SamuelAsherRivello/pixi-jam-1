@@ -1,0 +1,19 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "../../../dist/client",
+    "baseUrl": "./",
+    "paths": {
+      "@client/*": [
+        "*"
+      ],
+      "@shared/*": [
+        "../shared/*"
+      ]
+    },
+    "skipLibCheck": true
+  },
+  "include": [
+    "**/*.ts"
+  ]
+}

@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { GixiApplication } from '@src/scripts/client/gixi/GixiApplication';
+import { GixiApplication } from '@client/gixi/GixiApplication';
 import { DropShadowFilter } from 'pixi-filters';
 import { CoinTilemapObject } from './tileMap/tileMapObjects/CoinTilemapObject';
 import { ChestTilemapObject } from './tileMap/tileMapObjects/ChestTilemapObject';

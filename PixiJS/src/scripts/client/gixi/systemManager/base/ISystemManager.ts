@@ -1,4 +1,4 @@
-import { LocatorContructor } from "@src/scripts/client/core/locators/Locator";
+import { LocatorContructor } from "@client/core/locators/Locator";
 import { GixiApplication } from "../../GixiApplication";
 import { IInitializableAsync } from "../../base/IInitializeAsync";
 import { ISystemBase } from "../../systems/base/SystemBase";

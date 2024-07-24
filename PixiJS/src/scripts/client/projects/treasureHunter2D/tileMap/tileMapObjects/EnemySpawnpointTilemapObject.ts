@@ -1,5 +1,5 @@
-import { ActorStaticConfiguration } from '@src/scripts/client/gixi/ActorStatic';
-import { GixiApplication } from '@src/scripts/client/gixi/GixiApplication';
+import { ActorStaticConfiguration } from '@client/gixi/ActorStatic';
+import { GixiApplication } from '@client/gixi/GixiApplication';
 import { BaseSpawnpointTilemapObject } from './base/BaseSpawnpointTilemapObject';
 
 /**

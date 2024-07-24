@@ -10,20 +10,22 @@ This repo includes Html5 examples using [PixiJS](https://pixijs.com/) and [TypeS
 
 ### Build
 
-**Client Instructions - WIP**
+**Client Instructions - Works!**
 
 ```
 > npm install
 
-> npm run build
+> npm run build-client
 
-> npm run start
+> npm run start-client
 ```
 
-**Server Instructions - WIP**
+**Server Instructions - Not working!**
 
 ```
-> npm run server-start
+> npm run build-server
+
+> npm run start-server
 ```
 
 

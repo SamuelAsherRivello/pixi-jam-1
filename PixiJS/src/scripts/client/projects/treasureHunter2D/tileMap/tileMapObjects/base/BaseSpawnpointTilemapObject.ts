@@ -1,5 +1,5 @@
-import { ActorStatic, ActorStaticConfiguration } from '@src/scripts/client/gixi/ActorStatic';
-import { GixiApplication } from '@src/scripts/client/gixi/GixiApplication';
+import { ActorStatic, ActorStaticConfiguration } from '@client/gixi/ActorStatic';
+import { GixiApplication } from '@client/gixi/GixiApplication';
 
 /**
  * Represents a spawnpoint in the game.

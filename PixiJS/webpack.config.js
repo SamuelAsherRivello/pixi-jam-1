@@ -43,7 +43,8 @@ export default (env) => {
     resolve: {
       extensions: ['.tsx', '.ts', '.js'],
       alias: {
-        '@src': path.resolve(__dirname, 'src')
+        '@client': path.resolve(__dirname, 'src/scripts/client'),
+        '@shared': path.resolve(__dirname, 'src/scripts/shared'),
       }
     },
     module: {

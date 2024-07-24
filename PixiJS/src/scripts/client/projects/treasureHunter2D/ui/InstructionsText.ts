@@ -1,5 +1,5 @@
-import { GixiApplication } from "@src/scripts/client/gixi/GixiApplication";
-import { GixiText } from "@src/scripts/client/gixi/GixiText";
+import { GixiApplication } from "@client/gixi/GixiApplication";
+import { GixiText } from "@client/gixi/GixiText";
 
 export class InstructionsText extends GixiText {
 

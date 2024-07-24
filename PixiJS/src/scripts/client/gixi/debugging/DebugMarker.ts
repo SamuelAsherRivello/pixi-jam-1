@@ -1,6 +1,6 @@
-import { GixiApplication } from '@src/scripts/client/gixi/GixiApplication';
+import { GixiApplication } from '@client/gixi/GixiApplication';
 import { ActorStatic } from '../../gixi/ActorStatic';
-import { Graphics } from 'pixi.js';
+import { Graphics, TextOptions, TextStyle } from 'pixi.js';
 import { Text } from 'pixi.js';
 
 /**
@@ -47,7 +47,18 @@ export class DebugMarker extends ActorStatic {
         graphics.y = - graphics.height / 2
         this.addChild(graphics);
 
-        const text: Text = new Text(this.displayMessage, { align: 'center', fontSize: 12, fill: 0xffffff });
+        const textStyle = new TextStyle();
+        textStyle.fontSize = 12;
+        textStyle.fill = '#ffffff';
+        textStyle.align = 'center';
+
+        const textOptions: TextOptions = {
+            text: this.displayMessage,
+            style: textStyle,
+            resolution: 2 // TODO: Fix. Text is not too sharp. Is it this value?
+        };
+
+        const text: Text = new Text(textOptions);
         text.x = - text.width / 2
         text.y = - text.height / 2
         this.addChild(text);

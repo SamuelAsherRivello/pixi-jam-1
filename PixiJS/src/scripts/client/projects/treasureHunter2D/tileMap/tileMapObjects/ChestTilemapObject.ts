@@ -1,11 +1,11 @@
-import { ActorStatic, ActorStaticConfiguration } from '@src/scripts/client/gixi/ActorStatic';
-import { GixiApplication } from '@src/scripts/client/gixi/GixiApplication';
+import { ActorStatic, ActorStaticConfiguration } from '@client/gixi/ActorStatic';
+import { GixiApplication } from '@client/gixi/GixiApplication';
 import { Actions, Interpolations } from 'pixi-actions';
 import { DropShadowFilter } from 'pixi-filters';
 import { Ticker } from 'pixi.js';
 import { ICollisionSystemBody } from '../../../../gixi/base/ICollisionSystemBody';
 import { TreasureHunter2DConstants } from '../../TreasureHunter2DConstants';
-import { AudioSystem } from '@src/scripts/client/gixi/systems/AudioSystem';
+import { AudioSystem } from '@client/gixi/systems/AudioSystem';
 
 /**
  * Represents a coin in the game.

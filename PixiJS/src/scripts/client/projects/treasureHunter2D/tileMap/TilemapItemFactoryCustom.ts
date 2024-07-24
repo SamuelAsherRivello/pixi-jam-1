@@ -1,13 +1,13 @@
 import * as PIXI from 'pixi.js';
 import { ChestTilemapObject } from "./tileMapObjects/ChestTilemapObject";
 import { CoinTilemapObject } from './tileMapObjects/CoinTilemapObject';
-import { GixiApplication } from '@src/scripts/client/gixi/GixiApplication';
-import { ITilemapItemFactory, LayerType, TilemapItemData } from '@src/scripts/client/gixi/tilemap/Tilemap';
-import { ActorStaticConfiguration } from '@src/scripts/client/gixi';
+import { GixiApplication } from '@client/gixi/GixiApplication';
+import { ITilemapItemFactory, LayerType, TilemapItemData } from '@client/gixi/tilemap/Tilemap';
+import { ActorStaticConfiguration } from '@client/gixi';
 import { PlayerSpawnpointTilemapObject } from './tileMapObjects/PlayerSpawnpointTilemapObject';
 import { EnemySpawnpointTilemapObject } from './tileMapObjects/EnemySpawnpointTilemapObject';
 import { Tilemap } from '../../../gixi/tilemap/Tilemap';
-import { ITreasureHunterData } from '@src/scripts/client/client';
+import { ITreasureHunterData } from '@client/client';
 
 export class TilemapItemFactoryCustom implements ITilemapItemFactory {
 

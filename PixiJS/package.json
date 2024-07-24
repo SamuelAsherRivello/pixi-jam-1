@@ -20,22 +20,27 @@
     "stats.js": "^0.17.0",
     "terser-webpack-plugin": "^5.3.10",
     "ts-loader": "^9.5.1",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.5.3",
     "webpack": "^5.92.1",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.0.4"
   },
   "scripts": {
-    "build": "webpack --mode production",
-    "start": "webpack serve --mode development",
-    "start-with-test": "concurrently --kill-others \"npm run watch:test\" \"webpack serve --mode development\"",
+    "compile-client": "tsc -p src/scripts/client/tsconfig.json",
+    "compile-server": "tsc -p src/scripts/server/tsconfig.json",
+    "compile-shared": "tsc -p src/scripts/shared/tsconfig.json",
+    "compile-all": "npm run compile-client && npm run compile-server && npm run compile-shared",
+    "build-client": "webpack --mode production",
+    "start-client": "webpack serve --mode development",
+    "start-client-with-test": "concurrently --kill-others \"npm run watch:test\" \"webpack serve --mode development\"",
+    "start-server": "node --loader ts-node/esm -r tsconfig-paths/register src/scripts/server/server.ts",
     "test": "jest",
     "test:watch": "jest --watch",
     "watch:test": "onchange \"src/**/*\" \"tests/**/*\" -- npm run test",
     "lint": "eslint --config eslint.config.mjs",
     "lint:fix": "eslint --config eslint.config.mjs --fix",
-    "analyze": "webpack --mode production --env analyze",
-    "server-start": "nodemon"
+    "analyze": "webpack --mode production --env analyze"
   },
   "devDependencies": {
     "@eslint/js": "^8.2.0",

@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { GixiApplication } from '@src/scripts/client/gixi/GixiApplication';
+import { GixiApplication } from '@client/gixi/GixiApplication';
 import { DropShadowFilter } from 'pixi-filters';
 import { ActorStatic, ActorStaticConfiguration } from '../../gixi/ActorStatic';
 import { ICollisionSystemBody } from '../../gixi/base/ICollisionSystemBody';
