@@ -106,29 +106,8 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
 
     }
 
+    private handleMovement(ticker: PIXI.Ticker) {
 
-
-    public takeDamage(deltaHealth: number) {
-        const currentTime = this._app.app.ticker.lastTime;
-        const timeSinceLastTakeDamage = currentTime - this.timeAtLastTakeDamageMS;
-
-        if (timeSinceLastTakeDamage > Player.timeBetweenTakeDamageMS) {
-            this._app.systemManager.getItem(AudioSystem).play("./assets/audio/Hit01.mp3");
-
-            // Update the time of the last damage taken
-            this.timeAtLastTakeDamageMS = currentTime;
-
-            // Update health value
-            this._app.configuration.data.health.Value = Math.max(0, this._app.configuration.data.health.Value + deltaHealth);
-        }
-    }
-
-
-    // Event Handlers -------------------------------
-
-    public override onTick(ticker: PIXI.Ticker): void {
-
-        super.onTick(ticker);
 
         let moveVector: PIXI.Point = new PIXI.Point(0, 0);
 
@@ -158,6 +137,49 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
             //DO something here like attack
         }
 
+
+        const movementSpeed = (isShift ? 10.0 : 3.0);
+        const nextX = this.position.x + moveVector.x * ticker.deltaTime * movementSpeed;
+        const nextY = this.position.y + moveVector.y * ticker.deltaTime * movementSpeed;
+
+        // Half-width and half-height adjustments
+        const halfWidth = this.width / 2;
+        const halfHeight = this.height / 2;
+
+        // Adjusted collision checks
+        if (moveVector.x !== 0 && !this.isCollisionWithTilemap(nextX + (moveVector.x > 0 ? -this.width / 2 : -halfWidth), this.position.y)) {
+            this.position.x = nextX;
+        }
+
+        if (moveVector.y !== 0 && !this.isCollisionWithTilemap(this.position.x, nextY + (moveVector.y > 0 ? -this.height / 2 : -halfHeight))) {
+            this.position.y = nextY;
+        }
+
+    }
+
+    public takeDamage(deltaHealth: number) {
+        const currentTime = this._app.app.ticker.lastTime;
+        const timeSinceLastTakeDamage = currentTime - this.timeAtLastTakeDamageMS;
+
+        if (timeSinceLastTakeDamage > Player.timeBetweenTakeDamageMS) {
+            this._app.systemManager.getItem(AudioSystem).play("./assets/audio/Hit01.mp3");
+
+            // Update the time of the last damage taken
+            this.timeAtLastTakeDamageMS = currentTime;
+
+            // Update health value
+            this._app.configuration.data.health.Value = Math.max(0, this._app.configuration.data.health.Value + deltaHealth);
+        }
+    }
+
+
+    // Event Handlers -------------------------------
+
+    public override onTick(ticker: PIXI.Ticker): void {
+
+        super.onTick(ticker);
+
+        this.handleMovement(ticker);
 
         if (this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame('f')) {
 
@@ -195,25 +217,10 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
 
         }
 
-        const movementSpeed = (isShift ? 10.0 : 3.0);
-        const nextX = this.position.x + moveVector.x * ticker.deltaTime * movementSpeed;
-        const nextY = this.position.y + moveVector.y * ticker.deltaTime * movementSpeed;
-
-        // Half-width and half-height adjustments
-        const halfWidth = this.width / 2;
-        const halfHeight = this.height / 2;
-
-        // Adjusted collision checks
-        if (moveVector.x !== 0 && !this.isCollisionWithTilemap(nextX + (moveVector.x > 0 ? -this.width / 2 : -halfWidth), this.position.y)) {
-            this.position.x = nextX;
-        }
-
-        if (moveVector.y !== 0 && !this.isCollisionWithTilemap(this.position.x, nextY + (moveVector.y > 0 ? -this.height / 2 : -halfHeight))) {
-            this.position.y = nextY;
-        }
-
-
     }
+
+
+
 
 
     public override onCollision(collisions: PIXI.Container[]): void {
