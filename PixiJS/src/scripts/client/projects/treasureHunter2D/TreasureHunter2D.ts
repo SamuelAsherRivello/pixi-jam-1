@@ -35,9 +35,10 @@ export class TreasureHunter2D extends GixiApplication {
   private _scoreText!: ScoreText;
   private _instructionsText!: InstructionsText;
   private _player!: Player;
-  private _tempScreenCenterpoint!: DebugMarker;
-  private _tempWorldOrigin!: DebugMarker;
-  private _tempMapOrigin!: DebugMarker;
+  private screenDebugMarker!: DebugMarker;
+  private worldDebugMarker!: DebugMarker;
+  private tilemapDebugMarker!: DebugMarker;
+  private _stageDebugMarker!: DebugMarker;
 
   // Initialization -------------------------------
   constructor(configuration: GixiApplicationConfiguration) {
@@ -75,17 +76,27 @@ export class TreasureHunter2D extends GixiApplication {
     /////////////////////////////
     // DebugMarkers
     /////////////////////////////
-    this._tempWorldOrigin = new DebugMarker(this, "World(0,0)");
-    this.addToViewport(this._tempWorldOrigin);
-    this._tempWorldOrigin.position = new PIXI.Point();
 
-    this._tempScreenCenterpoint = new DebugMarker(this, "Screen(C,C)");
-    this.addToViewport(this._tempScreenCenterpoint);
-    this._tempScreenCenterpoint.position = this.getScreenCenterpoint();
+    // NOTE: Relative - Depends on the size of your browser at the moment of application starting
+    this.screenDebugMarker = new DebugMarker(this, "Screen(C,C) - Relative");
+    this.addToViewport(this.screenDebugMarker);
+    this.screenDebugMarker.position = this.getScreenCenterpoint();
 
-    this._tempMapOrigin = new DebugMarker(this, "Tilemap(0,0)");
-    this.addToViewport(this._tempMapOrigin);
-    this._tempMapOrigin.position = tilemap.position;
+    // NOTE: Absolute
+    this.worldDebugMarker = new DebugMarker(this, "World(0,0)");
+    this.addToViewport(this.worldDebugMarker);
+    this.worldDebugMarker.position = new PIXI.Point();
+
+    // NOTE: Absolute
+    this.tilemapDebugMarker = new DebugMarker(this, "Tilemap(0,0)");
+    this.addToViewport(this.tilemapDebugMarker);
+    this.tilemapDebugMarker.position = tilemap.position;
+
+    // NOTE: Absolute
+    this._stageDebugMarker = new DebugMarker(this, "Stage (0,0)");
+    this.addToStage(this._stageDebugMarker);
+    this._stageDebugMarker.position = new PIXI.Point();
+
 
     /////////////////////////////
     // Create Enemy Spawner
