@@ -34,7 +34,7 @@
     "build-client": "webpack --mode production",
     "start-client": "webpack serve --mode development",
     "start-client-with-test": "concurrently --kill-others \"npm run watch:test\" \"webpack serve --mode development\"",
-    "start-server": "node --loader ts-node/esm -r tsconfig-paths/register src/scripts/server/server.ts",
+    "start-server": "nodemon --watch src/scripts/server --exec \"npx ts-node-esm src/scripts/server/server.ts\"",
     "test": "jest",
     "test:watch": "jest --watch",
     "watch:test": "onchange \"src/**/*\" \"tests/**/*\" -- npm run test",
@@ -66,6 +66,7 @@
     "style-loader": "^4.0.0",
     "ts-jest": "^29.2.2",
     "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript-eslint": "^7.16.0",
     "webpack-bundle-analyzer": "^4.10.2"
   }
