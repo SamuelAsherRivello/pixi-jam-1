@@ -204,7 +204,7 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
         const halfHeight = this.height / 2;
 
         // Adjusted collision checks
-        if (moveVector.x !== 0 && !this.isCollisionWithTilemap(nextX + (moveVector.x > 0 ? halfWidth : -halfWidth), this.position.y)) {
+        if (moveVector.x !== 0 && !this.isCollisionWithTilemap(nextX + (moveVector.x > 0 ? -this.width / 2 : -halfWidth), this.position.y)) {
             this.position.x = nextX;
         }
 
