@@ -11,6 +11,7 @@ import { Viewport } from 'pixi-viewport';
  * Configuration
  */
 export interface EnemySpawnerConfiguration extends ActorStaticConfiguration {
+    enemySpawnerIsEnabled: boolean;
     perEnemytextureUrl: string;
     timeBetweenSpawnsMS: number;
     maxToSpawn: number
@@ -18,6 +19,7 @@ export interface EnemySpawnerConfiguration extends ActorStaticConfiguration {
 
 const EnemySpawnerConfigurationDefault: EnemySpawnerConfiguration = {
     perEnemytextureUrl: '',
+    enemySpawnerIsEnabled: true,
     timeBetweenSpawnsMS: 2000,
     maxToSpawn: 10,
     textureUrl: '',
@@ -81,6 +83,11 @@ export class EnemySpawner extends ActorStatic implements ICollisionSystemBody {
 
     // Methods --------------------------------------
     private spawnEnemy() {
+
+
+        if (!this.configuration.enemySpawnerIsEnabled) {
+            return;
+        }
 
         this.timeSinceLastSpawnMS = 0;
 

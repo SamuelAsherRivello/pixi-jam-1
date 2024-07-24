@@ -104,6 +104,7 @@ export class TreasureHunter2D extends GixiApplication {
     const enemySpawnerConfiguration: EnemySpawnerConfiguration = {
       perEnemytextureUrl: this._treasureHunterData.enemyTextureUrl,
       timeBetweenSpawnsMS: 4000,
+      enemySpawnerIsEnabled: false,
       maxToSpawn: 3,
       textureUrl: this._treasureHunterData.enemySpawnerTextureUrl,
       texture: PIXI.Texture.EMPTY,

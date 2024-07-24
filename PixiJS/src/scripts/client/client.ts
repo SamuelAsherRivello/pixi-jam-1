@@ -24,6 +24,7 @@ export interface ITreasureHunterData {
   logoImageUrl: string;
   tilemapDataUrl: string;
   playerTextureUrl: string;
+  enemySpawnerIsEnabled: boolean;
   enemySpawnerTextureUrl: string;
   enemyTextureUrl: string;
   coinsCollected: Observable<number>;
@@ -41,6 +42,7 @@ const treasureHunterData: ITreasureHunterData = {
   logoImageUrl: 'assets/images/pixijs-logo-32x32.png',
   tilemapDataUrl: tilemapDataUrl,
   playerTextureUrl: 'assets/images/player.png',
+  enemySpawnerIsEnabled: false,
   enemySpawnerTextureUrl: 'assets/images/enemy-spawner.png',
   enemyTextureUrl: 'assets/images/enemy.png',
   coinsCollected: new Observable<number>(0),
