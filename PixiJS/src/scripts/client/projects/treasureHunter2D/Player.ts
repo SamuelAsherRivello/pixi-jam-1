@@ -11,6 +11,7 @@ import { InputSystem } from '../../gixi/systems/InputSystem';
 import { TilemapCollisionSystem } from '../../gixi/systems/TilemapCollisionSystem';
 import { LocalDiskStorageSystem } from '../../gixi/systems/LocalDiskStorageSystem';
 import { Enemy } from './Enemy';
+import { KeyCode } from '../../core/data/types/KeyCode';
 
 /**
  * Configuration
@@ -112,24 +113,24 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
         let moveVector: PIXI.Point = new PIXI.Point(0, 0);
 
         //TODO: Change to be either/both shift keys
-        const isShift: boolean = this._app.systemManager.getItem(InputSystem).isKeyDown('m')
+        const isShift: boolean = this._app.systemManager.getItem(InputSystem).isKeyDown(KeyCode.M)
 
-        if (this._app.systemManager.getItem(InputSystem).isKeyDown('a')) {
+        if (this._app.systemManager.getItem(InputSystem).isKeyDown(KeyCode.A)) {
             //ACTION!
             moveVector.x += -1;
         }
-        if (this._app.systemManager.getItem(InputSystem).isKeyDown('d')) {
+        if (this._app.systemManager.getItem(InputSystem).isKeyDown(KeyCode.D)) {
             moveVector.x += 1;
         }
-        if (this._app.systemManager.getItem(InputSystem).isKeyDown('w')) {
+        if (this._app.systemManager.getItem(InputSystem).isKeyDown(KeyCode.W)) {
             moveVector.y += -1;
         }
-        if (this._app.systemManager.getItem(InputSystem).isKeyDown('s')) {
+        if (this._app.systemManager.getItem(InputSystem).isKeyDown(KeyCode.S)) {
             moveVector.y += 1;
         }
 
-        if (this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame('Enter') ||         //works
-            this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame('Spacebar')) {      //does work. TODO: WHy?
+        if (this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame(KeyCode.Enter) ||         //works
+            this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame(KeyCode.Space)) {      //does work. TODO: WHy?
 
             //Action!
             this._app.systemManager.getItem(AudioSystem).play("./assets/audio/Click01.wav");
@@ -181,14 +182,14 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
 
         this.handleMovement(ticker);
 
-        if (this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame('f')) {
+        if (this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame(KeyCode.F)) {
 
             //Fullscreen
             this._app.isFullscreen = !this._app.isFullscreen;
             this._app.systemManager.getItem(AudioSystem).play("./assets/audio/Click01.wav");
         }
 
-        if (this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame('r')) {
+        if (this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame(KeyCode.R)) {
 
             //Reload page
             this._app.systemManager.getItem(AudioSystem).play("./assets/audio/Click01.wav");
@@ -196,7 +197,7 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
 
         }
 
-        if (this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame('o')) {
+        if (this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame(KeyCode.O)) {
 
             //Clear Data
             this._app.systemManager.getItem(AudioSystem).play("./assets/audio/Click01.wav");
@@ -207,7 +208,7 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
 
         }
 
-        if (this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame('p')) {
+        if (this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame(KeyCode.P)) {
 
             //Clear Data
             this._app.systemManager.getItem(AudioSystem).play("./assets/audio/Click01.wav");

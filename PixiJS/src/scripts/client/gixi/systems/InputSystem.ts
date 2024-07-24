@@ -2,91 +2,75 @@ import { GixiApplication } from "../GixiApplication";
 import { ISystemBase } from "./base/SystemBase";
 import { SystemBase } from "./base/SystemBase";
 
-
 /**
- * 
+ * Interface for InputSystem
  */
 export interface IInputSystem extends ISystemBase {
-
-    // Properties -----------------------------------
-
-    // Methods --------------------------------------
-    isKeyDown(keycode: string): boolean;
-    isKeyDownThisFrame(keycode: string): boolean;
-
+    isKeyDown(keyCode: number): boolean;
+    isKeyDownThisFrame(keyCode: number): boolean;
 }
-
 
 /**
  * Handles keyboard input and maintains the state of keys.
  */
 export class InputSystem extends SystemBase implements IInputSystem {
-
     // Fields ---------------------------------------
-    private _keyStateDictionary: Map<string, KeyState>;
+    private _keyStateDictionary: Map<number, KeyState>;
 
     // Initialization -------------------------------
     constructor(app: GixiApplication) {
         super(app);
 
-        //TODO: Move this and all systems to use IInitializeAsync and move this into that init
+        // Initialize key state dictionary
         this._keyStateDictionary = new Map();
         window.addEventListener('keydown', this.onKeyDown.bind(this));
         window.addEventListener('keyup', this.onKeyUp.bind(this));
     }
 
     public override async initializeAsync(): Promise<any> {
-
         if (this.isInitialized) {
             return;
         }
 
-
-        //console.log(`${(InputSystem).name}.initializeAsync()`)
-
-        //Local
+        // Local initialization
         this._isInitialized = true;
-
     }
 
     // Methods ------------------------------
     /**
      * Checks if the specified key is currently pressed down.
-     * @param key - The key to check.
+     * @param keyCode - The key code to check.
      * @returns True if the key is down, otherwise false.
      */
-    public isKeyDown(key: string): boolean {
-        let keyState: KeyState = this.getKeyStateByKey(key);
+    public isKeyDown(keyCode: number): boolean {
+        let keyState: KeyState = this.getKeyStateByKey(keyCode);
         return keyState.isDown;
     }
 
     /**
      * Checks if the specified key was pressed down this frame.
-     * @param key - The key to check.
+     * @param keyCode - The key code to check.
      * @returns True if the key is down this frame, otherwise false.
      */
-    public isKeyDownThisFrame(key: string): boolean {
-        let keyState: KeyState = this.getKeyStateByKey(key);
+    public isKeyDownThisFrame(keyCode: number): boolean {
+        let keyState: KeyState = this.getKeyStateByKey(keyCode);
 
-        //NOTE: I tried a few ways to capture **ONE** moment of true here
-        //FInally this one works - srivello
+        // Capture one moment of true
         let isDownThisFrame = keyState.isDownThisFrame;
         keyState.isDownThisFrame = false;
         return isDownThisFrame;
     }
-
 
     /**
      * Handles the key down event and updates the key state.
      * @param keyboardEvent - The keyboard event.
      */
     private onKeyDown(keyboardEvent: KeyboardEvent): void {
-        let keyState: KeyState = this.getKeyStateByKey(keyboardEvent.key);
+        let keyState: KeyState = this.getKeyStateByKey(keyboardEvent.keyCode);
         if (!keyState.isDown) {
             keyState.isDown = true;
             keyState.isDownThisFrame = true;
-        }
-        else {
+        } else {
             keyState.isDownThisFrame = false;
         }
     }
@@ -96,21 +80,21 @@ export class InputSystem extends SystemBase implements IInputSystem {
      * @param keyboardEvent - The keyboard event.
      */
     private onKeyUp(keyboardEvent: KeyboardEvent): void {
-        let keyState: KeyState = this.getKeyStateByKey(keyboardEvent.key);
+        let keyState: KeyState = this.getKeyStateByKey(keyboardEvent.keyCode);
         keyState.isDown = false;
         keyState.isDownThisFrame = false;
     }
 
     /**
-     * Retrieves the key state for the specified key. If the key does not exist, a new KeyState is created and returned.
-     * @param key - The key to retrieve the state for.
+     * Retrieves the key state for the specified key code. If the key does not exist, a new KeyState is created and returned.
+     * @param keyCode - The key code to retrieve the state for.
      * @returns The KeyState for the specified key.
      */
-    private getKeyStateByKey(key: string): KeyState {
-        let keyState: KeyState | undefined = this._keyStateDictionary.get(key);
-        if (keyState == undefined) {
+    private getKeyStateByKey(keyCode: number): KeyState {
+        let keyState: KeyState | undefined = this._keyStateDictionary.get(keyCode);
+        if (keyState === undefined) {
             let newKeyState: KeyState = new KeyState();
-            this._keyStateDictionary.set(key, newKeyState);
+            this._keyStateDictionary.set(keyCode, newKeyState);
             return newKeyState;
         }
         return keyState;
