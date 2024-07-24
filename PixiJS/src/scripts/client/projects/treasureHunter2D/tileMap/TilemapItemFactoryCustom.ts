@@ -75,7 +75,15 @@ export class TilemapItemFactoryCustom implements ITilemapItemFactory {
           //////////////////////////////////////////
           case (PlayerSpawnpointTilemapObject).name:
             let playerSpawnpointTilemapObject = new PlayerSpawnpointTilemapObject(this._app, { texture: tilemapItemData.texture });
-            playerSpawnpointTilemapObject.alpha = 0.1;
+            playerSpawnpointTilemapObject.alpha = 0.2;
+
+
+            //NOTE: TilemapItemData is passed by reference.
+            //      So for some objects, I adjust the position 
+            //      which the Tilemap.ts will use for placement
+            tilemapItemData.x += tilemapItemData.width;
+            tilemapItemData.y += tilemapItemData.height;
+
 
             console.log("#hack Tilemap positions player poorly.")
 
@@ -91,7 +99,13 @@ export class TilemapItemFactoryCustom implements ITilemapItemFactory {
           //////////////////////////////////////////
           case (EnemySpawnpointTilemapObject).name:
             let enemySpawnpointTilemapObject = new EnemySpawnpointTilemapObject(this._app, { texture: tilemapItemData.texture });
-            enemySpawnpointTilemapObject.alpha = 0.1;
+            enemySpawnpointTilemapObject.alpha = 0.2;
+
+            //NOTE: TilemapItemData is passed by reference.
+            //      So for some objects, I adjust the position 
+            //      which the Tilemap.ts will use for placement
+            tilemapItemData.x += tilemapItemData.width;
+            tilemapItemData.y += tilemapItemData.height;
 
             console.log("#hack Tilemap positions enemy poorly.")
 
