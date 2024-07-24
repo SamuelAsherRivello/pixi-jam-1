@@ -8,7 +8,6 @@ import { PlayerSpawnpointTilemapObject } from './tileMapObjects/PlayerSpawnpoint
 import { EnemySpawnpointTilemapObject } from './tileMapObjects/EnemySpawnpointTilemapObject';
 import { Tilemap } from '../../../gixi/tilemap/Tilemap';
 import { ITreasureHunterData } from '@src/scripts/client/client';
-import { DebugMarker } from '@src/scripts/client/gixi/debugging/DebugMarker';
 
 export class TilemapItemFactoryCustom implements ITilemapItemFactory {
 
@@ -107,8 +106,19 @@ export class TilemapItemFactoryCustom implements ITilemapItemFactory {
 
           //////////////////////////////////////////
           default:
-            return new PIXI.Sprite(tilemapItemData.texture);
+            const sprite = new PIXI.Sprite(tilemapItemData.texture);
 
+            //TODO: OPTIMIZE TO RUN AT HIGHER FPS
+            //I'm not sure if this helps.
+
+            sprite.roundPixels = true;
+            sprite.interactive = false;
+
+            //TODO: OPTIMIZE MORE
+            //one idea is to render as something OTHER than *many sprites* for the non-interactive stuff
+
+
+            return sprite;
         }
     }
   }

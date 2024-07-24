@@ -7,7 +7,6 @@ import { InstructionsText } from '@src/scripts/client/projects/treasureHunter2D/
 import { ScoreText } from '@src/scripts/client/projects/treasureHunter2D/ui/ScoreText';
 import { Player } from '@src/scripts/client/projects/treasureHunter2D/Player';
 import { TilemapItemFactoryCustom } from './tileMap/TilemapItemFactoryCustom';
-import { Enemy } from './Enemy';
 import { ITreasureHunterData } from '../../client';
 import { TilemapCollisionSystem } from '../../gixi/systems/TilemapCollisionSystem';
 import { DebugMarker } from '../../gixi/debugging/DebugMarker';

@@ -1,9 +1,20 @@
 import { Observable } from './core/observables/Observable';
 import { GixiApplicationConfiguration } from './gixi/GixiApplication';
 import { SystemManagerDefault } from './gixi/systemManager/SystemManagerDefault';
-import { Tilemap } from './gixi/tilemap/Tilemap';
 import { TreasureHunter2D } from './projects/treasureHunter2D/TreasureHunter2D';
 import * as PIXI from 'pixi.js';
+
+
+
+/////////////////////////////
+// Debugging
+/////////////////////////////
+const isDebugMap = false;
+let tilemapDataUrl = 'assets/tilemaps/TreasureHunter2D.tmj';
+if (isDebugMap) {
+  tilemapDataUrl = 'assets/tilemaps/TreasureHunter2D_TestSmallerMap.tmj';
+}
+
 
 
 /////////////////////////////
@@ -28,7 +39,7 @@ export interface ITreasureHunterData {
 
 const treasureHunterData: ITreasureHunterData = {
   logoImageUrl: 'assets/images/pixijs-logo-32x32.png',
-  tilemapDataUrl: 'assets/tilemaps/TreasureHunter2D.tmj',
+  tilemapDataUrl: tilemapDataUrl,
   playerTextureUrl: 'assets/images/player.png',
   enemySpawnerTextureUrl: 'assets/images/enemy-spawner.png',
   enemyTextureUrl: 'assets/images/enemy.png',
