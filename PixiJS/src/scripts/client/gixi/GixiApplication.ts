@@ -14,8 +14,8 @@ export interface GixiApplicationConfiguration {
   widthInitial: number;
   heightInitial: number;
   backgroundColor: number;
-  minFPS: number,
-  maxFPS: number,
+  minFPS: number;
+  maxFPS: number;
   systemManager: ISystemManager;
   data: { [key: string]: any };
 }
@@ -27,22 +27,17 @@ const GixiApplicationConfigurationDefault: GixiApplicationConfiguration = {
   maxFPS: 240,
   backgroundColor: 0x1099bb,
   systemManager: new SystemManagerDefault(),
-  data: {}
-}
-
-
+  data: {},
+};
 
 /**
  * Wrapper class for initializing and managing a PixiJS application.
  */
 export class GixiApplication extends EventEmitter implements IInitializableAsync, ITickable {
-
-
   // Constants ------------------------------------
   public static readonly EVENT_INITIALIZE_COMPLETE: string = 'initializeComplete';
   public static readonly EVENT_INITIALIZE_ERROR: string = 'initializeError';
   public static readonly EVENT_RESIZE: string = 'resize';
-
 
   // Properties -----------------------------------
   public get isInitialized(): boolean {
@@ -54,19 +49,15 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
   }
 
   public set isFullscreen(value: boolean) {
-
     this._isFullscreen = value;
 
     var elem = document.getElementById(this.app.canvas.id);
 
     if (this._isFullscreen) {
-
       if (elem?.requestFullscreen) {
         elem?.requestFullscreen();
       }
-
-    }
-    else {
+    } else {
       document.fullscreenEnabled && document.exitFullscreen();
     }
   }
@@ -95,31 +86,26 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
   private _isFullscreen: boolean = false;
 
   // Initialization -------------------------------
-  constructor(
-    canvasId: string = 'pixi-application-canvas',
-    configuration?: Partial<GixiApplicationConfiguration>
-  ) {
-
+  constructor(canvasId: string = 'pixi-application-canvas', configuration?: Partial<GixiApplicationConfiguration>) {
     /////////////////////////////
     // Setup
     /////////////////////////////
     super();
     this._canvasId = canvasId;
 
-
-    //TODO: The console logs out the renderer upon init. 
+    //TODO: The console logs out the renderer upon init.
     //      Note its forever "WebGL". I want WebGPU. - srivello
     this.app = new PIXI.Application<PIXI.WebGPURenderer<HTMLCanvasElement>>();
-    this._configuration = { ...GixiApplicationConfigurationDefault, ...configuration };
+    this._configuration = {
+      ...GixiApplicationConfigurationDefault,
+      ...configuration,
+    };
     this._systemManager = this._configuration.systemManager;
-
 
     // Every SuperSprite instance listens to App
     // So this number must be >= to the number of SuperSprite instances
     this.setMaxListeners(100);
   }
-
-
 
   /**
    * Initializes the PixiJS application.
@@ -142,7 +128,6 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
         height: this.configuration.heightInitial,
         resizeTo: window,
 
-
         antialias: true,
         backgroundAlpha: 1,
         powerPreference: 'high-performance',
@@ -153,27 +138,28 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
         // EVENTS
         eventMode: 'passive',
         eventFeatures: {
-
           /** what is this? */
           move: true, //try false after I get swipe working
 
           /** disables the global move events which can be very expensive in large scenes */
           globalMove: true, //try false after I get swipe working
           click: true,
-          wheel: false
-        }
-
+          wheel: false,
+        },
       });
 
       this.app.ticker.minFPS = this.configuration.minFPS;
       this.app.ticker.maxFPS = this.configuration.maxFPS;
 
-      let possible: string = "WebGL";
+      let possible: string = 'WebGL';
       if (navigator.gpu) {
-        possible = "(WebGL, WebGPU)";
+        possible = '(WebGL, WebGPU)';
       }
-      console.log(`PIXI.Application.initializeAsync() success! PixiJS v${PIXI.VERSION} ...\nRendering Supported : ${possible}. Rendering Active : ${this.GetRendererTypeAsString(this.app.renderer.type)}.`);
-
+      console.log(
+        `PIXI.Application.initializeAsync() success! PixiJS v${
+          PIXI.VERSION
+        } ...\nRendering Supported : ${possible}. Rendering Active : ${this.GetRendererTypeAsString(this.app.renderer.type)}.`
+      );
 
       /////////////////////////////
       // Create Viewport
@@ -181,12 +167,12 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
       this.viewport = new Viewport({
         screenWidth: this.app.screen.width,
         screenHeight: this.app.screen.height,
-        worldWidth: 3000,   //TODO: not sure what value is best?
-        worldHeight: 3000,  //TODO: not sure what value is best?
+        worldWidth: 3000, //TODO: not sure what value is best?
+        worldHeight: 3000, //TODO: not sure what value is best?
 
-        // the interaction module is important for wheel to work properly 
+        // the interaction module is important for wheel to work properly
         // when renderer.view is placed or scaled
-        events: this.app.renderer.events
+        events: this.app.renderer.events,
       });
 
       this.viewport.center = this.getScreenCenterpoint();
@@ -196,34 +182,26 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
         this.onTick(ticker);
       });
 
-
       /////////////////////////////
       this.emit(GixiApplication.EVENT_INITIALIZE_COMPLETE, this);
       this.setupResizeHandling();
       this.addToStage(this.viewport);
-      this.viewport.label = "Viewport"; //TODO: Why "Et Viewport"?
-
+      this.viewport.label = 'Viewport'; //TODO: Why "Et Viewport"?
     } catch (error) {
-
       console.log(`PIXI.Application.initializeAsync() failed! PixiJS v${PIXI.VERSION} with ${this.GetRendererTypeAsString(this.app.renderer.type)} `);
       this.emit(GixiApplication.EVENT_INITIALIZE_ERROR, error);
-
     }
-
-
   }
 
   public requireIsInitialized() {
-
     if (!this.isInitialized) {
       throw new Error('requireIsInitialized.');
     }
   }
 
-
   // Methods ------------------------------
   private GetRendererTypeAsString(type: number) {
-    let rendererType: string = "Unknown";
+    let rendererType: string = 'Unknown';
     switch (type) {
       case PIXI.RendererType.WEBGL:
         rendererType = 'WebGL';
@@ -243,7 +221,6 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
 
   // Add to camera-controlled scene tree
   public addToViewport(obj: PIXI.Container | PIXI.Sprite): any {
-
     this.requireIsInitialized();
 
     this.viewport.addChild(obj);
@@ -252,13 +229,11 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
       obj.onAdded();
     }
 
-
     this.resize();
   }
 
   // Remove from camera-controlled scene tree
   public removeFromViewport(obj: PIXI.Container | PIXI.Sprite): any {
-
     this.requireIsInitialized();
 
     this.viewport.removeChild(obj);
@@ -272,7 +247,6 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
 
   // Add to basic scene tree
   public addToStage(obj: PIXI.Container | PIXI.Sprite, parent?: PIXI.Sprite | ActorContainer): any {
-
     this.requireIsInitialized();
 
     if (parent == null) {
@@ -286,18 +260,15 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
     }
 
     this.resize();
-  };
-
+  }
 
   // Remove from basic scene tree
   public removeFromStage(obj: PIXI.Container | PIXI.Sprite, parent?: PIXI.Sprite | ActorContainer): any {
-
     this.requireIsInitialized();
 
     if (parent == null) {
       this.app.stage.removeChild(obj);
-    }
-    else {
+    } else {
       parent.removeChild(obj);
     }
 
@@ -308,14 +279,11 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
     this.resize();
   }
 
-
   public resize = () => {
-
     this.emit(GixiApplication.EVENT_RESIZE, this);
   };
 
   private setupResizeHandling() {
-
     const resizeAfterDelay = () => {
       setTimeout(this.resize, 100);
     };
@@ -323,28 +291,19 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
     /////////////////////////////
     // Observe window resize
     /////////////////////////////
-    window.addEventListener('resize', this.resize);               //now
-    window.addEventListener('resize', resizeAfterDelay);          //and after delay. Robust.
+    window.addEventListener('resize', this.resize); //now
+    window.addEventListener('resize', resizeAfterDelay); //and after delay. Robust.
     window.addEventListener('orientationchange', this.resize);
     window.addEventListener('orientationchange', resizeAfterDelay);
     this.resize(); // Initial resize
   }
 
   public getScreenScaleCurrent(): PIXI.Point {
-
-    return new PIXI.Point(
-      this.app.screen.width / this.configuration.widthInitial,
-      this.app.screen.height / this.configuration.heightInitial
-    );
+    return new PIXI.Point(this.app.screen.width / this.configuration.widthInitial, this.app.screen.height / this.configuration.heightInitial);
   }
 
-
-
   getScreenCenterpoint() {
-
-    return new PIXI.Point(
-      this.app.screen.width / 2,
-      this.app.screen.height / 2)
+    return new PIXI.Point(this.app.screen.width / 2, this.app.screen.height / 2);
   }
 
   // Event Handlers -------------------------------

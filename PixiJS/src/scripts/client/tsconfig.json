@@ -4,16 +4,10 @@
     "outDir": "../../../dist/client",
     "baseUrl": "./",
     "paths": {
-      "@client/*": [
-        "*"
-      ],
-      "@shared/*": [
-        "../shared/*"
-      ]
+      "@client/*": ["*"],
+      "@shared/*": ["../shared/*"]
     },
     "skipLibCheck": true
   },
-  "include": [
-    "**/*.ts"
-  ]
+  "include": ["**/*.ts"]
 }

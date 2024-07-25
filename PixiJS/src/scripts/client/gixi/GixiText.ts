@@ -1,94 +1,84 @@
-import { ActorContainer, ActorContainerConfiguration } from "./ActorContainer";
-import { GixiApplication } from "./GixiApplication";
-import { IActor } from "./base/IActor";
-import { IInitializableAsync } from "./base/IInitializeAsync";
+import { ActorContainer, ActorContainerConfiguration } from './ActorContainer';
+import { GixiApplication } from './GixiApplication';
+import { IActor } from './base/IActor';
+import { IInitializableAsync } from './base/IInitializeAsync';
 import * as PIXI from 'pixi.js';
 
 /**
  * Configuration
  */
 export interface GixiTextConfiguration extends ActorContainerConfiguration {
-    textStyle: PIXI.TextStyle,
+  textStyle: PIXI.TextStyle;
 }
 
 const GixiTextConfigurationDefault: GixiTextConfiguration = {
-    textStyle: new PIXI.TextStyle(),
-    canCollisionCheck: false,
-    isTickable: true,
-    isResizable: true
-}
-
+  textStyle: new PIXI.TextStyle(),
+  canCollisionCheck: false,
+  isTickable: true,
+  isResizable: true,
+};
 
 /**
  * Represents a coin in the game.
- * 
+ *
  */
 export class GixiText extends ActorContainer implements IInitializableAsync, IActor {
+  // Properties -----------------------------------
+  public override get configuration(): GixiTextConfiguration {
+    return this._configuration as GixiTextConfiguration;
+  }
 
+  public get textString(): string {
+    return this._text.text;
+  }
 
-    // Properties -----------------------------------
-    public override get configuration(): GixiTextConfiguration {
-        return this._configuration as GixiTextConfiguration;
-    }
+  public set textString(value: string) {
+    this._text.text = value;
 
-    public get textString(): string {
-        return this._text.text;
-    }
+    // Some resizing may depend on string length, so call again here
+    this.onResize(this._app);
+  }
 
-    public set textString(value: string) {
-        this._text.text = value;
+  // Fields ---------------------------------------
+  protected _text!: PIXI.Text;
 
-        // Some resizing may depend on string length, so call again here
-        this.onResize(this._app);
-    }
+  // Initialization -------------------------------
+  constructor(app: GixiApplication, text: string, configuration?: Partial<GixiTextConfiguration>) {
+    super(app, { ...GixiTextConfigurationDefault, ...configuration });
 
-    // Fields ---------------------------------------
-    protected _text!: PIXI.Text
+    const textOptions: PIXI.TextOptions = {
+      style: this.configuration.textStyle,
+      resolution: 2, // TODO: Fix. Text is not too sharp. Is it this value?
+    };
 
-    // Initialization -------------------------------
-    constructor(app: GixiApplication, text: string, configuration?: Partial<GixiTextConfiguration>) {
+    this._text = new PIXI.Text(textOptions);
+    this.addChild(this._text);
 
-        super(app, { ...GixiTextConfigurationDefault, ...configuration });
+    // Initialize
+    this.initializeAsync();
 
-        const textOptions: PIXI.TextOptions = {
-            style: this.configuration.textStyle,
-            resolution: 2 // TODO: Fix. Text is not too sharp. Is it this value?
-        };
+    // Redeclare anything from super
+    // that you want differently here
+    this.label = GixiText.name;
+    this._text.text = text;
+  }
 
-        this._text = new PIXI.Text(textOptions);
-        this.addChild(this._text);
+  public override async initializeAsync() {
+    // Super
+    await super.initializeAsync();
 
-        // Initialize
-        this.initializeAsync();
+    // Local
+  }
 
-        // Redeclare anything from super 
-        // that you want differently here
-        this.label = (GixiText).name;
-        this._text.text = text;
+  // Methods --------------------------------------
 
-    }
+  // Event Handlers -------------------------------
 
-    public override async initializeAsync() {
+  public override onTick(ticker: PIXI.Ticker): void {
+    // Super
+    super.onTick(ticker);
 
-        // Super
-        await super.initializeAsync();
-
-        // Local
-    }
-
-    // Methods --------------------------------------
-
-    // Event Handlers -------------------------------
-
-    public override onTick(ticker: PIXI.Ticker): void {
-
-        // Super
-        super.onTick(ticker);
-
-
-        // Local
-        //Do any additional things here
-
-    }
+    // Local
+    //Do any additional things here
+  }
 }
-

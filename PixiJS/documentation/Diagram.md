@@ -13,12 +13,12 @@ subgraph PixiNamespace ["Pixi"]
   classDef pixi fill:#0077cc,stroke:#0055aa,stroke-width:2px;
 
   %% ///////////////////////////////////////////////////
-  %% Pixi.Stage 
+  %% Pixi.Stage
   %% ///////////////////////////////////////////////////
   PixiStage("Pixi.Stage"):::pixi -.->|Ref| PixiContainer
 
   %% ///////////////////////////////////////////////////
-  %% Pixi.View 
+  %% Pixi.View
   %% ///////////////////////////////////////////////////
   PixiView("Pixi.View"):::pixi
   PixiSprite("Pixi.Sprite"):::pixi --> PixiView
@@ -27,7 +27,7 @@ subgraph PixiNamespace ["Pixi"]
   PixiContainer("Pixi.Container"):::pixi --> PixiView
 
   %% ///////////////////////////////////////////////////
-  %% Pixi.Application 
+  %% Pixi.Application
   %% ///////////////////////////////////////////////////
   PixiApp("Pixi.Application"):::pixi -.->|Ref| PixiStage
 end
@@ -36,12 +36,12 @@ subgraph GixiNamespace ["Gixi"]
   classDef gixi fill:#333,stroke:#aaa,stroke-width:2px;
 
   %% ///////////////////////////////////////////////////
-  %% GixiActorContainer 
+  %% GixiActorContainer
   %% ///////////////////////////////////////////////////
   GixiActorContainer:::gixi -.->|Ref| GixiApplication
 
   %% ///////////////////////////////////////////////////
-  %% GixiActorContainer 
+  %% GixiActorContainer
   %% ///////////////////////////////////////////////////
   GixiActorContainer("Gixi.ActorContainer"):::gixi --> PixiContainer
   ActorStatic("Gixi.ActorStatic"):::gixi --> GixiActorContainer
@@ -49,13 +49,13 @@ subgraph GixiNamespace ["Gixi"]
   Tilemap("Gixi.Tilemap"):::gixi --> GixiActorContainer
 
   %% ///////////////////////////////////////////////////
-  %% GixiApplication 
+  %% GixiApplication
   %% ///////////////////////////////////////////////////
   GixiApplication("Gixi.GixiApplication"):::gixi --> PixiApp
   GixiApplication:::gixi -.->|Ref| GixiSystemManager
 
   %% ///////////////////////////////////////////////////
-  %% GixiSystemManager 
+  %% GixiSystemManager
   %% ///////////////////////////////////////////////////
   GixiSystemManager("Gixi.SystemManager"):::gixi -.->|Ref| GixiAudioSystem
   GixiSystemManager:::gixi -.->|Ref| GixiCollisionSystem
@@ -64,14 +64,15 @@ subgraph GixiNamespace ["Gixi"]
   GixiSystemManager:::gixi -.->|Ref| GixiTilemapCollisionSystem
 
   %% ///////////////////////////////////////////////////
-  %% List of systems 
+  %% List of systems
   %% ///////////////////////////////////////////////////
-  GixiAudioSystem("Gixi.AudioSystem"):::gixi 
-  GixiCollisionSystem("Gixi.CollisionSystem"):::gixi 
-  GixiInputSystem("Gixi.InputSystem"):::gixi 
-  GixiMultiplayerSystem("Gixi.MultiplayerSystem"):::gixi 
+  GixiAudioSystem("Gixi.AudioSystem"):::gixi
+  GixiCollisionSystem("Gixi.CollisionSystem"):::gixi
+  GixiInputSystem("Gixi.InputSystem"):::gixi
+  GixiMultiplayerSystem("Gixi.MultiplayerSystem"):::gixi
   GixiTilemapCollisionSystem("Gixi.TilemapCollisionSystem"):::gixi
 end
 
 ```
+
 ---

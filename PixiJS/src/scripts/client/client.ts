@@ -4,8 +4,6 @@ import { SystemManagerDefault } from './gixi/systemManager/SystemManagerDefault'
 import { TreasureHunter2D } from './projects/treasureHunter2D/TreasureHunter2D';
 import * as PIXI from 'pixi.js';
 
-
-
 /////////////////////////////
 // Debugging
 /////////////////////////////
@@ -14,8 +12,6 @@ let tilemapDataUrl = 'assets/tilemaps/TreasureHunter2D.tmj';
 if (isDebugMap) {
   tilemapDataUrl = 'assets/tilemaps/TreasureHunter2D_TestSmallerMap.tmj';
 }
-
-
 
 /////////////////////////////
 // Application Data
@@ -69,15 +65,13 @@ export const gixiAppConfiguration: GixiApplicationConfiguration = {
   maxFPS: 240,
   backgroundColor: 0x87867a,
   systemManager: new SystemManagerDefault(),
-  data: treasureHunterData
+  data: treasureHunterData,
 };
-
 
 /////////////////////////////
 // Application Creation
 /////////////////////////////
 const treasureHunterApp = new TreasureHunter2D(gixiAppConfiguration);
-
 
 /////////////////////////////
 // Application Initialize

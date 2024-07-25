@@ -5,24 +5,18 @@ import { IActor } from './base/IActor';
 import { IActorConfiguration } from './base/IActorConfiguration';
 import { CollisionSystem } from './systems/CollisionSystem';
 
-
 /**
-* Configuration
-*/
-export interface ActorContainerConfiguration extends IActorConfiguration {
-
-}
+ * Configuration
+ */
+export interface ActorContainerConfiguration extends IActorConfiguration {}
 
 const ActorContainerConfigurationDefault: ActorContainerConfiguration = {
   canCollisionCheck: true,
   isTickable: true,
-  isResizable: true
-}
-
-
+  isResizable: true,
+};
 
 export class ActorContainer extends PIXI.Container implements IInitializableAsync, IActor {
-
   // Properties -----------------------------------
   public get isInitialized(): boolean {
     return this._isInitialized;
@@ -47,14 +41,13 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
   protected _canCollisionCheck: boolean = true;
   protected _app: GixiApplication;
 
-
-
   // Initialization -------------------------------
-  constructor(app: GixiApplication,
-    configuration?: Partial<ActorContainerConfiguration>) {
-
+  constructor(app: GixiApplication, configuration?: Partial<ActorContainerConfiguration>) {
     super();
-    this._configuration = { ...ActorContainerConfigurationDefault, ...configuration };
+    this._configuration = {
+      ...ActorContainerConfigurationDefault,
+      ...configuration,
+    };
     this._app = app;
 
     // Tick
@@ -71,14 +64,12 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
   }
 
   public requireIsInitialized() {
-
     if (!this.isInitialized) {
       throw new Error('requireIsInitialized.');
     }
   }
 
   public async initializeAsync(): Promise<any> {
-
     if (this._isInitialized) {
       return;
     }
@@ -86,10 +77,8 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
     this._isInitialized = true;
   }
 
-
   // Override PIXI.Sprite's destroy method
   public override destroy(options?: PIXI.DestroyOptions | boolean): void {
-
     this.requireIsInitialized();
 
     if (this._isDestroyed) return;
@@ -119,7 +108,6 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
   }
 
   public onTick(ticker: PIXI.Ticker): void {
-
     // Empty implementation to be overridden
     if (!this.canCollisionCheck) {
       return;
@@ -129,8 +117,7 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
 
     if (collisions.length) {
       this.onCollision(collisions);
-    };
-
+    }
   }
 
   protected onCollision(collisions: PIXI.Container[]): void {
@@ -147,6 +134,4 @@ export class ActorContainer extends PIXI.Container implements IInitializableAsyn
     if (this._isDestroyed) return;
     this.onResize(app);
   }
-
-
 }

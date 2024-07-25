@@ -3,38 +3,31 @@ import { GixiApplication } from '@client/gixi/GixiApplication';
 
 /**
  * Represents a spawnpoint in the game.
- * 
+ *
  */
 export class BaseSpawnpointTilemapObject extends ActorStatic {
+  // Properties -----------------------------------
 
-    // Properties -----------------------------------
+  // Fields ---------------------------------------
 
-    // Fields ---------------------------------------
+  // Initialization -------------------------------
+  constructor(app: GixiApplication, configuration?: Partial<ActorStaticConfiguration>) {
+    super(app, configuration);
 
+    // Redeclare anything from super
+    // that you want differently here
+    this.label = BaseSpawnpointTilemapObject.name;
+  }
 
-    // Initialization -------------------------------
-    constructor(app: GixiApplication, configuration?: Partial<ActorStaticConfiguration>) {
+  public override async initializeAsync() {
+    // Super
+    await super.initializeAsync();
 
-        super(app, configuration);
+    // Local
+    // Do any additional initialization here
+  }
 
-        // Redeclare anything from super 
-        // that you want differently here
-        this.label = (BaseSpawnpointTilemapObject).name;
-    }
+  // Methods --------------------------------------
 
-
-    public override async initializeAsync() {
-
-        // Super
-        await super.initializeAsync();
-
-        // Local
-        // Do any additional initialization here
-
-    }
-
-    // Methods --------------------------------------
-
-    // Event Handlers -------------------------------
-
+  // Event Handlers -------------------------------
 }

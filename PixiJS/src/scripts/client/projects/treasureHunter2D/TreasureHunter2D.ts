@@ -14,19 +14,17 @@ import { LocalDiskStorageSystem } from '../../gixi/systems/LocalDiskStorageSyste
 import { GixiUtility } from '../../gixi/GixiUtility';
 import { EnemySpawner, EnemySpawnerConfiguration } from './EnemySpawner';
 
-
-
 /**
  * The main game class
- * 
+ *
  */
 export class TreasureHunter2D extends GixiApplication {
-
   // Events ---------------------------------------
 
-
   // Properties -----------------------------------
-  get treasureHunterData(): ITreasureHunterData { return this._treasureHunterData; }
+  get treasureHunterData(): ITreasureHunterData {
+    return this._treasureHunterData;
+  }
 
   // Fields ---------------------------------------
   private _stats: Stats;
@@ -61,11 +59,7 @@ export class TreasureHunter2D extends GixiApplication {
     /////////////////////////////
     // Create Tilemap
     /////////////////////////////
-    const tilemap = new Tilemap(
-      this,
-      this._treasureHunterData.tilemapDataUrl,
-      new TilemapItemFactoryCustom(this)
-    );
+    const tilemap = new Tilemap(this, this._treasureHunterData.tilemapDataUrl, new TilemapItemFactoryCustom(this));
 
     await tilemap.initializeAsync();
     this.addToViewport(tilemap);
@@ -78,25 +72,24 @@ export class TreasureHunter2D extends GixiApplication {
     /////////////////////////////
 
     // NOTE: Relative - Depends on the size of your browser at the moment of application starting
-    this.screenDebugMarker = new DebugMarker(this, "Screen(C,C) - Relative");
+    this.screenDebugMarker = new DebugMarker(this, 'Screen(C,C) - Relative');
     this.addToViewport(this.screenDebugMarker);
     this.screenDebugMarker.position = this.getScreenCenterpoint();
 
     // NOTE: Absolute
-    this.worldDebugMarker = new DebugMarker(this, "World(0,0)");
+    this.worldDebugMarker = new DebugMarker(this, 'World(0,0)');
     this.addToViewport(this.worldDebugMarker);
     this.worldDebugMarker.position = new PIXI.Point();
 
     // NOTE: Absolute
-    this.tilemapDebugMarker = new DebugMarker(this, "Tilemap(0,0)");
+    this.tilemapDebugMarker = new DebugMarker(this, 'Tilemap(0,0)');
     this.addToViewport(this.tilemapDebugMarker);
     this.tilemapDebugMarker.position = tilemap.position;
 
     // NOTE: Absolute
-    this._stageDebugMarker = new DebugMarker(this, "Stage (0,0)");
+    this._stageDebugMarker = new DebugMarker(this, 'Stage (0,0)');
     this.addToStage(this._stageDebugMarker);
     this._stageDebugMarker.position = new PIXI.Point();
-
 
     /////////////////////////////
     // Create Enemy Spawner
@@ -110,8 +103,8 @@ export class TreasureHunter2D extends GixiApplication {
       texture: PIXI.Texture.EMPTY,
       canCollisionCheck: false,
       isTickable: true,
-      isResizable: false
-    }
+      isResizable: false,
+    };
     const enemySpawner = new EnemySpawner(this, enemySpawnerConfiguration);
     this.addToViewport(enemySpawner);
     enemySpawner.position = this.configuration.data.enemySpawnerSpawnpoint;
@@ -119,7 +112,9 @@ export class TreasureHunter2D extends GixiApplication {
     /////////////////////////////
     // Create Player
     /////////////////////////////
-    this._player = new Player(this, { textureUrl: this._treasureHunterData.playerTextureUrl });
+    this._player = new Player(this, {
+      textureUrl: this._treasureHunterData.playerTextureUrl,
+    });
     this.addToViewport(this._player);
     this._player.position = this.configuration.data.playerSpawnpoint;
 
@@ -129,20 +124,18 @@ export class TreasureHunter2D extends GixiApplication {
     this.viewport.follow(this._player, {
       speed: 1,
       acceleration: 1,
-      radius: 20
+      radius: 20,
     });
 
-
     /////////////////////////////
-    // Local Disk Storage 
+    // Local Disk Storage
     /////////////////////////////
-    const hasData: boolean = this.systemManager.getItem(LocalDiskStorageSystem).hasData("timeElapsedBest");
+    const hasData: boolean = this.systemManager.getItem(LocalDiskStorageSystem).hasData('timeElapsedBest');
 
     if (hasData) {
-      const timeElapsedBest = this.systemManager.getItem(LocalDiskStorageSystem).getData<number>("timeElapsedBest");
+      const timeElapsedBest = this.systemManager.getItem(LocalDiskStorageSystem).getData<number>('timeElapsedBest');
       this._treasureHunterData.timeElapsedBest.Value = timeElapsedBest;
     }
-
 
     /////////////////////////////
     // Create Text - Instructions
@@ -161,9 +154,10 @@ export class TreasureHunter2D extends GixiApplication {
     instructionsString += 'M For Move Fast\n';
     instructionsString += 'O For Clear Data\n';
     instructionsString += 'P For Pause (Unpause is broken)\n';
-    this._instructionsText = new InstructionsText(this, instructionsString, { textStyle: instructionsTextStyle });
+    this._instructionsText = new InstructionsText(this, instructionsString, {
+      textStyle: instructionsTextStyle,
+    });
     this.addToStage(this._instructionsText);
-
 
     /////////////////////////////
     // Create Text - Score
@@ -174,10 +168,11 @@ export class TreasureHunter2D extends GixiApplication {
     scoreTextStyle.fill = '#ffffff';
     scoreTextStyle.align = 'right';
     //
-    let scoreString = "replace later";
-    this._scoreText = new ScoreText(this, scoreString, { textStyle: scoreTextStyle });
+    let scoreString = 'replace later';
+    this._scoreText = new ScoreText(this, scoreString, {
+      textStyle: scoreTextStyle,
+    });
     this.addToStage(this._scoreText);
-
 
     /////////////////////////////
     // Setup Ticker
@@ -201,31 +196,27 @@ export class TreasureHunter2D extends GixiApplication {
     this.onRefreshUI();
   }
 
-
   /////////////////////////////
   // Event Handlers
   /////////////////////////////
   private CoinsCollected_OnValueChanged() {
-
     this.onRefreshUI();
 
     console.log(this._treasureHunterData.coinsCollected.Value);
     if (this._treasureHunterData.coinsCollected.Value >= this._treasureHunterData.coinsMax.Value) {
-      this.systemManager.getItem(LocalDiskStorageSystem).saveData("timeElapsedBest", this._treasureHunterData.timeElapsed.Value);
+      this.systemManager.getItem(LocalDiskStorageSystem).saveData('timeElapsedBest', this._treasureHunterData.timeElapsed.Value);
       this.reload();
     }
   }
 
   private onRefreshUI() {
-
     const coinsCollected: string = GixiUtility.FormatNumber(this._treasureHunterData.coinsCollected.Value, 2);
     const coinsMax: string = GixiUtility.FormatNumber(this._treasureHunterData.coinsMax.Value, 2);
     const timeElapsed: string = GixiUtility.FormatNumber(Math.round(this._treasureHunterData.timeElapsed.Value), 4);
     const timeElapsedBest: string = GixiUtility.FormatNumber(Math.round(this._treasureHunterData.timeElapsedBest.Value), 4);
     const health: string = GixiUtility.FormatNumber(Math.round(this._treasureHunterData.health.Value), 4);
 
-
-    let textString = "";
+    let textString = '';
     textString += `Best Time ${timeElapsedBest}\n`;
     textString += `Time ${timeElapsed}\n`;
     textString += `Coins ${coinsCollected}/${coinsMax}\n`;

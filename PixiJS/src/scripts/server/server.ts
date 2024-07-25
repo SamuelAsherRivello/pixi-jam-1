@@ -35,15 +35,17 @@ export class PacketManager {
     console.log(`[${this.constructor.name}] ${msg}`);
   }
 
-  protected emitPacket(packet: Packet): void {
+  protected consoleLogError(msg: string) {
+    console.error(`[${this.constructor.name}] ${msg}`);
+  }
+
+  public emitPacket(packet: Packet): void {
     this._socket.emit(packet.constructor.name, JSON.stringify(packet));
   }
 
-  protected onPacket<T extends Packet>(
-    PacketClass: new () => T,
-    onCallback: (request: T) => void
-  ): void {
+  public onPacket<T extends Packet>(PacketClass: new () => T, onCallback: (request: T) => void): void {
     this.consoleLog(`onPacket() ${PacketClass.name}`);
+
     this._socket.on(PacketClass.name, (data: string) => {
       const request = Packet.fromJSON(data, PacketClass);
       onCallback(request);
@@ -58,10 +60,7 @@ class Packet {
   }
   constructor() {}
 
-  static fromJSON<T extends Packet>(
-    json: string,
-    cls: new (...args: any[]) => T
-  ): T {
+  static fromJSON<T extends Packet>(json: string, cls: new (...args: any[]) => T): T {
     const obj = typeof json === 'string' ? JSON.parse(json) : json;
     return new cls(obj.name);
   }
@@ -191,13 +190,14 @@ export class MultiplayerServerSystem extends PacketManager {
   }
 
   public emitResponse(response: Response): void {
+    if (!(response instanceof Response)) {
+      this.consoleLogError(`!!!!emitResponse() ${(response as any).constructor.name} wrong type !!!!`);
+    }
+    console.log('response: ' + response.constructor.name + ' was : ' + response);
     this.emitPacket(response);
   }
 
-  private onRequest<T extends Request>(
-    RequestClass: new () => T,
-    onRequestCallback: (request: T) => void
-  ): void {
+  private onRequest<T extends Request>(RequestClass: new () => T, onRequestCallback: (request: T) => void): void {
     this.onPacket(RequestClass, onRequestCallback);
   }
 

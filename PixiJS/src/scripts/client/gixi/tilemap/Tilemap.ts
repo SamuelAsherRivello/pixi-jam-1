@@ -50,7 +50,6 @@ export interface TilemapItemData {
   type: string;
 }
 
-
 export enum LayerType {
   TileLayer = 'tilelayer',
   ObjectGroup = 'objectgroup',
@@ -60,11 +59,11 @@ export interface ITilemapItemFactory {
   createTilemapItem(tilemap: Tilemap, tilemapItemData: TilemapItemData): Promise<PIXI.Container>;
 }
 
-
 export class Tilemap extends ActorContainer implements IInitializableAsync {
-
   // Properties -----------------------------------
-  get tilemapData(): TilemapData { return this._tilemapData; }
+  get tilemapData(): TilemapData {
+    return this._tilemapData;
+  }
 
   // Fields ---------------------------------------
   private _tilemapDataUrl: string;
@@ -74,24 +73,22 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
 
   // Initialization -------------------------------
   constructor(app: GixiApplication, tilemapDataUrl: string, TilemapItemFactory: ITilemapItemFactory) {
-
     const configuration: ActorContainerConfiguration = {
       canCollisionCheck: false,
       isTickable: false,
-      isResizable: false
-    }
+      isResizable: false,
+    };
     super(app, configuration);
 
     this._tilemapDataUrl = tilemapDataUrl;
     this._TilemapItemFactory = TilemapItemFactory;
     this._TilemapCollisionSystem = new TilemapDetails(this._app, this);
 
-
     // OPTIMIZATION
     //  https://pixijs.com/8.x/guides/advanced/render-groups
-    //    As you delve deeper into PixiJS, especially with version 8, 
-    //    you'll encounter a powerful feature known as RenderGroups. Think 
-    //    of RenderGroups as specialized containers within your scene graph 
+    //    As you delve deeper into PixiJS, especially with version 8,
+    //    you'll encounter a powerful feature known as RenderGroups. Think
+    //    of RenderGroups as specialized containers within your scene graph
     //    that act like mini scene graphs themselves. Here's what you need to
     //    know to effectively use Render Groups in your projects:
     this.isRenderGroup = true;
@@ -101,9 +98,8 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
     this.interactive = false;
     this.interactiveChildren = false;
 
-
     //
-    this.label = (Tilemap).name;
+    this.label = Tilemap.name;
     this.position.set(0, 0);
     this.scale.set(1);
     this.isRenderGroup = true;
@@ -113,8 +109,6 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
   }
 
   public override async initializeAsync() {
-
-
     if (this.isInitialized) {
       return;
     }
@@ -125,22 +119,20 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
       throw new Error(`Tilemap.initializeAsync() file missing error. tilemapDataUrl = "${this._tilemapDataUrl}"`);
     }
 
-    if (!this._tilemapDataUrl.endsWith(".tmj")) {
+    if (!this._tilemapDataUrl.endsWith('.tmj')) {
       throw new Error(`Tilemap.initializeAsync() file extension error. tilemapDataUrl = "${this._tilemapDataUrl}"`);
     }
 
     let response!: Response;
     try {
       response = await fetch(this._tilemapDataUrl);
-    }
-    catch (e) {
+    } catch (e) {
       throw new Error(`Tilemap.initializeAsync() fetch error. tilemapDataUrl = "${this._tilemapDataUrl}"`);
     }
 
     try {
       this._tilemapData = await response.json();
-    }
-    catch (e) {
+    } catch (e) {
       throw new Error(`Tilemap.initializeAsync() json error. tilemapDataUrl = "${this._tilemapDataUrl}"`);
     }
 
@@ -150,7 +142,6 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
         return { ...tileset, texture: PIXI.Texture.from(imageUrl) };
       });
     });
-
 
     const tilesets = await Promise.all(tilesetPromises);
 
@@ -184,7 +175,7 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
             const rectangle = new PIXI.Rectangle(tileX, tileY, tileset.tilewidth, tileset.tileheight);
             const tileTexture = new PIXI.Texture({
               source: tileset.texture.source,
-              frame: rectangle
+              frame: rectangle,
             });
 
             const tilemapItemData: TilemapItemData = {
@@ -196,7 +187,7 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
               column: column,
               texture: tileTexture,
               layerType: LayerType.TileLayer,
-              type: this.getTileType(tileset, localTileIndex) || ""
+              type: this.getTileType(tileset, localTileIndex) || '',
             };
 
             const sprite = await this._TilemapItemFactory.createTilemapItem(this, tilemapItemData);
@@ -222,17 +213,16 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
         const rectangle = new PIXI.Rectangle(tileX, tileY, tileset.tilewidth, tileset.tileheight);
         const tileTexture = new PIXI.Texture({
           source: tileset.texture.source,
-          frame: rectangle
+          frame: rectangle,
         });
 
-        let typeResult: string = ""; //ok value
+        let typeResult: string = ''; //ok value
         let typePrimary = object.type; //BUG: THis is never populated. Its backup. Ok for now
         let typeBackup = this.getTileType(tileset, localTileIndex)?.toString();
 
         if (!GixiUtility.stringIsNullOrEmpty(typePrimary)) {
           typeResult = typePrimary;
-        }
-        else if (typeBackup != null && !GixiUtility.stringIsNullOrEmpty(typeBackup)) {
+        } else if (typeBackup != null && !GixiUtility.stringIsNullOrEmpty(typeBackup)) {
           typeResult = typeBackup;
         }
 
@@ -248,7 +238,7 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
           column: unsetValue,
           texture: tileTexture,
           layerType: LayerType.ObjectGroup,
-          type: typeResult
+          type: typeResult,
         };
 
         const sprite = await this._TilemapItemFactory.createTilemapItem(this, tilemapItemData);
@@ -299,7 +289,7 @@ export class Tilemap extends ActorContainer implements IInitializableAsync {
 
   private getTileType(tileset: Tileset, tileIndex: number): string | undefined {
     if (!tileset.tiles) return undefined;
-    const tile = tileset.tiles.find(t => t.id === tileIndex);
+    const tile = tileset.tiles.find((t) => t.id === tileIndex);
     return tile?.type;
   }
 }

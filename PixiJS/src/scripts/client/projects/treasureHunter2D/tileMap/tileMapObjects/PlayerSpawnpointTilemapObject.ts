@@ -4,37 +4,31 @@ import { BaseSpawnpointTilemapObject } from './base/BaseSpawnpointTilemapObject'
 
 /**
  * Represents a spawnpoint in the game.
- * 
+ *
  */
 export class PlayerSpawnpointTilemapObject extends BaseSpawnpointTilemapObject {
+  // Properties -----------------------------------
 
-    // Properties -----------------------------------
+  // Fields ---------------------------------------
 
-    // Fields ---------------------------------------
+  // Initialization -------------------------------
+  constructor(app: GixiApplication, configuration?: Partial<ActorStaticConfiguration>) {
+    super(app, configuration);
 
-    // Initialization -------------------------------
-    constructor(app: GixiApplication, configuration?: Partial<ActorStaticConfiguration>) {
+    // Redeclare anything from super
+    // that you want differently here
+    this.label = PlayerSpawnpointTilemapObject.name;
+  }
 
-        super(app, configuration);
+  public override async initializeAsync() {
+    // Super
+    await super.initializeAsync();
 
-        // Redeclare anything from super 
-        // that you want differently here
-        this.label = (PlayerSpawnpointTilemapObject).name;
-    }
+    // Local
+    // Do any additional initialization here
+  }
 
+  // Methods --------------------------------------
 
-    public override async initializeAsync() {
-
-        // Super
-        await super.initializeAsync();
-
-        // Local
-        // Do any additional initialization here
-
-    }
-
-    // Methods --------------------------------------
-
-    // Event Handlers -------------------------------
-
+  // Event Handlers -------------------------------
 }

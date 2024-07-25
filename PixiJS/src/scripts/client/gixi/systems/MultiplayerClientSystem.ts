@@ -1,7 +1,7 @@
-import { io, Socket } from "socket.io-client";
-import { GixiApplication } from "../GixiApplication";
-import { SystemBase } from "./base/SystemBase";
-import * as PIXI from "pixi.js";
+import { io, Socket } from 'socket.io-client';
+import { GixiApplication } from '../GixiApplication';
+import { SystemBase } from './base/SystemBase';
+import * as PIXI from 'pixi.js';
 
 /**
  * Handles keyboard input and maintains the state of keys.
@@ -28,61 +28,59 @@ export class MultiplayerClientSystem extends SystemBase {
     // Local
     this._isInitialized = true;
 
-    this._packetManager.socket = io("http://localhost:3001");
+    this._packetManager.socket = io('http://localhost:3001');
 
-    this._packetManager.socket.on("connect", () => {
-      this.consoleLog("client connected to server 456");
+    this._packetManager.socket.on('connect', () => {
+      this.consoleLog('client connected to server 456');
 
       const request = new SessionStartRequest();
-
-      this.consoleLog("sending: " + SessionStartRequest.name);
-      this._packetManager.socket.emit(
-        SessionStartRequest.name,
-        JSON.stringify(request)
-      );
+      this.emitRequest(request);
     });
 
-    this._packetManager.socket.on(SessionStartResponse.name, (data) => {
-      console.log("Received data 5 :", data);
-      const response = Packet.fromJSON(data, SessionStartResponse);
-      console.log("Received packet 6 :", response);
+    this.onResponse(SessionStartResponse, (response) => {
+      console.log('Received packet 6 :', response);
 
       const request = new GameCreateRequest();
-      this._packetManager.socket.emit(
-        GameCreateRequest.name,
-        JSON.stringify(request)
-      );
+      this.emitRequest(request);
     });
 
-    this._packetManager.socket.on(GameCreateResponse.name, (data) => {
-      console.log("Received data 9999 :", data);
-      const response = Packet.fromJSON(data, GameCreateResponse);
-      console.log("Received packet 10 :", response);
+    this.onResponse(GameCreateResponse, (response) => {
+      console.log('Received packet 10 :', response);
 
       const request = new GameJoinRequest();
-      this._packetManager.socket.emit(
-        GameJoinRequest.name,
-        JSON.stringify(request)
-      );
+
+      this.emitRequest(request);
     });
 
-    this._packetManager.socket.on(GamePacketResponse.name, (data) => {
-      const response = Packet.fromJSON(data, GamePacketResponse);
-      console.log("Received packet 22 :", response);
+    this.onResponse(GameJoinResponse, (response) => {
+      console.log('Received packet 1010 :', response);
+
+      const request = new GamePacketRequest();
+
+      this.emitRequest(request);
     });
 
-    this._packetManager.socket.on(GameJoinResponse.name, (data) => {
-      console.log("Received data 99 :", data);
-      const request = Packet.fromJSON(data, GameJoinResponse);
-      console.log("Received packet 1010 :", request);
+    this.onResponse(GamePacketResponse, (response) => {
+      console.log('Received packet 22 :', response);
     });
 
-    this._packetManager.socket.on("disconnect", () => {
-      this.consoleLog("disconnected from server");
+    this._packetManager.socket.on('disconnect', () => {
+      this.consoleLog('disconnected from server');
     });
   }
 
   // Methods ------------------------------
+  public emitRequest(response: Request): void {
+    if (!(response instanceof Request)) {
+      this.consoleLog(`!!!!emitRequest() ${response}} wrong type !!!!`);
+    }
+
+    this._packetManager.emitPacket(response);
+  }
+
+  private onResponse<T extends Response>(ResponseClass: new () => T, onRequestCallback: (request: T) => void): void {
+    this._packetManager.onPacket(ResponseClass, onRequestCallback);
+  }
 
   protected consoleLog(msg: string) {
     if (!this._isDebug) {
@@ -127,7 +125,7 @@ export class PacketManager {
 
   requireIsInitialized() {
     if (!this.isInitialized) {
-      throw new Error("requireIsInitialized.");
+      throw new Error('requireIsInitialized.');
     }
   }
 
@@ -139,14 +137,11 @@ export class PacketManager {
     console.log(`[${this.constructor.name}] ${msg}`);
   }
 
-  protected emitPacket(packet: Packet): void {
+  public emitPacket(packet: Packet): void {
     this._socket.emit(packet.constructor.name, JSON.stringify(packet));
   }
 
-  protected onPacket<T extends Packet>(
-    PacketClass: new () => T,
-    onCallback: (request: T) => void
-  ): void {
+  public onPacket<T extends Packet>(PacketClass: new () => T, onCallback: (request: T) => void): void {
     this.consoleLog(`onPacket() ${PacketClass.name}`);
     this._socket.on(PacketClass.name, (data: string) => {
       const request = Packet.fromJSON(data, PacketClass);
@@ -162,11 +157,8 @@ class Packet {
   }
   constructor() {}
 
-  static fromJSON<T extends Packet>(
-    json: string,
-    cls: new (...args: any[]) => T
-  ): T {
-    const obj = typeof json === "string" ? JSON.parse(json) : json;
+  static fromJSON<T extends Packet>(json: string, cls: new (...args: any[]) => T): T {
+    const obj = typeof json === 'string' ? JSON.parse(json) : json;
     return new cls(obj.name);
   }
 }

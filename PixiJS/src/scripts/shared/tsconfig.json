@@ -4,12 +4,8 @@
     "outDir": "../../../dist/shared",
     "baseUrl": "./",
     "paths": {
-      "@shared/*": [
-        "*"
-      ]
+      "@shared/*": ["*"]
     }
   },
-  "include": [
-    "**/*.ts"
-  ]
+  "include": ["**/*.ts"]
 }

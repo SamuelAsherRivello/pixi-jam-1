@@ -9,96 +9,79 @@ import * as PIXI from 'pixi.js';
  * Configuration
  */
 export interface ActorStaticConfiguration extends ActorContainerConfiguration {
-    textureUrl: string;
-    texture: PIXI.Texture;
+  textureUrl: string;
+  texture: PIXI.Texture;
 }
 
 const ActorStaticConfigurationDefault: ActorStaticConfiguration = {
-    textureUrl: '',
-    texture: PIXI.Texture.EMPTY,
-    canCollisionCheck: true,
-    isTickable: true,
-    isResizable: true
-}
-
+  textureUrl: '',
+  texture: PIXI.Texture.EMPTY,
+  canCollisionCheck: true,
+  isTickable: true,
+  isResizable: true,
+};
 
 /**
  * Represents a coin in the game.
- * 
+ *
  */
 export class ActorStatic extends ActorContainer implements IInitializableAsync, IActor {
+  // Properties -----------------------------------
+  public override get configuration(): ActorStaticConfiguration {
+    return this._configuration as ActorStaticConfiguration;
+  }
 
+  // Fields ---------------------------------------
+  protected _sprite!: PIXI.Sprite;
 
-    // Properties -----------------------------------
-    public override get configuration(): ActorStaticConfiguration {
-        return this._configuration as ActorStaticConfiguration;
+  // Initialization -------------------------------
+  constructor(app: GixiApplication, configuration?: Partial<ActorStaticConfiguration>) {
+    super(app, { ...ActorStaticConfigurationDefault, ...configuration });
+
+    if (!GixiUtility.textureIsNullOrEmpty(this.configuration?.texture) && !GixiUtility.stringIsNullOrEmpty(this.configuration?.textureUrl)) {
+      throw new Error('You cannot set both texture and textureUrl in the configuration');
     }
 
-    // Fields ---------------------------------------
-    protected _sprite!: PIXI.Sprite;
+    this.initializeAsync();
 
-    // Initialization -------------------------------
-    constructor(app: GixiApplication, configuration?: Partial<ActorStaticConfiguration>) {
+    // Redeclare anything from super
+    // that you want differently here
+    this.label = ActorStatic.name;
+  }
 
-        super(app, { ...ActorStaticConfigurationDefault, ...configuration });
+  public override async initializeAsync() {
+    // Super
+    await super.initializeAsync();
 
-
-        if (!GixiUtility.textureIsNullOrEmpty(this.configuration?.texture) &&
-            !GixiUtility.stringIsNullOrEmpty(this.configuration?.textureUrl)) {
-            throw new Error("You cannot set both texture and textureUrl in the configuration");
-        }
-
-        this.initializeAsync();
-
-        // Redeclare anything from super 
-        // that you want differently here
-        this.label = (ActorStatic).name;
+    if (!GixiUtility.textureIsNullOrEmpty(this.configuration?.texture)) {
+      this._sprite = new PIXI.Sprite(this.configuration?.texture);
+    } else if (!GixiUtility.stringIsNullOrEmpty(this.configuration?.textureUrl)) {
+      await PIXI.Assets.load([this.configuration.textureUrl]);
+      const texture: PIXI.Texture = PIXI.Texture.from(this.configuration.textureUrl);
+      this._sprite = new PIXI.Sprite(texture);
     }
 
+    if (this._sprite) {
+      this._sprite.label = this.label;
+      this.addChild(this._sprite);
 
-    public override async initializeAsync() {
-
-        // Super
-        await super.initializeAsync();
-
-        if (!GixiUtility.textureIsNullOrEmpty(this.configuration?.texture)) {
-            this._sprite = new PIXI.Sprite(this.configuration?.texture);
-        }
-        else if (!GixiUtility.stringIsNullOrEmpty(this.configuration?.textureUrl)) {
-            await PIXI.Assets.load([this.configuration.textureUrl]);
-            const texture: PIXI.Texture = PIXI.Texture.from(this.configuration.textureUrl);
-            this._sprite = new PIXI.Sprite(texture);
-        }
-
-        if (this._sprite) {
-            this._sprite.label = this.label;
-            this.addChild(this._sprite);
-
-            //await new Promise(resolve => setTimeout(resolve, 100));
-            GixiUtility.setAnchorAndAdjustPositionAndParent(this, this._sprite, new PIXI.Point(0.5, 0.5));
-
-
-        }
-
-
-        // Local
-        //Do any additional initialization here
-
+      //await new Promise(resolve => setTimeout(resolve, 100));
+      GixiUtility.setAnchorAndAdjustPositionAndParent(this, this._sprite, new PIXI.Point(0.5, 0.5));
     }
 
-    // Methods --------------------------------------
+    // Local
+    //Do any additional initialization here
+  }
 
-    // Event Handlers -------------------------------
+  // Methods --------------------------------------
 
-    public override onTick(ticker: PIXI.Ticker): void {
+  // Event Handlers -------------------------------
 
-        // Super
-        super.onTick(ticker);
+  public override onTick(ticker: PIXI.Ticker): void {
+    // Super
+    super.onTick(ticker);
 
-
-        // Local
-        //Do any additional things here
-
-    }
+    // Local
+    //Do any additional things here
+  }
 }
-

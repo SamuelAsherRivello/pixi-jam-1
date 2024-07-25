@@ -4,9 +4,8 @@ import * as PIXI from 'pixi.js';
  * ITickable Interface
  */
 export interface ITickable {
+  // Properties -----------------------------------
 
-    // Properties -----------------------------------
-
-    // Methods --------------------------------------
-    onTick(ticker: PIXI.Ticker): void;
+  // Methods --------------------------------------
+  onTick(ticker: PIXI.Ticker): void;
 }
