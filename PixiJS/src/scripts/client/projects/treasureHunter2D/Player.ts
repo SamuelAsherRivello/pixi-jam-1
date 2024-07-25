@@ -13,7 +13,7 @@ import { LocalDiskStorageSystem } from '../../gixi/systems/LocalDiskStorageSyste
 import { Enemy } from './Enemy';
 import { KeyCode } from '../../core/data/types/KeyCode';
 import { MultiplayerClientSystem } from '@client/gixi/systems/MultiplayerClientSystem/MultiplayerClientSystem';
-import { GamePacketRequest, GamePacketResponse } from '@client/gixi/systems/MultiplayerClientSystem/MultiplayerClientSocket';
+import { GamePacketRequest, GamePacketResponse } from '@shared/multiplayer/Packet';
 
 /**
  * Configuration

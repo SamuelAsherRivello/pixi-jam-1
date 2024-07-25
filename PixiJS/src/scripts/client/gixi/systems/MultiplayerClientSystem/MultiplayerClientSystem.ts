@@ -1,7 +1,8 @@
 import { GixiApplication } from '@client/gixi/GixiApplication';
 import { SystemBase } from '../base/SystemBase';
-import { GamePacketRequest, MultiplayerSocketClient, Request, Response } from './MultiplayerClientSocket';
 import * as PIXI from 'pixi.js';
+import { MultiplayerSocketClient } from './MultiplayerClientSocket';
+import { GamePacketRequest, PacketRequest, PacketResponse } from '@shared/multiplayer/Packet';
 
 /**
  * Handles keyboard input and maintains the state of keys.
@@ -62,7 +63,7 @@ export class MultiplayerClientSystem extends SystemBase {
     this.emitRequest(request);
   }
 
-  protected emitRequest<T extends Request>(request: T): void {
+  protected emitRequest<T extends PacketRequest>(request: T): void {
     if (!this._multiplayerSocketClient.isGameJoined) {
       //
       //Only log here if you are in a multiplayer session
@@ -75,7 +76,7 @@ export class MultiplayerClientSystem extends SystemBase {
   }
 
   // Event Handlers -------------------------------
-  public onResponse<T extends Response>(ResponseClass: new () => T, onRequestCallback: (request: T) => void): void {
+  public onResponse<T extends PacketResponse>(ResponseClass: new () => T, onRequestCallback: (request: T) => void): void {
     this._multiplayerSocketClient.onResponse(ResponseClass, onRequestCallback);
   }
 

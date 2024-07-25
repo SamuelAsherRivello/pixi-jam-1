@@ -1,18 +1,22 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "moduleResolution": "node",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "sourceMap": true,
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": "./src/scripts",
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./src",
     "paths": {
-      "@client/*": ["client/*"],
-      "@server/*": ["server/*"],
-      "@shared/*": ["shared/*"]
-    }
+      "@client/*": ["scripts/client/*"],
+      "@server/*": ["scripts/server/*"],
+      "@shared/*": ["scripts/shared/*"]
+    },
+    "resolveJsonModule": true
   },
-  "include": ["src/**/*", "tests/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules"]
 }

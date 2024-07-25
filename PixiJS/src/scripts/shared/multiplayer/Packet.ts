@@ -1,4 +1,6 @@
-import { Socket } from 'socket.io';
+/**
+ * IMPORTANT FOR FILES OUTSIDE OF /CLIENT/: Always import using `.js` even though it's a `.ts` file.
+ */
 
 export class Packet {
   public get name(): string {
@@ -10,55 +12,55 @@ export class Packet {
   constructor() {}
 }
 
-export class Request extends Packet {
+export class PacketRequest extends Packet {
   constructor() {
     super();
   }
 }
 
-export class Response extends Packet {
+export class PacketResponse extends Packet {
   constructor() {
     super();
   }
 }
 
-export class SessionStartRequest extends Request {
+export class SessionStartRequest extends PacketRequest {
   constructor() {
     super();
   }
 }
 
-export class SessionStartResponse extends Response {
+export class SessionStartResponse extends PacketResponse {
   constructor() {
     super();
   }
 }
 
-export class GameCreateRequest extends Request {
+export class GameCreateRequest extends PacketRequest {
   constructor() {
     super();
   }
 }
 
-export class GameCreateResponse extends Response {
+export class GameCreateResponse extends PacketResponse {
   constructor() {
     super();
   }
 }
 
-export class GameJoinRequest extends Request {
+export class GameJoinRequest extends PacketRequest {
   constructor() {
     super();
   }
 }
 
-export class GameJoinResponse extends Response {
+export class GameJoinResponse extends PacketResponse {
   constructor() {
     super();
   }
 }
 
-export class GamePacketRequest extends Request {
+export class GamePacketRequest extends PacketRequest {
   constructor();
   constructor(x: number, y: number);
   constructor(x?: number, y?: number) {
@@ -71,7 +73,7 @@ export class GamePacketRequest extends Request {
   }
 }
 
-export class GamePacketResponse extends Response {
+export class GamePacketResponse extends PacketResponse {
   constructor();
   constructor(x: number, y: number);
   constructor(x?: number, y?: number) {

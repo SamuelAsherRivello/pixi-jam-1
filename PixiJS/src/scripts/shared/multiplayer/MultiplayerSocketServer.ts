@@ -1,20 +1,24 @@
+/**
+ * IMPORTANT FOR FILES OUTSIDE OF /CLIENT/: Always import using `.js` even though it's a `.ts` file.
+ */
+
 import { Server, Socket } from 'socket.io';
+import { MultiplayerSocket } from './MultiplayerSocket.js';
 import http from 'http';
 import {
+  PacketRequest,
+  PacketResponse,
+  SessionStartRequest,
+  SessionStartResponse,
   GameCreateRequest,
   GameCreateResponse,
   GameJoinRequest,
   GameJoinResponse,
   GamePacketRequest,
   GamePacketResponse,
-  SessionStartRequest,
-  SessionStartResponse,
-  Request,
-  Response,
 } from './Packet.js';
-import { MultiplayerSocket } from './MultiplayerSocket.js';
 
-export class MultiplayerServerSystem extends MultiplayerSocket {
+export class MultiplayerSocketServer extends MultiplayerSocket {
   // Properties -----------------------------------
 
   // Fields ---------------------------------------
@@ -73,9 +77,9 @@ export class MultiplayerServerSystem extends MultiplayerSocket {
     });
   }
 
-  protected emitResponse<T extends Response>(response: T): void {
+  protected emitResponse<T extends PacketResponse>(response: T): void {
     //Check type
-    if (!(response instanceof Response)) {
+    if (!(response instanceof PacketResponse)) {
       this.consoleLogError(`!!!!emitResponse() failed. Wrong type of ${(response as any).constructor.name}.`);
       return;
     }
@@ -85,7 +89,7 @@ export class MultiplayerServerSystem extends MultiplayerSocket {
     this.emitPacket(response);
   }
 
-  protected onRequest<T extends Request>(RequestClass: new () => T, onRequestCallback: (request: T) => void): void {
+  protected onRequest<T extends PacketRequest>(RequestClass: new () => T, onRequestCallback: (request: T) => void): void {
     this.onPacket(RequestClass, onRequestCallback);
   }
 

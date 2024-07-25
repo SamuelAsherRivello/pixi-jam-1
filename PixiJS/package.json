@@ -11,8 +11,7 @@
     "pixi.js": "^8.2.1",
     "socket.io": "^4.7.5",
     "socket.io-client": "^4.7.5",
-    "stats.js": "^0.17.0",
-    "tsconfig-paths": "^4.2.0"
+    "stats.js": "^0.17.0"
   },
   "scripts": {
     "compile-client": "tsc -p src/scripts/client/tsconfig.json",
@@ -22,24 +21,24 @@
     "build-client": "webpack --mode production",
     "start-client": "webpack serve --mode development",
     "start-client-with-test": "concurrently --kill-others \"npm run watch:test\" \"webpack serve --mode development\"",
-    "start-server": "nodemon --watch src/scripts/server --exec \"npx ts-node-esm src/scripts/server/server.ts\"",
     "test": "jest",
     "test:watch": "jest --watch",
     "watch:test": "onchange \"src/**/*\" \"tests/**/*\" -- npm run test",
     "format": "prettier --config prettier.config.cjs --write .",
     "lint": "eslint --config eslint.config.mjs",
     "lint:fix": "eslint --config eslint.config.mjs --fix",
-    "analyze": "webpack --mode production --env analyze"
+    "analyze": "webpack --mode production --env analyze",
+    "start-server": "node --loader ts-node/esm -r tsconfig-paths/register src/scripts/server/server.ts"
   },
   "devDependencies": {
     "@eslint/js": "^8.2.0",
     "@types/express": "^4.17.21",
     "@types/jest": "^29.5.12",
-    "@typescript-eslint/eslint-plugin": "^7.16.0",
-    "@typescript-eslint/parser": "^7.16.0",
     "@types/node": "^20.14.11",
     "@types/socket.io": "^3.0.1",
     "@types/stats": "^0.16.30",
+    "@typescript-eslint/eslint-plugin": "^7.16.0",
+    "@typescript-eslint/parser": "^7.16.0",
     "concurrently": "^7.2.1",
     "copy-webpack-plugin": "^12.0.2",
     "css-loader": "^7.1.2",
@@ -63,6 +62,7 @@
     "ts-jest": "^29.2.2",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.5.4",
     "typescript-eslint": "^7.16.0",

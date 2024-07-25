@@ -5,7 +5,6 @@ import CopyWebpackPlugin from 'copy-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
-// Use fileURLToPath to get the file path of the current module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -13,7 +12,7 @@ export default (env) => {
   const plugins = [
     new HtmlWebpackPlugin({
       template: './public/index.html',
-      inject: 'body', // Ensure scripts are injected into the body
+      inject: 'body',
     }),
     new CopyWebpackPlugin({
       patterns: [{ from: 'assets', to: 'assets' }],
@@ -49,7 +48,12 @@ export default (env) => {
       rules: [
         {
           test: /\.tsx?$/,
-          use: 'ts-loader',
+          use: {
+            loader: 'ts-loader',
+            options: {
+              configFile: path.resolve(__dirname, 'src/scripts/client/tsconfig.json'),
+            },
+          },
           exclude: /node_modules/,
         },
         {
@@ -68,11 +72,11 @@ export default (env) => {
       hints: false,
     },
     devServer: {
-      port: 3000, // Change to a different port, e.g., 3001
+      port: 3000,
       static: {
         directory: path.resolve(__dirname, 'dist'),
       },
-      hot: false, // Disable HMR
+      hot: false,
       client: {
         logging: 'error',
       },

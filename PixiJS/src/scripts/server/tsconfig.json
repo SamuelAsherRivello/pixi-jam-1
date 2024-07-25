@@ -3,12 +3,17 @@
   "compilerOptions": {
     "outDir": "../../../dist/server",
     "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "target": "ES2020",
     "esModuleInterop": true,
-    "sourceMap": true,
-    "moduleResolution": "NodeNext",
-    "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true
+    "baseUrl": "../../",
+    "paths": {
+      "@server/*": ["scripts/server/*"],
+      "@shared/*": ["scripts/shared/*"]
+    }
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*", "../shared/**/*"],
+  "ts-node": {
+    "esm": true
+  }
 }

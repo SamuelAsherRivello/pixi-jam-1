@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js';
 import { DropShadowFilter } from 'pixi-filters';
 import { ActorStatic } from '../../gixi/ActorStatic';
 import { MultiplayerClientSystem } from '@client/gixi/systems/MultiplayerClientSystem/MultiplayerClientSystem';
-import { GamePacketResponse } from '@client/gixi/systems/MultiplayerClientSystem/MultiplayerClientSocket';
+import { GamePacketResponse } from '@shared/multiplayer/Packet';
 
 /**
  * Represents a ghost following the player using multiplayer

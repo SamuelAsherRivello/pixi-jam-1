@@ -2,12 +2,20 @@
   "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "../../../dist/client",
-    "baseUrl": "./",
+    "module": "ESNext",
+    "target": "ES2020",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "baseUrl": "../../",
     "paths": {
-      "@client/*": ["*"],
-      "@shared/*": ["../shared/*"]
+      "@client/*": ["scripts/client/*"],
+      "@shared/*": ["scripts/shared/*"]
     },
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "noEmit": false,
+    "sourceMap": true
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*", "../shared/multiplayer/BadConnectionSimulator.ts"]
 }

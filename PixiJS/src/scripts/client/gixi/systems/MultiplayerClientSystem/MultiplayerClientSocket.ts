@@ -1,153 +1,18 @@
-import { BadConnectionSimulator } from '@client/core/networking/BadConnectionSimulator';
-import { fastCopy } from 'pixi.js';
+import { BadConnectionSimulator } from '@shared/multiplayer/BadConnectionSimulator';
 import { io, Socket } from 'socket.io-client';
-
-////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
-//////////////////////   COPY THE BELOW ////////////////////////////////
-
-export class MultiplayerSocket {
-  // Properties -----------------------------------
-  get isInitialized(): boolean {
-    return this._isInitialized;
-  }
-
-  set socket(socket: Socket) {
-    this._socket = socket;
-  }
-
-  get socket(): Socket {
-    return this._socket;
-  }
-
-  // Fields ---------------------------------------
-  protected _socket!: Socket;
-  protected _isInitialized: boolean = false;
-  protected isDebug: boolean = true;
-
-  // Initialization -------------------------------
-  constructor() {}
-
-  public async initializeAsync(): Promise<any> {}
-
-  requireIsInitialized() {
-    if (!this.isInitialized) {
-      throw new Error('requireIsInitialized.');
-    }
-  }
-
-  // Methods ------------------------------
-  protected consoleLog(msg: string) {
-    if (!this.isDebug) {
-      return;
-    }
-    console.log(`[${this.constructor.name}] ${msg}`);
-  }
-
-  protected emitPacket(packet: Packet): void {
-    this._socket.emit(packet.constructor.name, JSON.stringify(packet));
-  }
-
-  protected onPacket<T extends Packet>(PacketClass: new () => T, onCallback: (t: T) => void): void {
-    //this.consoleLog(`onPacket() ${PacketClass.name}`);
-
-    this._socket.on(PacketClass.name, (packetString: string) => {
-      console.log(packetString);
-      const packet = JSON.parse(packetString) as T;
-      console.log(packet);
-      onCallback(packet);
-    });
-  }
-  // Event Handlers ------------------------------
-}
-
-class Packet {
-  public get name(): string {
-    return this.constructor.name;
-  }
-
-  public data: any;
-
-  constructor() {}
-}
-
-export class Request extends Packet {
-  constructor() {
-    super();
-  }
-}
-
-export class Response extends Packet {
-  constructor() {
-    super();
-  }
-}
-
-class SessionStartRequest extends Request {
-  constructor() {
-    super();
-  }
-}
-
-class SessionStartResponse extends Response {
-  constructor() {
-    super();
-  }
-}
-
-class GameCreateRequest extends Request {
-  constructor() {
-    super();
-  }
-}
-
-class GameCreateResponse extends Response {
-  constructor() {
-    super();
-  }
-}
-
-class GameJoinRequest extends Request {
-  constructor() {
-    super();
-  }
-}
-
-class GameJoinResponse extends Response {
-  constructor() {
-    super();
-  }
-}
-
-export class GamePacketRequest extends Request {
-  constructor();
-  constructor(x: number, y: number);
-  constructor(x?: number, y?: number) {
-    super();
-    if (x !== undefined && y !== undefined) {
-      this.data = { x, y };
-    } else {
-      this.data = { x: 0, y: 0 };
-    }
-  }
-}
-
-export class GamePacketResponse extends Response {
-  constructor();
-  constructor(x: number, y: number);
-  constructor(x?: number, y?: number) {
-    super();
-    if (x !== undefined && y !== undefined) {
-      this.data = { x, y };
-    } else {
-      this.data = { x: 0, y: 0 };
-    }
-  }
-}
-
-//////////////////////   COPY THE ABOVE ////////////////////////////////
-////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
+import {
+  GameCreateRequest,
+  GameCreateResponse,
+  GameJoinRequest,
+  GameJoinResponse,
+  GamePacketRequest,
+  GamePacketResponse,
+  PacketRequest,
+  PacketResponse,
+  SessionStartRequest,
+  SessionStartResponse,
+} from '@shared/multiplayer/Packet';
+import { MultiplayerSocket } from '@shared/multiplayer/MultiplayerSocket';
 
 export class MultiplayerSocketClient extends MultiplayerSocket {
   // Properties -----------------------------------
@@ -201,9 +66,9 @@ export class MultiplayerSocketClient extends MultiplayerSocket {
     // Local
     this._isInitialized = true;
 
-    this.socket = io('http://localhost:3001');
+    this._socket = io('http://localhost:3001');
 
-    this.socket.on('connect', () => {
+    this._socket.on('connect', () => {
       this.consoleLog('Client connected to server');
 
       this._isConnected = true;
@@ -232,7 +97,7 @@ export class MultiplayerSocketClient extends MultiplayerSocket {
 
     this.onResponse(GamePacketResponse, (response) => {});
 
-    this.socket.on('disconnect', () => {
+    this._socket.on('disconnect', () => {
       this._isSessionStarted = false;
       this._hasJoinedGame = false;
       this._isConnected = false;
@@ -242,9 +107,9 @@ export class MultiplayerSocketClient extends MultiplayerSocket {
 
   // Methods ------------------------------
 
-  public async emitRequest<T extends Request>(request: T) {
+  public async emitRequest<T extends PacketRequest>(request: T) {
     //Check type
-    if (!(request instanceof Request)) {
+    if (!(request instanceof PacketRequest)) {
       //this.consoleLog(`!!!!emitRequest() failed. Wrong type of ${(request as any).constructor.name}.`);
       return;
     }
@@ -258,7 +123,7 @@ export class MultiplayerSocketClient extends MultiplayerSocket {
     this.emitPacket(request);
   }
 
-  public onResponse<T extends Response>(ResponseClass: new () => T, onRequestCallback: (request: T) => void): void {
+  public onResponse<T extends PacketResponse>(ResponseClass: new () => T, onRequestCallback: (request: T) => void): void {
     this.onPacket(ResponseClass, onRequestCallback);
   }
 

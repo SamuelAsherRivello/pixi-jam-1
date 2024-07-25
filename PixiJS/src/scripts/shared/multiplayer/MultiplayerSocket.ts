@@ -1,4 +1,7 @@
-import { Socket } from 'socket.io';
+/**
+ * IMPORTANT FOR FILES OUTSIDE OF /CLIENT/: Always import using `.js` even though it's a `.ts` file.
+ */
+
 import { Packet } from './Packet.js';
 
 export class MultiplayerSocket {
@@ -8,7 +11,7 @@ export class MultiplayerSocket {
   }
 
   // Fields ---------------------------------------
-  protected _socket!: Socket;
+  protected _socket!: any;
   protected _isInitialized: boolean = false;
   protected isDebug: boolean = true;
 
@@ -40,7 +43,7 @@ export class MultiplayerSocket {
   }
 
   protected onPacket<T extends Packet>(PacketClass: new () => T, onCallback: (t: T) => void): void {
-    this.consoleLog(`onPacket() ${PacketClass.name}`);
+    //this.consoleLog(`onPacket() ${PacketClass.name}`);
 
     this._socket.on(PacketClass.name, (packetString: string) => {
       console.log(packetString);
