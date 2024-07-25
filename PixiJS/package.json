@@ -38,6 +38,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "watch:test": "onchange \"src/**/*\" \"tests/**/*\" -- npm run test",
+    "format": "prettier --write .",
     "lint": "eslint --config eslint.config.mjs",
     "lint:fix": "eslint --config eslint.config.mjs --fix",
     "analyze": "webpack --mode production --env analyze"

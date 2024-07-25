@@ -16,9 +16,7 @@ export default (env) => {
       inject: 'body', // Ensure scripts are injected into the body
     }),
     new CopyWebpackPlugin({
-      patterns: [
-        { from: 'assets', to: 'assets' },
-      ],
+      patterns: [{ from: 'assets', to: 'assets' }],
     }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css',
@@ -45,7 +43,7 @@ export default (env) => {
       alias: {
         '@client': path.resolve(__dirname, 'src/scripts/client'),
         '@shared': path.resolve(__dirname, 'src/scripts/shared'),
-      }
+      },
     },
     module: {
       rules: [
