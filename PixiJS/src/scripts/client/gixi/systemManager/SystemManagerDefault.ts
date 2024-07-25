@@ -3,7 +3,7 @@ import { AudioSystem } from '../systems/AudioSystem';
 import { CollisionSystem } from '../systems/CollisionSystem';
 import { InputSystem } from '../systems/InputSystem';
 import { LocalDiskStorageSystem } from '../systems/LocalDiskStorageSystem';
-import { MultiplayerClientSystem } from '../systems/MultiplayerClientSystem';
+import { MultiplayerClientSystem } from '../systems/MultiplayerClientSystem/MultiplayerClientSystem';
 import { TilemapCollisionSystem } from '../systems/TilemapCollisionSystem';
 import { ISystemManager } from './base/ISystemManager';
 import { SystemManagerBase } from './base/SystemManagerBase';

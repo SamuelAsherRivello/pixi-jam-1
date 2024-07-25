@@ -12,6 +12,8 @@ import { TilemapCollisionSystem } from '../../gixi/systems/TilemapCollisionSyste
 import { LocalDiskStorageSystem } from '../../gixi/systems/LocalDiskStorageSystem';
 import { Enemy } from './Enemy';
 import { KeyCode } from '../../core/data/types/KeyCode';
+import { MultiplayerClientSystem } from '@client/gixi/systems/MultiplayerClientSystem/MultiplayerClientSystem';
+import { GamePacketRequest, GamePacketResponse } from '@client/gixi/systems/MultiplayerClientSystem/MultiplayerClientSocket';
 
 /**
  * Configuration
@@ -27,7 +29,7 @@ const PlayerConfigurationDefault: PlayerConfiguration = {
 };
 
 /**
- * Represents a coin in the game.
+ * Represents the playable character in the game
  *
  */
 export class Player extends ActorStatic implements ICollisionSystemBody {
@@ -67,6 +69,16 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
     // Local
     //Do any additional initialization here
     this._sprite.anchor.set(0, 0);
+
+    const multiplayerClientSystem: MultiplayerClientSystem = this._app.systemManager.getItem(MultiplayerClientSystem);
+
+    if (!multiplayerClientSystem) {
+      return;
+    }
+
+    multiplayerClientSystem.onResponse(GamePacketResponse, (response) => {
+      console.log('playerOnGamePacketResponse :', response);
+    });
   }
 
   // Methods --------------------------------------
@@ -91,29 +103,24 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
   private handleMovement(ticker: PIXI.Ticker) {
     let moveVector: PIXI.Point = new PIXI.Point(0, 0);
 
-    //TODO: Change to be either/both shift keys
-    const isShift: boolean = this._app.systemManager.getItem(InputSystem).isKeyDown(KeyCode.M);
+    const isShift: boolean =
+      this._app.systemManager.getItem(InputSystem).isKeyDown(KeyCode.LeftShift) || this._app.systemManager.getItem(InputSystem).isKeyDown(KeyCode.RightShift);
 
-    if (this._app.systemManager.getItem(InputSystem).isKeyDown(KeyCode.A)) {
+    if (this._app.systemManager.getItem(InputSystem).isKeyDown(KeyCode.A) || this._app.systemManager.getItem(InputSystem).isKeyDown(KeyCode.LeftArrow)) {
       //ACTION!
       moveVector.x += -1;
     }
-    if (this._app.systemManager.getItem(InputSystem).isKeyDown(KeyCode.D)) {
+    if (this._app.systemManager.getItem(InputSystem).isKeyDown(KeyCode.D) || this._app.systemManager.getItem(InputSystem).isKeyDown(KeyCode.RightArrow)) {
       moveVector.x += 1;
     }
-    if (this._app.systemManager.getItem(InputSystem).isKeyDown(KeyCode.W)) {
+    if (this._app.systemManager.getItem(InputSystem).isKeyDown(KeyCode.W) || this._app.systemManager.getItem(InputSystem).isKeyDown(KeyCode.UpArrow)) {
       moveVector.y += -1;
     }
-    if (this._app.systemManager.getItem(InputSystem).isKeyDown(KeyCode.S)) {
+    if (this._app.systemManager.getItem(InputSystem).isKeyDown(KeyCode.S) || this._app.systemManager.getItem(InputSystem).isKeyDown(KeyCode.DownArrow)) {
       moveVector.y += 1;
     }
 
-    if (
-      this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame(KeyCode.Enter) || //works
-      this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame(KeyCode.Space)
-    ) {
-      //does work. TODO: WHy?
-
+    if (this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame(KeyCode.Space)) {
       //Action!
       this._app.systemManager.getItem(AudioSystem).play('./assets/audio/Click01.wav');
 
@@ -136,6 +143,10 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
     if (moveVector.y !== 0 && !this.isCollisionWithTilemap(this.position.x, nextY + (moveVector.y > 0 ? -this.height / 2 : -halfHeight))) {
       this.position.y = nextY;
     }
+
+    if (moveVector.x !== 0 || moveVector.y !== 0) {
+      this.multiplayerEmitGamePacketRequestSafe();
+    }
   }
 
   public takeDamage(deltaHealth: number) {
@@ -151,6 +162,16 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
       // Update health value
       this._app.configuration.data.health.Value = Math.max(0, this._app.configuration.data.health.Value + deltaHealth);
     }
+  }
+
+  private multiplayerEmitGamePacketRequestSafe() {
+    const multiplayerClientSystem: MultiplayerClientSystem = this._app.systemManager.getItem(MultiplayerClientSystem);
+
+    if (!multiplayerClientSystem) {
+      return;
+    }
+
+    multiplayerClientSystem.emitGamePacketRequest(new GamePacketRequest(this.x, this.y));
   }
 
   // Event Handlers -------------------------------
@@ -187,6 +208,25 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
 
       //And reload
       this._app.app.ticker.started = !this._app.app.ticker.started;
+    }
+
+    if (this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame(KeyCode.L)) {
+      //Latency
+      this._app.systemManager.getItem(AudioSystem).play('./assets/audio/Click01.wav');
+
+      const multiplayerClientSystem = this._app.systemManager.getItem(MultiplayerClientSystem);
+      if (multiplayerClientSystem) {
+        multiplayerClientSystem.nextTargetLatency();
+      }
+    }
+    if (this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame(KeyCode.K)) {
+      //Latency
+      this._app.systemManager.getItem(AudioSystem).play('./assets/audio/Click01.wav');
+
+      const multiplayerClientSystem = this._app.systemManager.getItem(MultiplayerClientSystem);
+      if (multiplayerClientSystem) {
+        multiplayerClientSystem.nextTargetPacketLoss();
+      }
     }
   }
 

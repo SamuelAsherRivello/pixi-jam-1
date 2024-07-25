@@ -15,6 +15,8 @@ This repo includes Html5 examples using [PixiJS](https://pixijs.com/) and [TypeS
 ```
 > npm install
 
+> npm run compile-client
+
 > npm run build-client
 
 > npm run start-client

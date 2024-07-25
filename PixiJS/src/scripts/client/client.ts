@@ -20,6 +20,7 @@ export interface ITreasureHunterData {
   logoImageUrl: string;
   tilemapDataUrl: string;
   playerTextureUrl: string;
+  playerGhostTextureUrl: string;
   enemySpawnerIsEnabled: boolean;
   enemySpawnerTextureUrl: string;
   enemyTextureUrl: string;
@@ -38,6 +39,7 @@ const treasureHunterData: ITreasureHunterData = {
   logoImageUrl: 'assets/images/pixijs-logo-32x32.png',
   tilemapDataUrl: tilemapDataUrl,
   playerTextureUrl: 'assets/images/player.png',
+  playerGhostTextureUrl: 'assets/images/player-ghost.png',
   enemySpawnerIsEnabled: false,
   enemySpawnerTextureUrl: 'assets/images/enemy-spawner.png',
   enemyTextureUrl: 'assets/images/enemy.png',

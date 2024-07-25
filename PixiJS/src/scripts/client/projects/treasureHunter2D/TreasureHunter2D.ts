@@ -13,6 +13,8 @@ import { DebugMarker } from '../../gixi/debugging/DebugMarker';
 import { LocalDiskStorageSystem } from '../../gixi/systems/LocalDiskStorageSystem';
 import { GixiUtility } from '../../gixi/GixiUtility';
 import { EnemySpawner, EnemySpawnerConfiguration } from './EnemySpawner';
+import { PlayerGhost } from './PlayerGhost';
+import { MultiplayerClientSystem } from '@client/gixi/systems/MultiplayerClientSystem/MultiplayerClientSystem';
 
 /**
  * The main game class
@@ -119,6 +121,15 @@ export class TreasureHunter2D extends GixiApplication {
     this._player.position = this.configuration.data.playerSpawnpoint;
 
     /////////////////////////////
+    // Create Temp Ghost To Follow Player Using Multiplayer latency
+    /////////////////////////////
+    const playerGhost = new PlayerGhost(this, {
+      textureUrl: this._treasureHunterData.playerGhostTextureUrl,
+    });
+    this.addToViewport(playerGhost);
+    playerGhost.position = this._player.position;
+
+    /////////////////////////////
     // Setup Camera
     /////////////////////////////
     this.viewport.follow(this._player, {
@@ -146,14 +157,7 @@ export class TreasureHunter2D extends GixiApplication {
     instructionsTextStyle.fill = '#ffffff';
     instructionsTextStyle.align = 'left';
     //
-    let instructionsString = '';
-    instructionsString += 'Arrows / WASD To Move\n';
-    instructionsString += 'Enter / Spacebar For Attack\n';
-    instructionsString += 'F For Fullscreen\n';
-    instructionsString += 'R For Restart\n';
-    instructionsString += 'M For Move Fast\n';
-    instructionsString += 'O For Clear Data\n';
-    instructionsString += 'P For Pause (Unpause is broken)\n';
+    let instructionsString = 'see onRefreshUI';
     this._instructionsText = new InstructionsText(this, instructionsString, {
       textStyle: instructionsTextStyle,
     });
@@ -168,7 +172,7 @@ export class TreasureHunter2D extends GixiApplication {
     scoreTextStyle.fill = '#ffffff';
     scoreTextStyle.align = 'right';
     //
-    let scoreString = 'replace later';
+    let scoreString = 'see onRefreshUI';
     this._scoreText = new ScoreText(this, scoreString, {
       textStyle: scoreTextStyle,
     });
@@ -222,6 +226,27 @@ export class TreasureHunter2D extends GixiApplication {
     textString += `Coins ${coinsCollected}/${coinsMax}\n`;
     textString += `Health ${health}\n`;
     this._scoreText.textString = textString;
+
+    let latencyString = '';
+    let packetLossString = '';
+    const multiplayerClientSystem = this.systemManager.getItem(MultiplayerClientSystem);
+    if (multiplayerClientSystem && multiplayerClientSystem.isConnected) {
+      latencyString = `L for Latency (${multiplayerClientSystem.targetLatencyMS})\n`;
+      packetLossString = `K for Packet Loss (${multiplayerClientSystem.targetPacketLoss})\n`;
+    }
+
+    let instructionsString = '';
+    instructionsString += 'WASD/Arrows To Walk\n';
+    instructionsString += 'Spacebar To Attack\n';
+    instructionsString += 'Shift To Run\n';
+    instructionsString += 'P To Pause (Broken)\n';
+    instructionsString += 'O For Clear Data\n';
+    instructionsString += 'F For Fullscreen\n';
+    instructionsString += 'R For Restart\n';
+    instructionsString += latencyString;
+    instructionsString += packetLossString;
+
+    this._instructionsText.textString = instructionsString;
   }
 
   // Event Handlers -------------------------------

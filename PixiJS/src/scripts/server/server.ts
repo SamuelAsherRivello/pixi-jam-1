@@ -5,7 +5,7 @@ import http from 'http';
 ////////////////////////////////////////////////////////////////////////
 //////////////////////   COPY THE BELOW ////////////////////////////////
 
-export class PacketManager {
+export class MultiplayerSocket {
   // Properties -----------------------------------
   get isInitialized(): boolean {
     return this._isInitialized;
@@ -39,16 +39,18 @@ export class PacketManager {
     console.error(`[${this.constructor.name}] ${msg}`);
   }
 
-  public emitPacket(packet: Packet): void {
+  protected emitPacket(packet: Packet): void {
     this._socket.emit(packet.constructor.name, JSON.stringify(packet));
   }
 
-  public onPacket<T extends Packet>(PacketClass: new () => T, onCallback: (request: T) => void): void {
+  protected onPacket<T extends Packet>(PacketClass: new () => T, onCallback: (t: T) => void): void {
     this.consoleLog(`onPacket() ${PacketClass.name}`);
 
-    this._socket.on(PacketClass.name, (data: string) => {
-      const request = Packet.fromJSON(data, PacketClass);
-      onCallback(request);
+    this._socket.on(PacketClass.name, (packetString: string) => {
+      console.log(packetString);
+      const packet = JSON.parse(packetString) as T;
+      console.log(packet);
+      onCallback(packet);
     });
   }
   // Event Handlers ------------------------------
@@ -58,12 +60,10 @@ class Packet {
   public get name(): string {
     return this.constructor.name;
   }
-  constructor() {}
 
-  static fromJSON<T extends Packet>(json: string, cls: new (...args: any[]) => T): T {
-    const obj = typeof json === 'string' ? JSON.parse(json) : json;
-    return new cls(obj.name);
-  }
+  public data: any;
+
+  constructor() {}
 }
 
 class Request extends Packet {
@@ -114,15 +114,30 @@ class GameJoinResponse extends Response {
   }
 }
 
-class GamePacketRequest extends Request {
-  constructor() {
+export class GamePacketRequest extends Request {
+  constructor();
+  constructor(x: number, y: number);
+  constructor(x?: number, y?: number) {
     super();
+    if (x !== undefined && y !== undefined) {
+      this.data = { x, y };
+    } else {
+      this.data = { x: 0, y: 0 };
+    }
   }
 }
 
-class GamePacketResponse extends Response {
-  constructor() {
+export class GamePacketResponse extends Response {
+  constructor();
+  constructor(x: number, y: number);
+  constructor(x?: number, y?: number) {
     super();
+    if (x !== undefined && y !== undefined) {
+      this.data = { x, y };
+    } else {
+      this.data = { x: -1, y: -1 };
+    }
+    console.log('sending : ' + this.data.x);
   }
 }
 
@@ -130,7 +145,7 @@ class GamePacketResponse extends Response {
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 
-export class MultiplayerServerSystem extends PacketManager {
+export class MultiplayerServerSystem extends MultiplayerSocket {
   // Properties -----------------------------------
 
   // Fields ---------------------------------------
@@ -167,20 +182,20 @@ export class MultiplayerServerSystem extends PacketManager {
       this.consoleLog('Server connection by client socked.id = ' + socket.id);
       this._socket = socket;
 
-      this.onRequest(SessionStartRequest, (data) => {
+      this.onRequest(SessionStartRequest, (response) => {
         this.emitResponse(new SessionStartResponse());
       });
 
-      this.onRequest(GameCreateRequest, (data) => {
+      this.onRequest(GameCreateRequest, (response) => {
         this.emitResponse(new GameCreateResponse());
       });
 
-      this.onRequest(GameJoinRequest, (data) => {
-        this.emitResponse(new GameJoinRequest());
+      this.onRequest(GameJoinRequest, (response) => {
+        this.emitResponse(new GameJoinResponse());
       });
 
-      this.onRequest(GamePacketRequest, (data) => {
-        this.emitResponse(new GamePacketResponse());
+      this.onRequest(GamePacketRequest, (response) => {
+        this.emitResponse(new GamePacketResponse(response.data.x, response.data.y));
       });
 
       this._socket.on('disconnect', () => {
@@ -189,15 +204,19 @@ export class MultiplayerServerSystem extends PacketManager {
     });
   }
 
-  public emitResponse(response: Response): void {
+  protected emitResponse<T extends Response>(response: T): void {
+    //Check type
     if (!(response instanceof Response)) {
-      this.consoleLogError(`!!!!emitResponse() ${(response as any).constructor.name} wrong type !!!!`);
+      this.consoleLogError(`!!!!emitResponse() failed. Wrong type of ${(response as any).constructor.name}.`);
+      return;
     }
+
+    //Emit only proper type
     console.log('response: ' + response.constructor.name + ' was : ' + response);
     this.emitPacket(response);
   }
 
-  private onRequest<T extends Request>(RequestClass: new () => T, onRequestCallback: (request: T) => void): void {
+  protected onRequest<T extends Request>(RequestClass: new () => T, onRequestCallback: (request: T) => void): void {
     this.onPacket(RequestClass, onRequestCallback);
   }
 
