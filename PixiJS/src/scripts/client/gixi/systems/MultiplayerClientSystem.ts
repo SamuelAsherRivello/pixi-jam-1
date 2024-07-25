@@ -73,11 +73,11 @@ export class MultiplayerClientSystem extends SystemBase {
 
     // Methods ------------------------------
 
-    private consoleLog(msg: string) {
+    protected consoleLog(msg: string) {
         if (!this.isDebug) {
             return;
         }
-        console.log(`[${(MultiplayerClientSystem).name}] ${msg}`);
+        console.log(`[${this.constructor.name}] ${msg}`);
     }
 
     // Event Handlers -------------------------------
