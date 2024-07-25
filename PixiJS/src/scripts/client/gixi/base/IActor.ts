@@ -1,4 +1,3 @@
-import * as PIXI from 'pixi.js';
 import { GixiApplication } from '../GixiApplication';
 import { IActorConfiguration } from './IActorConfiguration';
 
@@ -16,5 +15,4 @@ export interface IActor {
     onAdded(): void;
     onRemoved(): void;
     onResize(app: GixiApplication): void;
-    onTick(ticker: PIXI.Ticker): void;
 }

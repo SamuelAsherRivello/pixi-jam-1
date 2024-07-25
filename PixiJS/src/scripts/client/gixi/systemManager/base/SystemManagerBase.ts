@@ -1,7 +1,8 @@
+import { SystemBase } from "@client/gixi/systems/base/SystemBase";
 import { Locator, LocatorContructor } from "../../../core/locators/Locator";
 import { GixiApplication } from "../../GixiApplication";
-import { ISystemBase } from "../../systems/base/SystemBase";
 import { ISystemManager } from "./ISystemManager";
+import { Ticker } from "pixi.js";
 
 /**
  * 
@@ -23,7 +24,7 @@ export class SystemManagerBase implements ISystemManager {
 
 
     // Fields ---------------------------------------
-    protected _locator: Locator<ISystemBase> = new Locator<ISystemBase>();
+    protected _locator: Locator<SystemBase> = new Locator<SystemBase>();
     protected _isInitialized: boolean = false;
     protected _app!: GixiApplication;
 
@@ -51,20 +52,25 @@ export class SystemManagerBase implements ISystemManager {
         }
     }
 
-    // Locator API Methods -------------------------------
-    public hasItem<U extends ISystemBase>(key: LocatorContructor<U>): boolean {
+    // Methods -----------------------------------------
+    public hasItem<U extends SystemBase>(key: LocatorContructor<U>): boolean {
         return this._locator.hasItem(key);
     }
 
-    public addItem<U extends ISystemBase>(key: LocatorContructor<U>, system: U): void {
+    public addItem<U extends SystemBase>(key: LocatorContructor<U>, system: U): void {
         this._locator.addItem(key, system);
     }
 
-    public getItem<U extends ISystemBase>(key: LocatorContructor<U>): U {
+    public getItem<U extends SystemBase>(key: LocatorContructor<U>): U {
         return this._locator.getItem(key) as U;
     }
 
-    public removeItem<U extends ISystemBase>(key: LocatorContructor<U>): void {
+    public removeItem<U extends SystemBase>(key: LocatorContructor<U>): void {
         this._locator.removeItem(key);
+    }
+
+    // Event Handlers  -------------------------------
+    public onTick(ticker: Ticker): void {
+        console.log("Method must be overriden");
     }
 }

@@ -1,12 +1,12 @@
 import { GixiApplication } from "../GixiApplication";
-import { SystemBase } from "./base/SystemBase";
-import { ISystemBase } from "./base/SystemBase";
 import { Tilemap } from '../tilemap/Tilemap';
+import { SystemBase } from "./base/SystemBase";
+import * as PIXI from 'pixi.js';
 
 /**
  * TilemapCollisionSystem handles lookups for tilemap info
  */
-export class TilemapCollisionSystem extends SystemBase implements ISystemBase {
+export class TilemapCollisionSystem extends SystemBase {
 
     // Properties -------------------------------
 
@@ -41,6 +41,9 @@ export class TilemapCollisionSystem extends SystemBase implements ISystemBase {
     }
 
     // Event Handlers -------------------------------
+    public override onTick(ticker: PIXI.Ticker): void {
+        //Use if desired
+    }
 }
 
 

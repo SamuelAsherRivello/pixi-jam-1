@@ -1,12 +1,12 @@
 import { io, Socket } from "socket.io-client";
 import { GixiApplication } from "../GixiApplication";
-import { ISystemBase } from "./base/SystemBase";
 import { SystemBase } from "./base/SystemBase";
+import * as PIXI from 'pixi.js';
 
 /**
  * Handles keyboard input and maintains the state of keys.
  */
-export class MultiplayerSystem extends SystemBase implements ISystemBase {
+export class MultiplayerClientSystem extends SystemBase {
 
     // Fields ---------------------------------------
     public isDebug: boolean = true;
@@ -30,9 +30,11 @@ export class MultiplayerSystem extends SystemBase implements ISystemBase {
         this.socket = io('http://localhost:3001');
 
         this.socket.on('connect', () => {
-            this.consoleLog('client connected to server 123');
+            this.consoleLog('client connected to server 456');
 
             const request = new SessionStartRequest();
+
+            this.consoleLog("sending: " + SessionStartRequest.name)
             this.socket.emit(SessionStartRequest.name, JSON.stringify(request));
         });
 
@@ -75,7 +77,12 @@ export class MultiplayerSystem extends SystemBase implements ISystemBase {
         if (!this.isDebug) {
             return;
         }
-        console.log(`[${(MultiplayerSystem).name}] ${msg}`);
+        console.log(`[${(MultiplayerClientSystem).name}] ${msg}`);
+    }
+
+    // Event Handlers -------------------------------
+    public override onTick(ticker: PIXI.Ticker): void {
+        //Use if desired
     }
 }
 

@@ -1,22 +1,14 @@
-import { GixiApplication } from "../../GixiApplication";
-import { IInitializableAsync } from "../../base/IInitializeAsync";
+import { LocatorContructor } from "@client/core/locators/Locator";
+import { IInitializableAsync } from "@client/gixi/base/IInitializeAsync";
+import { ITickable } from "@client/gixi/base/ITickable";
+import { GixiApplication } from "@client/gixi/GixiApplication";
+import { Ticker } from "pixi.js";
 
 
 /**
  * 
  */
-export interface ISystemBase extends IInitializableAsync {
-
-    // Properties -----------------------------------
-
-    // Methods --------------------------------------
-
-}
-
-/**
- * 
- */
-export class SystemBase implements ISystemBase {
+export class SystemBase implements IInitializableAsync, ITickable {
 
     // Properties -----------------------------------
     get isInitialized(): boolean {
@@ -27,13 +19,14 @@ export class SystemBase implements ISystemBase {
     protected _app: GixiApplication;
     protected _isInitialized: boolean = false;
 
+
     // Initialization -------------------------------
     constructor(app: GixiApplication) {
         this._app = app;
     }
 
     public async initializeAsync(): Promise<any> {
-        //console.log("Method must be overriden");
+        console.log("Method must be overriden. " + this.constructor.name);
     }
 
     public requireIsInitialized() {
@@ -43,4 +36,23 @@ export class SystemBase implements ISystemBase {
     }
 
     // Methods --------------------------------------
+    public hasItem<U extends SystemBase>(key: LocatorContructor<U>): boolean {
+        console.log("Method must be overriden. " + this.constructor.name);
+        return false;
+    }
+    public addItem<U extends SystemBase>(key: LocatorContructor<U>, system: U): void {
+        console.log("Method must be overriden. " + this.constructor.name);
+    }
+    public getItem<U extends SystemBase>(key: LocatorContructor<U>): U {
+        console.log("Method must be overriden. " + this.constructor.name);
+        return null as unknown as U;
+    }
+    public removeItem<U extends SystemBase>(key: LocatorContructor<U>): void {
+        console.log("Method must be overriden. " + this.constructor.name);
+    }
+
+    // Event Handlers -------------------------------
+    public onTick(ticker: Ticker): void {
+        console.log("Method must be overriden. " + this.constructor.name);
+    }
 }

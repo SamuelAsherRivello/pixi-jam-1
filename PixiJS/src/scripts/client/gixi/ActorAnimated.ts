@@ -4,6 +4,7 @@ import { GixiUtility } from './GixiUtility';
 import { IActor } from './base/IActor';
 import { IInitializableAsync } from './base/IInitializeAsync';
 import * as PIXI from 'pixi.js';
+import { ITickable } from './base/ITickable';
 
 
 
@@ -93,7 +94,7 @@ const ActorAnimatedConfigurationDefault: ActorAnimatedConfiguration = {
  * Represents a coin in the game.
  * 
  */
-export class ActorAnimated extends ActorContainer implements IInitializableAsync, IActor {
+export class ActorAnimated extends ActorContainer implements IInitializableAsync, IActor, ITickable {
 
 
     // Properties -----------------------------------

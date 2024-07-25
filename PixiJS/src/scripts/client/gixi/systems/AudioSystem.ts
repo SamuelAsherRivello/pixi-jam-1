@@ -1,13 +1,13 @@
 import { Sound, sound } from "@pixi/sound";
 import { GixiApplication } from "../GixiApplication";
 import { SystemBase } from "./base/SystemBase";
-import { ISystemBase } from "./base/SystemBase";
+import { Ticker } from "pixi.js";
 
 
 /**
  * Handles keyboard input and maintains the state of keys.
  */
-export class AudioSystem extends SystemBase implements ISystemBase {
+export class AudioSystem extends SystemBase {
 
     // Properties -----------------------------------
 
@@ -91,5 +91,10 @@ export class AudioSystem extends SystemBase implements ISystemBase {
         x.speed = 1;
         x.volume = 1;
         x.play();
+    }
+
+    // Event Handlers -------------------------------
+    public override onTick(ticker: Ticker): void {
+        //Use if desired
     }
 }

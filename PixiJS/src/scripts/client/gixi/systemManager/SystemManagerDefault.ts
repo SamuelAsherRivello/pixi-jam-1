@@ -1,11 +1,13 @@
+import { Ticker } from "pixi.js";
 import { AudioSystem } from "../systems/AudioSystem";
 import { CollisionSystem } from "../systems/CollisionSystem";
 import { InputSystem } from "../systems/InputSystem";
 import { LocalDiskStorageSystem } from "../systems/LocalDiskStorageSystem";
-import { MultiplayerSystem } from "../systems/MultiplayerSystem";
+import { MultiplayerClientSystem } from "../systems/MultiplayerClientSystem";
 import { TilemapCollisionSystem } from "../systems/TilemapCollisionSystem";
 import { ISystemManager } from "./base/ISystemManager";
 import { SystemManagerBase } from "./base/SystemManagerBase";
+import { SystemBase } from "../systems/base/SystemBase";
 
 /**
  * 
@@ -19,6 +21,7 @@ export class SystemManagerDefault extends SystemManagerBase implements ISystemMa
     // Properties -----------------------------------
 
     // Fields ---------------------------------------
+    private systems!: SystemBase[];
 
     // Initialization -------------------------------
     constructor() {
@@ -45,18 +48,26 @@ export class SystemManagerDefault extends SystemManagerBase implements ISystemMa
         this._locator.addItem(TilemapCollisionSystem, new TilemapCollisionSystem(this._app));
         this._locator.addItem(InputSystem, new InputSystem(this._app));
         this._locator.addItem(AudioSystem, new AudioSystem(this._app));
-        this._locator.addItem(MultiplayerSystem, new MultiplayerSystem(this._app));
+        this._locator.addItem(MultiplayerClientSystem, new MultiplayerClientSystem(this._app));
         this._locator.addItem(LocalDiskStorageSystem, new LocalDiskStorageSystem(this._app));
-        const systems = [
+
+        //
+        this.systems = [
             this._locator.getItem(CollisionSystem),
             this._locator.getItem(TilemapCollisionSystem),
             this._locator.getItem(InputSystem),
             this._locator.getItem(AudioSystem),
-            this._locator.getItem(MultiplayerSystem),
+            this._locator.getItem(MultiplayerClientSystem),
             this._locator.getItem(LocalDiskStorageSystem),
         ];
 
-        await Promise.all(systems.map(system => system.initializeAsync()));
+        await Promise.all(this.systems.map(system => system.initializeAsync()));
     }
 
+
+    // Event Handlers  -------------------------------
+    public override onTick(ticker: Ticker): void {
+
+        this.systems.forEach(system => system.onTick(ticker));
+    }
 }

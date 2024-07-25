@@ -5,6 +5,7 @@ import { IInitializableAsync } from './base/IInitializeAsync';
 import { ActorContainer } from './ActorContainer';
 import { SystemManagerDefault as SystemManagerDefault } from './systemManager/SystemManagerDefault';
 import { ISystemManager } from './systemManager/base/ISystemManager';
+import { ITickable } from './base/ITickable';
 
 /**
  * Configuration
@@ -34,7 +35,7 @@ const GixiApplicationConfigurationDefault: GixiApplicationConfiguration = {
 /**
  * Wrapper class for initializing and managing a PixiJS application.
  */
-export class GixiApplication extends EventEmitter implements IInitializableAsync {
+export class GixiApplication extends EventEmitter implements IInitializableAsync, ITickable {
 
 
   // Constants ------------------------------------
@@ -119,6 +120,7 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
   }
 
 
+
   /**
    * Initializes the PixiJS application.
    */
@@ -190,7 +192,8 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
       this.viewport.center = this.getScreenCenterpoint();
 
       this.app.ticker.add((ticker) => {
-        this.viewport.update(ticker.deltaMS);
+        //Do any ticking inside onTick far below
+        this.onTick(ticker);
       });
 
 
@@ -345,4 +348,8 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
   }
 
   // Event Handlers -------------------------------
+  public onTick(ticker: PIXI.Ticker): void {
+    this.viewport.update(ticker.deltaMS);
+    this._systemManager.onTick(ticker);
+  }
 }

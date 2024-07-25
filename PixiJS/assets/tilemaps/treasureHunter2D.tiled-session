@@ -3,8 +3,9 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "TreasureAdventureMap.tmx",
+    "activeFile": "TreasureHunter2D.tmx",
     "expandedProjectPaths": [
+        "."
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -12,8 +13,21 @@
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "ObjectsTileset.tsx": {
+            "scaleInDock": 3,
+            "scaleInEditor": 1
+        },
+        "PlantsTileset.tsx": {
+            "scaleInDock": 0.75,
+            "scaleInEditor": 1
+        },
         "StoneGroundTileset.tsx": {
-            "scaleInDock": 1
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "StructTileset.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "TreasureAdventureMap.tmx": {
             "scale": 0.31765625,
@@ -23,13 +37,28 @@
                 "y": 801.1805213969504
             }
         },
+        "TreasureHunter2D.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 1537,
+                "y": 1835
+            }
+        },
         "TreasureHunter2D_TestSmallerMap.tmx": {
+            "expandedObjectLayers": [
+                3
+            ],
             "scale": 0.125,
             "selectedLayer": 5,
             "viewCenter": {
                 "x": 1804,
                 "y": 1884
             }
+        },
+        "WallTileset.tsx": {
+            "scaleInDock": 0.75,
+            "scaleInEditor": 1
         }
     },
     "last.exportedFilePath": "D:/Documents/Projects/VC/PixiJS/pixi-jam-1/PixiJS/assets/tilemaps",
@@ -39,12 +68,18 @@
     "map.lastUsedFormat": "tmx",
     "map.width": 50,
     "openFiles": [
-        "GrassTileset.tsx",
-        "TreasureAdventureMap.tmx"
+        "TreasureHunter2D.tmx"
     ],
     "project": "treasureHunter2D.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "TreasureHunter2D.tmx",
+        "TreasureHunter2D_TestSmallerMap.tmx",
+        "StoneGroundTileset.tsx",
+        "StructTileset.tsx",
+        "WallTileset.tsx",
+        "ObjectsTileset.tsx",
+        "PlantsTileset.tsx",
         "GrassTileset.tsx",
         "TreasureAdventureMap.tmx"
     ],

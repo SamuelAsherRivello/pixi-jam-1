@@ -1,20 +1,21 @@
 import { LocatorContructor } from "@client/core/locators/Locator";
 import { GixiApplication } from "../../GixiApplication";
 import { IInitializableAsync } from "../../base/IInitializeAsync";
-import { ISystemBase } from "../../systems/base/SystemBase";
+import { SystemBase } from "@client/gixi/systems/base/SystemBase";
+import { ITickable } from "@client/gixi/base/ITickable";
 
 
 /**
  * 
  */
-export interface ISystemManager extends IInitializableAsync {
+export interface ISystemManager extends IInitializableAsync, ITickable {
 
     // Properties -----------------------------------
     set App(value: GixiApplication);
 
     // Methods --------------------------------------
-    hasItem<U extends ISystemBase>(key: LocatorContructor<U>): boolean;
-    addItem<U extends ISystemBase>(key: LocatorContructor<U>, system: U): void;
-    getItem<U extends ISystemBase>(key: LocatorContructor<U>): U;
-    removeItem<U extends ISystemBase>(key: LocatorContructor<U>): void;
+    hasItem<U extends SystemBase>(key: LocatorContructor<U>): boolean;
+    addItem<U extends SystemBase>(key: LocatorContructor<U>, system: U): void;
+    getItem<U extends SystemBase>(key: LocatorContructor<U>): U;
+    removeItem<U extends SystemBase>(key: LocatorContructor<U>): void;
 }

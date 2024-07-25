@@ -1,12 +1,11 @@
 import { GixiApplication } from "../GixiApplication";
 import { SystemBase } from "./base/SystemBase";
-import { ISystemBase } from "./base/SystemBase";
-
+import * as PIXI from 'pixi.js';
 
 /** 
  * LocalDiskStorageSystem handles local storage operations
  */
-export class LocalDiskStorageSystem extends SystemBase implements ISystemBase {
+export class LocalDiskStorageSystem extends SystemBase {
     constructor(app: GixiApplication) {
         super(app);
     }
@@ -45,5 +44,10 @@ export class LocalDiskStorageSystem extends SystemBase implements ISystemBase {
 
     public hasData(key: string): boolean {
         return localStorage.getItem(key) !== null;
+    }
+
+    // Event Handlers -------------------------------
+    public override onTick(ticker: PIXI.Ticker): void {
+        //Use if desired
     }
 }

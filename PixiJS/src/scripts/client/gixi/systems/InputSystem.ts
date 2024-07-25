@@ -1,11 +1,11 @@
+import * as PIXI from 'pixi.js';
 import { GixiApplication } from "../GixiApplication";
-import { ISystemBase } from "./base/SystemBase";
 import { SystemBase } from "./base/SystemBase";
 
 /**
  * Handles keyboard input and maintains the state of keys.
  */
-export class InputSystem extends SystemBase implements ISystemBase {
+export class InputSystem extends SystemBase {
     // Fields ---------------------------------------
     private _keyStateDictionary: Map<number, KeyState>;
 
@@ -99,6 +99,11 @@ export class InputSystem extends SystemBase implements ISystemBase {
         this._keyStateDictionary.forEach((keyState) => {
             keyState.isDownThisFrame = false;
         });
+    }
+
+    // Event Handlers -------------------------------
+    public override onTick(ticker: PIXI.Ticker): void {
+        //Use if desired
     }
 }
 

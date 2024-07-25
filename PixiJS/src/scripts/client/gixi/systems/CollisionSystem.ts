@@ -1,16 +1,15 @@
 import * as PIXI from 'pixi.js';
 import { GixiApplication } from "../GixiApplication";
-import { SystemBase } from "./base/SystemBase";
 import { ICollisionSystemBody } from '../base/ICollisionSystemBody';
 import { GixiUtility, ICollisionSystemBodyInterfaceLookup } from "../GixiUtility";
-import { ISystemBase } from "./base/SystemBase";
+import { SystemBase } from './base/SystemBase';
 
 
 /**
  * CollisionSystem is responsible for detecting collisions between PIXI containers.
  * It extends the SystemBase class and provides methods to get colliding sprites.
  */
-export class CollisionSystem extends SystemBase implements ISystemBase {
+export class CollisionSystem extends SystemBase {
 
     // Properties -------------------------------
 
@@ -123,6 +122,11 @@ export class CollisionSystem extends SystemBase implements ISystemBase {
             bounds1.y < bounds2.y + bounds2.height &&
             bounds1.y + bounds2.height > bounds2.y
         );
+    }
+
+    // Event Handlers -------------------------------
+    public override onTick(ticker: PIXI.Ticker): void {
+        //Use if desired
     }
 }
 
