@@ -126,7 +126,7 @@ export class TreasureHunter2D extends GixiApplication {
     const playerGhost = new PlayerGhost(this, {
       textureUrl: this._treasureHunterData.playerGhostTextureUrl,
     });
-    this.addToViewport(playerGhost);
+    this.addToStage(playerGhost);
     playerGhost.position = this._player.position;
 
     /////////////////////////////
@@ -135,7 +135,7 @@ export class TreasureHunter2D extends GixiApplication {
     this.viewport.follow(this._player, {
       speed: 1,
       acceleration: 1,
-      radius: 20,
+      radius: 500,
     });
 
     /////////////////////////////

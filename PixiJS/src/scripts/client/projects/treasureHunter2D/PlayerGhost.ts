@@ -39,8 +39,13 @@ export class PlayerGhost extends ActorStatic {
 
     multiplayerClientSystem.onResponse(GamePacketResponse, (response) => {
       console.log('ghost.OnResponse() :', response.data.x, response.data.y);
-      this.x = response.data.x;
-      this.y = response.data.y;
+
+      let newPosition = new PIXI.Point(response.data.x, response.data.y);
+
+      //TODO: toGlobal works, but is only needed if the player is on viewport
+      //and the ghost is on the stage. If both are on the viewport, remove this
+      newPosition = this._app.viewport.toGlobal(newPosition);
+      this.position = newPosition;
     });
   }
 
