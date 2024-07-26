@@ -6,11 +6,18 @@
     <link rel="icon" href="./assets/images/favicon.ico" type="image/x-icon" />
     <title>PixiJS Jam #1</title>
   </head>
-
   <body>
     <!--/////////////////////////
-  // Embed Pixi JS Canvas
-  //////////////////////////-->
+    // Embed Pixi JS Canvas
+    //////////////////////////-->
     <canvas id="pixi-application-canvas"></canvas>
+
+    <script>
+      window.onload = async function () {
+        if (window.createAndInitializeApp) {
+          await window.createAndInitializeApp('pixi-application-canvas');
+        }
+      };
+    </script>
   </body>
 </html>

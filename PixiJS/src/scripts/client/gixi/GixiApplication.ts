@@ -11,22 +11,23 @@ import { ITickable } from './base/ITickable';
  * Configuration
  */
 export interface GixiApplicationConfiguration {
+  canvasId: string;
   widthInitial: number;
   heightInitial: number;
   backgroundColor: number;
   minFPS: number;
   maxFPS: number;
-  systemManager: ISystemManager;
+  systemManager?: ISystemManager;
   data: { [key: string]: any };
 }
 
 const GixiApplicationConfigurationDefault: GixiApplicationConfiguration = {
+  canvasId: 'pixi-application-canvas',
   widthInitial: 1920,
   heightInitial: 1080,
   minFPS: 1,
   maxFPS: 240,
   backgroundColor: 0x1099bb,
-  systemManager: new SystemManagerDefault(),
   data: {},
 };
 
@@ -86,12 +87,11 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
   private _isFullscreen: boolean = false;
 
   // Initialization -------------------------------
-  constructor(canvasId: string = 'pixi-application-canvas', configuration?: Partial<GixiApplicationConfiguration>) {
+  constructor(configuration?: Partial<GixiApplicationConfiguration>) {
     /////////////////////////////
     // Setup
     /////////////////////////////
     super();
-    this._canvasId = canvasId;
 
     //TODO: The console logs out the renderer upon init.
     //      Note its forever "WebGL". I want WebGPU. - srivello
@@ -100,7 +100,13 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
       ...GixiApplicationConfigurationDefault,
       ...configuration,
     };
-    this._systemManager = this._configuration.systemManager;
+
+    if (this._configuration.systemManager) {
+      this._systemManager = this._configuration.systemManager;
+    } else {
+      this._systemManager = new SystemManagerDefault();
+    }
+    this._canvasId = this._configuration.canvasId;
 
     // Every SuperSprite instance listens to App
     // So this number must be >= to the number of SuperSprite instances

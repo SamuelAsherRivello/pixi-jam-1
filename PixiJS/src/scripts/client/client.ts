@@ -57,27 +57,28 @@ const treasureHunterData: ITreasureHunterData = {
 /////////////////////////////
 // Application Configuration
 /////////////////////////////
-
 //TODO: Make a subtype that is game specific so you can populate
 //      zero or more properties instead of all
 export const gixiAppConfiguration: GixiApplicationConfiguration = {
+  canvasId: 'pixi-application-canvas',
   widthInitial: 1920,
   heightInitial: 1080,
   minFPS: 1,
   maxFPS: 240,
   backgroundColor: 0x87867a,
-  systemManager: new SystemManagerDefault(),
   data: treasureHunterData,
 };
 
 /////////////////////////////
-// Application Creation
+// Application Creation and Initialization
 /////////////////////////////
-const treasureHunterApp = new TreasureHunter2D(gixiAppConfiguration);
+export async function createAndInitializeApp(canvasId: string): Promise<TreasureHunter2D> {
+  console.log('createAndInitializeApp() : ' + canvasId);
+  const config = { ...gixiAppConfiguration, canvasId: canvasId };
+  const app = new TreasureHunter2D(config);
+  await app.initializeAsync();
+  return app;
+}
 
-/////////////////////////////
-// Application Initialize
-/////////////////////////////
-(async () => {
-  await treasureHunterApp.initializeAsync();
-})();
+// Expose the function globally
+(window as any).createAndInitializeApp = createAndInitializeApp;

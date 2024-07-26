@@ -35,6 +35,12 @@ export default (env) => {
       filename: '[name].[contenthash].bundle.js',
       path: path.resolve(__dirname, 'dist'),
       clean: true,
+      library: {
+        name: 'TreasureHunterClient',
+        type: 'umd',
+        export: 'createAndInitializeApp',
+      },
+      globalObject: 'this',
     },
     devtool: 'source-map',
     resolve: {
@@ -84,15 +90,13 @@ export default (env) => {
         if (!devServer) {
           throw new Error('webpack-dev-server is not defined');
         }
-
         devServer.middleware.waitUntilValid(() => {
           console.log(`
 //- - - - - - - - - - - - - - - - - - - - - - - - - - -
-// Success! Play Via Browser:  http://localhost:${devServer.options.port}/ 
+// Success! Play Via Browser:  http://localhost:${devServer.options.port}/
 //- - - - - - - - - - - - - - - - - - - - - - - - - - -
           `);
         });
-
         return middlewares;
       },
     },

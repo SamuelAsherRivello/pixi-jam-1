@@ -25,6 +25,7 @@ export class SystemManagerDefault extends SystemManagerBase implements ISystemMa
   // Initialization -------------------------------
   constructor() {
     super();
+    console.log('SystemManagerDefault.constructor!!!!');
   }
 
   public async initializeAsync(): Promise<any> {
@@ -40,6 +41,7 @@ export class SystemManagerDefault extends SystemManagerBase implements ISystemMa
     //this._locator.addItem(CollisionSystem //which is the base class , new CollisionSystemDefault(this._app));
 
     //
+    console.log('SystemManagerDefault.initializeAsync!!!!');
     this._locator.addItem(CollisionSystem, new CollisionSystem(this._app));
     this._locator.addItem(TilemapCollisionSystem, new TilemapCollisionSystem(this._app));
     this._locator.addItem(InputSystem, new InputSystem(this._app));

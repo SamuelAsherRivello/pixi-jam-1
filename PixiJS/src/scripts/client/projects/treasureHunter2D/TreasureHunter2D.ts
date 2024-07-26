@@ -42,7 +42,7 @@ export class TreasureHunter2D extends GixiApplication {
 
   // Initialization -------------------------------
   constructor(configuration: GixiApplicationConfiguration) {
-    super('pixi-application-canvas', configuration);
+    super(configuration);
     this._treasureHunterData = configuration.data as ITreasureHunterData;
 
     this._stats = new Stats();
