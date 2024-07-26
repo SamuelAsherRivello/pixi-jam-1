@@ -36,6 +36,10 @@ export class MultiplayerSocketClient extends MultiplayerSocket {
     return this._isConnected;
   }
 
+  public get localSocketId(): string {
+    return this._socket ? this._socket.id : '-1';
+  }
+
   public get isGameJoined(): boolean {
     return this._hasJoinedGame;
   }
@@ -72,6 +76,7 @@ export class MultiplayerSocketClient extends MultiplayerSocket {
       this.consoleLog('Client connected to server');
 
       this._isConnected = true;
+      this._socket;
 
       const request = new SessionStartRequest();
       this.emitRequest(request);
@@ -80,11 +85,15 @@ export class MultiplayerSocketClient extends MultiplayerSocket {
     this.onResponse(SessionStartResponse, (response) => {
       this._isSessionStarted = true;
       this._hasJoinedGame = false;
+      console.log('SessionStartResponse: ' + response.data);
       const request = new GameCreateRequest();
       this.emitRequest(request);
     });
 
     this.onResponse(GameCreateResponse, (response) => {
+      //
+      console.log('GameCreateResponse: ' + response.data);
+      //
       const request = new GameJoinRequest();
       this.emitRequest(request);
     });
@@ -118,6 +127,8 @@ export class MultiplayerSocketClient extends MultiplayerSocket {
       return;
     }
     await this._badConnectionSimulator.simulateLatencyAsync();
+
+    request.data.socketId = this._socket.id;
 
     //Emit only proper type
     this.emitPacket(request);

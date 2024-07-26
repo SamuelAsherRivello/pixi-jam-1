@@ -1,7 +1,7 @@
 import { GixiApplication } from '@client/gixi/GixiApplication';
 import { SystemBase } from '../base/SystemBase';
 import * as PIXI from 'pixi.js';
-import { MultiplayerSocketClient } from './MultiplayerClientSocket';
+import { MultiplayerSocketClient } from './MultiplayerSocketClient';
 import { GamePacketRequest, PacketRequest, PacketResponse } from '@shared/multiplayer/Packet';
 
 /**
@@ -19,6 +19,10 @@ export class MultiplayerClientSystem extends SystemBase {
 
   public get isConnected(): boolean {
     return this._multiplayerSocketClient.isConnected;
+  }
+
+  public get localSocketId(): string {
+    return this._multiplayerSocketClient.localSocketId;
   }
 
   public get isGameJoined(): boolean {

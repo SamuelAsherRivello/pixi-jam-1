@@ -17,5 +17,5 @@
     "noEmit": false,
     "sourceMap": true
   },
-  "include": ["**/*", "../shared/multiplayer/BadConnectionSimulator.ts"]
+  "include": ["**/*"]
 }

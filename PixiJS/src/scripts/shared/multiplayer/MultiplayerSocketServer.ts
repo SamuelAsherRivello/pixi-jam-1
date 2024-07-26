@@ -16,6 +16,8 @@ import {
   GameJoinResponse,
   GamePacketRequest,
   GamePacketResponse,
+  Guid,
+  Client,
 } from './Packet.js';
 
 export class MultiplayerSocketServer extends MultiplayerSocket {
@@ -24,6 +26,7 @@ export class MultiplayerSocketServer extends MultiplayerSocket {
   // Fields ---------------------------------------
   private httpServer: http.Server;
   private ioServer: Server;
+  private _clients: Client[] = [];
 
   // Initialization -------------------------------
   constructor() {
@@ -52,23 +55,34 @@ export class MultiplayerSocketServer extends MultiplayerSocket {
 
     // Subscribing within here... any chance it'll double-subscribe on reconnect?
     this.ioServer.on('connection', (socket) => {
-      this.consoleLog('Server connection by client socked.id = ' + socket.id);
+      const client = new Client(socket.id);
+      this._clients.push(client);
+      const clientCount = this._clients.length + 1;
+      this.consoleLog(`Server connection by client. clientCount = ${clientCount}, socketId = ${client.socketId}`);
       this._socket = socket;
 
-      this.onRequest(SessionStartRequest, (response) => {
-        this.emitResponse(new SessionStartResponse());
+      this.onRequest(SessionStartRequest, (request) => {
+        //
+        console.log('s from client : ' + request.data.socketId);
+        const response = new SessionStartResponse(Guid.createNew());
+        this.emitResponse(response);
       });
 
-      this.onRequest(GameCreateRequest, (response) => {
-        this.emitResponse(new GameCreateResponse());
+      this.onRequest(GameCreateRequest, (request) => {
+        //
+        console.log('g from client : ' + request.data.socketId);
+        const response = new GameCreateResponse(Guid.createNew());
+        this.emitResponse(response);
       });
 
-      this.onRequest(GameJoinRequest, (response) => {
+      this.onRequest(GameJoinRequest, (request) => {
         this.emitResponse(new GameJoinResponse());
       });
 
-      this.onRequest(GamePacketRequest, (response) => {
-        this.emitResponse(new GamePacketResponse(response.data.x, response.data.y));
+      this.onRequest(GamePacketRequest, (request) => {
+        //
+        const response = new GamePacketResponse(request.data.socketId, request.data.x, request.data.y);
+        this.emitResponse(response);
       });
 
       this._socket.on('disconnect', () => {
