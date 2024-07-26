@@ -7,17 +7,45 @@
     <title>PixiJS Jam #1</title>
   </head>
   <body>
-    <!--/////////////////////////
-    // Embed Pixi JS Canvas
-    //////////////////////////-->
-    <canvas id="pixi-application-canvas"></canvas>
+    <div id="buttons">
+      <button onclick="setCanvasConfig(1)">1</button>
+      <button onclick="setCanvasConfig(2)">2</button>
+      <button onclick="setCanvasConfig(4)">4</button>
+    </div>
+
+    <div id="canvas-container"></div>
 
     <script>
-      window.onload = async function () {
-        if (window.createAndInitializeApp) {
-          await window.createAndInitializeApp('pixi-application-canvas');
+      let apps = [];
+
+      async function setCanvasConfig(count) {
+        const container = document.getElementById('canvas-container');
+        container.innerHTML = '';
+        container.className = `canvas-count-${count}`;
+
+        for (let app of apps) {
+          if (app && typeof app.destroy === 'function') {
+            app.destroy();
+          }
         }
-      };
+        apps = [];
+
+        for (let i = 0; i < count; i++) {
+          const canvas = document.createElement('canvas');
+          canvas.id = `pixi-application-canvas-${i}`;
+          container.appendChild(canvas);
+        }
+
+        // Add a small delay to ensure the canvas sizes have been computed
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        for (let i = 0; i < count; i++) {
+          const app = await window.createAndInitializeApp(`pixi-application-canvas-${i}`);
+          apps.push(app);
+        }
+      }
+
+      window.onload = () => setCanvasConfig(1);
     </script>
   </body>
 </html>

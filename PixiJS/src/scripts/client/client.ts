@@ -73,8 +73,30 @@ export const gixiAppConfiguration: GixiApplicationConfiguration = {
 // Application Creation and Initialization
 /////////////////////////////
 export async function createAndInitializeApp(canvasId: string): Promise<TreasureHunter2D> {
-  console.log('createAndInitializeApp() : ' + canvasId);
-  const config = { ...gixiAppConfiguration, canvasId: canvasId };
+  // Get the canvas element
+  const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
+
+  if (!canvas) {
+    throw new Error(`Canvas with id ${canvasId} not found`);
+  }
+
+  // Get the computed style of the canvas
+  const style = window.getComputedStyle(canvas);
+
+  // Parse the width and height, removing 'px' and accounting for the border
+  const width = parseInt(style.width, 10) - 4; // Subtracting 4 for the 2px border on each side
+  const height = parseInt(style.height, 10) - 4; // Subtracting 4 for the 2px border on each side
+
+  console.log(`createAndInitializeApp() id = ${canvasId} at size ${width}x${height}`);
+
+  // Update the configuration with the new dimensions
+  const config = {
+    ...gixiAppConfiguration,
+    canvasId: canvasId,
+    widthInitial: width,
+    heightInitial: height,
+  };
+
   const app = new TreasureHunter2D(config);
   await app.initializeAsync();
   return app;
