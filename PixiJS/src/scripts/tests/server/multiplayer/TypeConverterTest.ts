@@ -1,4 +1,4 @@
-import { TypeConverter } from '@shared/multiplayer/Packet';
+import { TypeConverter } from '@shared/multiplayer/MultiplayerSocket';
 class SimpleObject {
   property1: string = '';
   property2: number = 0;

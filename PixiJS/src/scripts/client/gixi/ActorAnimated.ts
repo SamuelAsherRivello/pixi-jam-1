@@ -67,13 +67,14 @@ class MultiAnimatedSprite {
  * Configuration
  */
 export interface ActorAnimatedConfiguration extends ActorContainerConfiguration {
-  //add the urls that define 'i am a coin' here
-  spriteSheetURL: string;
+  spriteSheetTextureUrl: string;
+  spriteSheetDataUrl: string;
 }
 
 const ActorAnimatedConfigurationDefault: ActorAnimatedConfiguration = {
   //populate urls here or pass them into the ActorAnimated constructor
-  spriteSheetURL: '',
+  spriteSheetTextureUrl: '',
+  spriteSheetDataUrl: '',
   canCollisionCheck: true,
   isTickable: true,
   isResizable: true,
@@ -114,11 +115,8 @@ export class ActorAnimated extends ActorContainer implements IInitializableAsync
     //2. Do some error checking here
     //      (See how ActorStatic does it.)
     //3. Update this snippet below as needed. Done!
-    const animatedTextureURL = this.configuration.spriteSheetURL;
-    const animatedTextureJSONURL = 'assets/images/AnimatedCoin/animated_coin.json';
-    this._multiAnimatedSprite = new MultiAnimatedSprite(animatedTextureURL, animatedTextureJSONURL);
+    this._multiAnimatedSprite = new MultiAnimatedSprite(this.configuration.spriteSheetTextureUrl, this.configuration.spriteSheetDataUrl);
     await this._multiAnimatedSprite.initializeAndReparent(this._app, this);
-    this._multiAnimatedSprite.play('Gold', 0.2);
 
     // Local
     //Do any additional initialization here

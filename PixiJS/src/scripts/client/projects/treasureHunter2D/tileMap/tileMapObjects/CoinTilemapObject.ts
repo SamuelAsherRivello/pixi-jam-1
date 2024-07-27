@@ -21,12 +21,12 @@ export class CoinTilemapObject extends ActorAnimated implements ICollisionSystem
   // Initialization -------------------------------
   constructor(app: GixiApplication) {
     const configuration: ActorAnimatedConfiguration = {
-      spriteSheetURL: 'assets/images/AnimatedCoin/animated_coin.png',
+      spriteSheetTextureUrl: 'assets/images/FreeKnight/_Idle.png',
+      spriteSheetDataUrl: 'assets/images/FreeKnight/_Idle.json',
       canCollisionCheck: false,
       isTickable: false,
       isResizable: false,
     };
-
     super(app, configuration);
 
     // Redeclare anything from super
@@ -46,11 +46,12 @@ export class CoinTilemapObject extends ActorAnimated implements ICollisionSystem
     // OPTIONAL: Try these - https://pixijs.io/filters/
     this.filters = [
       //new GlowFilter({ distance: 1, outerStrength: 1, innerStrength: 1, color: 0xffff00 }),
-      new DropShadowFilter({ blur: 1, alpha: 0.5, quality: 3, resolution: 2 }), //
+      // new DropShadowFilter({ blur: 1, alpha: 0.5, quality: 3, resolution: 2 }), //
     ];
 
     // Local
     //Do any additional initialization here
+    this._multiAnimatedSprite.play('Idle', 0.4);
   }
 
   // Methods --------------------------------------

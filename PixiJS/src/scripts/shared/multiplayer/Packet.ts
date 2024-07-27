@@ -129,16 +129,3 @@ export class Guid {
     return result.slice(0, length);
   }
 }
-
-export class TypeConverter {
-  static toJson(obj: any): string {
-    return JSON.stringify(obj);
-  }
-
-  static fromJson<T extends object>(json: string, cls: new (...args: any[]) => T): T {
-    const jsonObj = JSON.parse(json);
-    const instance = new cls();
-    Object.assign(instance, jsonObj);
-    return instance;
-  }
-}

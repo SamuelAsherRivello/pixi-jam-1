@@ -2,7 +2,7 @@
  * IMPORTANT FOR FILES OUTSIDE OF /CLIENT/: Always import using `.js` even though it's a `.ts` file.
  */
 
-import { Packet, TypeConverter } from './Packet.js';
+import { Packet } from './Packet.js';
 
 export class MultiplayerSocket {
   // Properties -----------------------------------
@@ -53,4 +53,17 @@ export class MultiplayerSocket {
     });
   }
   // Event Handlers ------------------------------
+}
+
+export class TypeConverter {
+  static toJson(obj: any): string {
+    return JSON.stringify(obj);
+  }
+
+  static fromJson<T extends object>(json: string, cls: new (...args: any[]) => T): T {
+    const jsonObj = JSON.parse(json);
+    const instance = new cls();
+    Object.assign(instance, jsonObj);
+    return instance;
+  }
 }
