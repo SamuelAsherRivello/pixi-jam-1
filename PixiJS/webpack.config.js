@@ -18,7 +18,7 @@ export default (env) => {
       patterns: [{ from: 'assets', to: 'assets' }],
     }),
     new MiniCssExtractPlugin({
-      filename: '[name].[contenthash].css',
+      filename: 'styles/[name].[contenthash].css', // Place CSS files in dist/styles/
     }),
   ];
 
@@ -32,7 +32,7 @@ export default (env) => {
       styles: './src/css/styles.css',
     },
     output: {
-      filename: '[name].[contenthash].bundle.js',
+      filename: 'scripts/[name].[contenthash].bundle.js', // Place JS files in dist/scripts/
       path: path.resolve(__dirname, 'dist'),
       clean: true,
       library: {
@@ -48,6 +48,8 @@ export default (env) => {
       alias: {
         '@client': path.resolve(__dirname, 'src/scripts/client'),
         '@shared': path.resolve(__dirname, 'src/scripts/shared'),
+        '@server': path.resolve(__dirname, 'src/scripts/server'),
+        '@tests': path.resolve(__dirname, 'src/scripts/tests'),
       },
     },
     module: {

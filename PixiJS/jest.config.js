@@ -11,7 +11,11 @@ export default {
     ],
   },
   moduleNameMapper: {
+    '^@client/(.*)$': '<rootDir>/src/scripts/client/$1',
+    '^@server/(.*)$': '<rootDir>/src/scripts/server/$1',
+    '^@shared/(.*)$': '<rootDir>/src/scripts/shared/$1',
+    '^@tests/(.*)$': '<rootDir>/src/scripts/tests/$1',
     '^@src/(.*)$': '<rootDir>/src/$1',
   },
-  testMatch: ['**/tests/**/*.ts', '**/?(*.)+(spec|test).ts'],
+  testMatch: ['**/src/scripts/tests/**/*.ts', '**/?(*.)+(spec|test).ts'],
 };

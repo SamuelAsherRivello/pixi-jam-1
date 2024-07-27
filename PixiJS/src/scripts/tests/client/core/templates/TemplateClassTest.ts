@@ -1,4 +1,4 @@
-import { TemplateClass } from '../../../../scripts/client/core/templates/TemplateClass';
+import { TemplateClass } from '@client/core/templates/TemplateClass';
 
 let templateClass: TemplateClass;
 

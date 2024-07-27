@@ -1,4 +1,4 @@
-import { Observable } from '../../../../scripts/client/core/observables/Observable';
+import { Observable } from '@client/core/observables/Observable';
 
 class SampleObservable<TValue> extends Observable<TValue> {}
 

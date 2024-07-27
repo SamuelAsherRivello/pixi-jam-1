@@ -1,4 +1,4 @@
-import { Locator } from '../../../../scripts/client/core/locators/Locator';
+import { Locator } from '@client/core/locators/Locator';
 
 // Define a common interface for the items
 interface ISystem {}
