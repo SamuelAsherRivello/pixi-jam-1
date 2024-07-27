@@ -16,8 +16,8 @@ import {
   GameJoinResponse,
   GamePacketRequest,
   GamePacketResponse,
-  Guid,
   Client,
+  Guid,
 } from './Packet.js';
 
 export class MultiplayerSocketServer extends MultiplayerSocket {

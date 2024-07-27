@@ -12,19 +12,19 @@ class CustomObservable<TValue> extends Observable<TValue> {
 }
 
 beforeAll(() => {
-  //console.log('TemplateClass.beforeAll()');
+  //console.log('ObservableClassTest.beforeAll()');
 });
 
 beforeEach(() => {
-  //console.log('TemplateClass.beforeEach()');
+  //console.log('ObservableClassTest.beforeEach()');
 });
 
 afterEach(() => {
-  //console.log('TemplateClass.afterEach()');
+  //console.log('ObservableClassTest.afterEach()');
 });
 
 afterAll(() => {
-  //console.log('TemplateClass.afterAll()');
+  //console.log('ObservableClassTest.afterAll()');
 });
 
 test('instance is not null when default', () => {

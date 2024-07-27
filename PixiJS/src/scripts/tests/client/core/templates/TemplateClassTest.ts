@@ -3,20 +3,20 @@ import { TemplateClass } from '@client/core/templates/TemplateClass';
 let templateClass: TemplateClass;
 
 beforeAll(() => {
-  //console.log('TemplateClass.beforeAll()');
+  //console.log('TemplateClassTest.beforeAll()');
 });
 
 beforeEach(() => {
-  //console.log('TemplateClass.beforeEach()');
+  //console.log('TemplateClassTest.beforeEach()');
   templateClass = new TemplateClass();
 });
 
 afterEach(() => {
-  //console.log('TemplateClass.afterEach()');
+  //console.log('TemplateClassTest.afterEach()');
 });
 
 afterAll(() => {
-  //console.log('TemplateClass.afterAll()');
+  //console.log('TemplateClassTest.afterAll()');
 });
 
 test('instance is not null when default', () => {

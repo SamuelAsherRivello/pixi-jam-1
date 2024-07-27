@@ -2,7 +2,7 @@
  * IMPORTANT FOR FILES OUTSIDE OF /CLIENT/: Always import using `.js` even though it's a `.ts` file.
  */
 
-import { Packet } from './Packet.js';
+import { Packet, TypeConverter } from './Packet.js';
 
 export class MultiplayerSocket {
   // Properties -----------------------------------
@@ -39,7 +39,7 @@ export class MultiplayerSocket {
   }
 
   protected emitPacket(packet: Packet): void {
-    this._socket.emit(packet.constructor.name, JSON.stringify(packet));
+    this._socket.emit(packet.constructor.name, TypeConverter.toJson(packet));
   }
 
   protected onPacket<T extends Packet>(PacketClass: new () => T, onCallback: (t: T) => void): void {
@@ -47,7 +47,7 @@ export class MultiplayerSocket {
 
     this._socket.on(PacketClass.name, (packetString: string) => {
       this.consoleLog(`onPacket() Call ${PacketClass.name}`);
-      const packet = JSON.parse(packetString) as T;
+      const packet = TypeConverter.fromJson(packetString, PacketClass) as T;
       console.log(packet);
       onCallback(packet);
     });
