@@ -14,8 +14,10 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "noEmit": false,
-    "sourceMap": true
+    "noEmit": true,
+    "sourceMap": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
   },
   "include": ["**/*"]
 }
