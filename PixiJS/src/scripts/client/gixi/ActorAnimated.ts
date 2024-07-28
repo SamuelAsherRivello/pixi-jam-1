@@ -1,79 +1,20 @@
 import { ActorContainer, ActorContainerConfiguration } from './ActorContainer';
 import { GixiApplication } from './GixiApplication';
-import { GixiUtility } from './GixiUtility';
 import { IActor } from './base/IActor';
 import { IInitializableAsync } from './base/IInitializeAsync';
 import * as PIXI from 'pixi.js';
 import { ITickable } from './base/ITickable';
-
-//NOTE: I put this class witin the same file as ActorAnimated
-//so I can NOT export it (to hide it from direct use). Needed? Not sure.
-class MultiAnimatedSprite {
-  // Fields ---------------------------------------
-  private _animationNameToAnimatedSprite: Map<string, PIXI.AnimatedSprite>;
-  private _textureImageURL: string;
-  private _spriteSheetURL: string;
-
-  // Initialization -------------------------------
-  constructor(newTextureImageURL: string, newSpriteSheetURL: string) {
-    this._textureImageURL = newTextureImageURL;
-    this._spriteSheetURL = newSpriteSheetURL;
-    this._animationNameToAnimatedSprite = new Map();
-  }
-
-  // Methods ------------------------------
-  public async initializeAndReparent(app: GixiApplication, parent: PIXI.Container) {
-    const spriteSheetAtlasResponse = await fetch(this._spriteSheetURL);
-    const spriteSheetAtlas = await spriteSheetAtlasResponse.json();
-    await PIXI.Assets.load(this._textureImageURL);
-    const texture = PIXI.Texture.from(this._textureImageURL);
-    const spriteSheet = new PIXI.Spritesheet(texture, spriteSheetAtlas);
-    await spriteSheet.parse();
-
-    const size = new PIXI.Point(spriteSheetAtlas.meta.size.w, spriteSheetAtlas.meta.size.h);
-
-    for (const [animationName, textures] of Object.entries(spriteSheet.animations)) {
-      this._animationNameToAnimatedSprite.set(animationName, new PIXI.AnimatedSprite(textures));
-    }
-
-    this._animationNameToAnimatedSprite.forEach((value: PIXI.AnimatedSprite, key: string) => {
-      value.label = MultiAnimatedSprite.name;
-      parent.addChild(value);
-
-      // 1 of 2
-      //NOTE: The parent center and/or the value center may not be proper
-      //TODO: Go to index.ts and try to put a coin at a specific world position and then be sure it looks good
-      value.setSize(size.x, size.y);
-
-      // 2 of 2
-      // Center the anchor and position
-      // to help with this.rotation++;
-      GixiUtility.setAnchorAndAdjustPosition(value, new PIXI.Point(0.5, 0.5));
-    });
-  }
-
-  public play(animationName: string, animationSpeed: number) {
-    const animatedSprite: PIXI.AnimatedSprite | undefined = this._animationNameToAnimatedSprite.get(animationName);
-    if (animatedSprite == undefined) {
-      throw new Error('Trying to play unknown animation with animationName=' + animationName);
-    }
-
-    animatedSprite.animationSpeed = animationSpeed;
-    animatedSprite.play();
-  }
-}
+import { MultiAnimatedSprite } from '@client/core/multiAnimatedSprites/MultiAnimatedSprite';
 
 /**
  * Configuration
  */
 export interface ActorAnimatedConfiguration extends ActorContainerConfiguration {
-  spriteSheetTextureUrl: string;
   spriteSheetDataUrl: string;
 }
 
 const ActorAnimatedConfigurationDefault: ActorAnimatedConfiguration = {
   //populate urls here or pass them into the ActorAnimated constructor
-  spriteSheetTextureUrl: '',
   spriteSheetDataUrl: '',
   canCollisionCheck: true,
   isTickable: true,
@@ -115,7 +56,7 @@ export class ActorAnimated extends ActorContainer implements IInitializableAsync
     //2. Do some error checking here
     //      (See how ActorStatic does it.)
     //3. Update this snippet below as needed. Done!
-    this._multiAnimatedSprite = new MultiAnimatedSprite(this.configuration.spriteSheetTextureUrl, this.configuration.spriteSheetDataUrl);
+    this._multiAnimatedSprite = new MultiAnimatedSprite(this.configuration.spriteSheetDataUrl);
     await this._multiAnimatedSprite.initializeAndReparent(this._app, this);
 
     // Local

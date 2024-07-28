@@ -5,7 +5,7 @@ import { ICollisionSystemBody } from '@client/gixi/base/ICollisionSystemBody';
 import { DropShadowFilter, GlowFilter } from 'pixi-filters';
 import { TreasureHunter2DConstants } from '../../TreasureHunter2DConstants';
 import { AudioSystem } from '@client/gixi/systems/AudioSystem';
-
+import * as PIXI from 'pixi.js';
 /**
  * Represents a coin in the game.
  *
@@ -21,8 +21,7 @@ export class CoinTilemapObject extends ActorAnimated implements ICollisionSystem
   // Initialization -------------------------------
   constructor(app: GixiApplication) {
     const configuration: ActorAnimatedConfiguration = {
-      spriteSheetTextureUrl: 'assets/images/FreeKnight/_Idle.png',
-      spriteSheetDataUrl: 'assets/images/FreeKnight/_Idle.json',
+      spriteSheetDataUrl: 'assets/images/AnimatedCoin/Active/animated_coin.json',
       canCollisionCheck: false,
       isTickable: false,
       isResizable: false,
@@ -46,12 +45,17 @@ export class CoinTilemapObject extends ActorAnimated implements ICollisionSystem
     // OPTIONAL: Try these - https://pixijs.io/filters/
     this.filters = [
       //new GlowFilter({ distance: 1, outerStrength: 1, innerStrength: 1, color: 0xffff00 }),
-      // new DropShadowFilter({ blur: 1, alpha: 0.5, quality: 3, resolution: 2 }), //
+      new DropShadowFilter({ blur: 1, alpha: 0.5, quality: 3, resolution: 2 }), //
     ];
 
     // Local
     //Do any additional initialization here
-    this._multiAnimatedSprite.play('Idle', 0.4);
+
+    //Play
+    //1. by index
+    this._multiAnimatedSprite.play(0, 0.2);
+    //2. by name
+    //this._multiAnimatedSprite.play('Run', 0.5);
   }
 
   // Methods --------------------------------------
@@ -85,4 +89,6 @@ export class CoinTilemapObject extends ActorAnimated implements ICollisionSystem
     this.isCollected = true;
     this.destroyAfterAnimation();
   }
+
+  // Event Handlers -------------------------------
 }
