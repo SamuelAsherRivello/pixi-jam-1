@@ -39,16 +39,16 @@ export class PlayerGhost extends ActorStatic {
     }
 
     multiplayerClientSystem.onResponse(GamePacketResponse, (response) => {
-      const isLocalClient = response.data.socketId == multiplayerClientSystem.localSocketId;
+      const isLocalClient = response.data.socketId == multiplayerClientSystem.localClientId;
+      const clientIndex = multiplayerClientSystem.clients.findIndex((c) => c.clientId == response.data.socketId);
       const clientCount = multiplayerClientSystem.clients.length;
       if (!isLocalClient) {
-        console.log('ghost.OnResponse() NOPE! :', response.data.socketId, multiplayerClientSystem.localSocketId);
         this.rotation = 45;
       } else {
         this.rotation = 0;
       }
 
-      console.log('ghost.OnResponse() :', clientCount, isLocalClient, response.data.x, response.data.y);
+      console.log(`[${clientIndex}] ghost.OnResponse() :`, clientCount, isLocalClient, response.data.x, response.data.y);
 
       let newPosition = new PIXI.Point(response.data.x, response.data.y);
 

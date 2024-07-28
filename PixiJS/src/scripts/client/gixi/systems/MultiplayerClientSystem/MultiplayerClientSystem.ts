@@ -25,8 +25,8 @@ export class MultiplayerClientSystem extends SystemBase {
     return this._multiplayerSocketClient.isConnected;
   }
 
-  public get localSocketId(): string {
-    return this._multiplayerSocketClient.localSocketId;
+  public get localClientId(): string {
+    return this._multiplayerSocketClient.localClientId;
   }
 
   public get isGameJoined(): boolean {

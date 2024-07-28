@@ -3,12 +3,12 @@
  */
 
 export class Client {
-  public get socketId(): string {
-    return this._socketId;
+  public get clientId(): string {
+    return this._clientId;
   }
-  private _socketId: string = '';
-  constructor(socketId: string) {
-    this._socketId = socketId;
+  private _clientId: string = '';
+  constructor(clientId: string) {
+    this._clientId = clientId;
   }
 }
 
@@ -26,7 +26,7 @@ export class PacketRequest extends Packet {
   constructor() {
     super();
     //will override before sending
-    this.data = { socketId: -1 };
+    this.data = { clientId: -1 };
   }
 }
 
@@ -105,9 +105,9 @@ export class GamePacketRequest extends PacketRequest {
 }
 
 export class GamePacketResponse extends PacketResponse {
-  constructor(socketId: string, x: number, y: number) {
+  constructor(clientId: string, x: number, y: number) {
     super();
-    this.data = { socketId, x, y };
+    this.data = { clientId: clientId, x, y };
   }
 }
 

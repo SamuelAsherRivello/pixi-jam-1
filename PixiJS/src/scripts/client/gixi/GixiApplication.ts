@@ -6,6 +6,7 @@ import { ActorContainer } from './ActorContainer';
 import { SystemManagerDefault as SystemManagerDefault } from './systemManager/SystemManagerDefault';
 import { ISystemManager } from './systemManager/base/ISystemManager';
 import { ITickable } from './base/ITickable';
+import { FocusSystem } from './systems/FocusSystem';
 
 /**
  * Configuration
@@ -43,6 +44,10 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
   // Properties -----------------------------------
   public get isInitialized(): boolean {
     return this._isInitialized;
+  }
+
+  public get CanvasId(): string {
+    return this._canvasId;
   }
 
   public get isFullscreen(): boolean {
@@ -133,7 +138,6 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
         width: this.configuration.widthInitial,
         height: this.configuration.heightInitial,
         resizeTo: window,
-
         antialias: true,
         backgroundAlpha: 1,
         powerPreference: 'high-performance',

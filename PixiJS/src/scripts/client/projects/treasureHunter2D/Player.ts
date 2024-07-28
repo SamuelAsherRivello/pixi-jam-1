@@ -14,6 +14,7 @@ import { Enemy } from './Enemy';
 import { KeyCode } from '../../core/data/types/KeyCode';
 import { MultiplayerClientSystem } from '@client/gixi/systems/MultiplayerClientSystem/MultiplayerClientSystem';
 import { GamePacketRequest, GamePacketResponse } from '@shared/multiplayer/Packet';
+import { FocusSystem } from '@client/gixi/systems/FocusSystem';
 
 /**
  * Configuration
@@ -100,7 +101,7 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
     return isCollision;
   }
 
-  private handleMovement(ticker: PIXI.Ticker) {
+  private handleInputForMovement(ticker: PIXI.Ticker) {
     let moveVector: PIXI.Point = new PIXI.Point(0, 0);
 
     const isShift: boolean =
@@ -176,13 +177,7 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
     }
   }
 
-  // Event Handlers -------------------------------
-
-  public override onTick(ticker: PIXI.Ticker): void {
-    super.onTick(ticker);
-
-    this.handleMovement(ticker);
-
+  handleInputForOther(ticker: PIXI.Ticker) {
     if (this._app.systemManager.getItem(InputSystem).isKeyDownThisFrame(KeyCode.F)) {
       //Fullscreen
       this._app.isFullscreen = !this._app.isFullscreen;
@@ -230,6 +225,21 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
         multiplayerClientSystem.nextTargetPacketLoss();
       }
     }
+  }
+
+  // Event Handlers -------------------------------
+
+  public override onTick(ticker: PIXI.Ticker): void {
+    super.onTick(ticker);
+
+    // Only allow input if *this* window is in focus
+    const focusSystem = this._app.systemManager.getItem(FocusSystem);
+    if (!focusSystem || !focusSystem.isInFocus) {
+      return;
+    }
+
+    this.handleInputForMovement(ticker);
+    this.handleInputForOther(ticker);
   }
 
   public override onCollision(collisions: PIXI.Container[]): void {

@@ -42,7 +42,7 @@ export class MultiplayerSocketClient extends MultiplayerSocket {
     return this._isConnected;
   }
 
-  public get localSocketId(): string {
+  public get localClientId(): string {
     return this._socket ? this._socket.id : '-1';
   }
 
@@ -164,7 +164,7 @@ export class MultiplayerSocketClient extends MultiplayerSocket {
     }
     await this._badConnectionSimulator.simulateLatencyAsync();
 
-    request.data.socketId = this._socket.id;
+    request.data.clientId = this._socket.id;
 
     //Emit only proper type
     this.emitPacket(request);

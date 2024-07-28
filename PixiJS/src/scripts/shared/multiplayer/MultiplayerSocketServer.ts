@@ -65,7 +65,7 @@ export class MultiplayerSocketServer extends MultiplayerSocket {
       const clientCount = this._clients.length + 1;
       this.consoleLog(`GET connection, clientCount = ${clientCount}`);
       this._clients.forEach((c) => {
-        console.log('\tclient id: ' + c.socketId);
+        console.log('\tclient id: ' + c.clientId);
       });
       this._socket = socket;
 
@@ -120,10 +120,10 @@ export class MultiplayerSocketServer extends MultiplayerSocket {
 
   // Event Handlers ------------------------------
   private handleDisconnect(socket: Socket): void {
-    const disconnectedClient = this._clients.find((client) => client.socketId === socket.id);
+    const disconnectedClient = this._clients.find((client) => client.clientId === socket.id);
     if (disconnectedClient) {
-      this.consoleLog(`GET disconnect: ${disconnectedClient.socketId}`);
-      this._clients = this._clients.filter((client) => client.socketId !== socket.id);
+      this.consoleLog(`GET disconnect: ${disconnectedClient.clientId}`);
+      this._clients = this._clients.filter((client) => client.clientId !== socket.id);
 
       // Here you can add any additional cleanup or notification logic
       // For example, notifying other clients about this disconnection
