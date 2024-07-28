@@ -76,9 +76,9 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
       return;
     }
 
-    multiplayerClientSystem.onResponse(GamePacketResponse, (response) => {
-      console.log('playerOnGamePacketResponse :', response);
-    });
+    // multiplayerClientSystem.onResponse(GamePacketResponse, (response) => {
+    //   console.log('playerOnGamePacketResponse :', response);
+    // });
   }
 
   // Methods --------------------------------------
@@ -171,7 +171,9 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
       return;
     }
 
-    multiplayerClientSystem.emitGamePacketRequest(new GamePacketRequest(this.x, this.y));
+    if (multiplayerClientSystem.isConnected && multiplayerClientSystem.isGameJoined) {
+      multiplayerClientSystem.emitGamePacketRequest(new GamePacketRequest(this.x, this.y));
+    }
   }
 
   // Event Handlers -------------------------------

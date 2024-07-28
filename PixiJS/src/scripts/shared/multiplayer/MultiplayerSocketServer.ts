@@ -18,6 +18,7 @@ import {
   GamePacketResponse,
   Client,
   Guid,
+  GameLeaveResponse,
 } from './Packet.js';
 
 export class MultiplayerSocketServer extends MultiplayerSocket {
@@ -54,29 +55,39 @@ export class MultiplayerSocketServer extends MultiplayerSocket {
     });
 
     // Subscribing within here... any chance it'll double-subscribe on reconnect?
+
+    ////////////////////////////////////////////////
+    // This represents all events FOR 1 GIVEN CLIENT
+    ////////////////////////////////////////////////
     this.ioServer.on('connection', (socket) => {
       const client = new Client(socket.id);
       this._clients.push(client);
       const clientCount = this._clients.length + 1;
-      this.consoleLog(`Server connection by client. clientCount = ${clientCount}, socketId = ${client.socketId}`);
+      this.consoleLog(`GET connection, clientCount = ${clientCount}`);
+      this._clients.forEach((c) => {
+        console.log('\tclient id: ' + c.socketId);
+      });
       this._socket = socket;
 
       this.onRequest(SessionStartRequest, (request) => {
         //
-        console.log('s from client : ' + request.data.socketId);
+        console.log('GET SessionStartRequest, id: ' + request.data.socketId);
         const response = new SessionStartResponse(Guid.createNew());
         this.emitResponse(response);
       });
 
       this.onRequest(GameCreateRequest, (request) => {
         //
-        console.log('g from client : ' + request.data.socketId);
+        console.log('GET GameCreateRequest, id: ' + request.data.socketId);
         const response = new GameCreateResponse(Guid.createNew());
         this.emitResponse(response);
       });
 
       this.onRequest(GameJoinRequest, (request) => {
-        this.emitResponse(new GameJoinResponse());
+        const response = new GameJoinResponse(this._clients);
+        console.log('TODO1 SET GameJoinResponse, clients1 = ' + this._clients.length);
+        console.log('TODO2 SET GameJoinResponse, clients2 = ' + response.clients.length);
+        this.emitResponse(response);
       });
 
       this.onRequest(GamePacketRequest, (request) => {
@@ -85,8 +96,9 @@ export class MultiplayerSocketServer extends MultiplayerSocket {
         this.emitResponse(response);
       });
 
-      this._socket.on('disconnect', () => {
-        this.consoleLog('user disconnected2');
+      socket.on('disconnect', () => {
+        // Pass along the specific socket that is disconnecting
+        this.handleDisconnect(socket);
       });
     });
   }
@@ -102,10 +114,24 @@ export class MultiplayerSocketServer extends MultiplayerSocket {
     console.log('response: ' + response.constructor.name + ' was : ' + response);
     this.emitPacket(response);
   }
-
-  protected onRequest<T extends PacketRequest>(RequestClass: new () => T, onRequestCallback: (request: T) => void): void {
+  protected onRequest<T extends PacketRequest>(RequestClass: new (...args: any[]) => T, onRequestCallback: (request: T) => void): void {
     this.onPacket(RequestClass, onRequestCallback);
   }
 
   // Event Handlers ------------------------------
+  private handleDisconnect(socket: Socket): void {
+    const disconnectedClient = this._clients.find((client) => client.socketId === socket.id);
+    if (disconnectedClient) {
+      this.consoleLog(`GET disconnect: ${disconnectedClient.socketId}`);
+      this._clients = this._clients.filter((client) => client.socketId !== socket.id);
+
+      // Here you can add any additional cleanup or notification logic
+      // For example, notifying other clients about this disconnection
+      this.emitResponse(new GameLeaveResponse(this._clients));
+
+      this.consoleLog(`Remaining clients: ${this._clients.length}`);
+    } else {
+      this.consoleLog(`Unknown client disconnected: ${socket.id}`);
+    }
+  }
 }

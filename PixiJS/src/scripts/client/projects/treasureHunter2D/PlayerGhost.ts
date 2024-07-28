@@ -3,6 +3,7 @@ import { DropShadowFilter } from 'pixi-filters';
 import { ActorStatic } from '../../gixi/ActorStatic';
 import { MultiplayerClientSystem } from '@client/gixi/systems/MultiplayerClientSystem/MultiplayerClientSystem';
 import { GamePacketResponse } from '@shared/multiplayer/Packet';
+import { Client } from '../../../shared/multiplayer/Packet';
 
 /**
  * Represents a ghost following the player using multiplayer
@@ -39,19 +40,21 @@ export class PlayerGhost extends ActorStatic {
 
     multiplayerClientSystem.onResponse(GamePacketResponse, (response) => {
       const isLocalClient = response.data.socketId == multiplayerClientSystem.localSocketId;
-
+      const clientCount = multiplayerClientSystem.clients.length;
       if (!isLocalClient) {
         console.log('ghost.OnResponse() NOPE! :', response.data.socketId, multiplayerClientSystem.localSocketId);
-        return;
+        this.rotation = 45;
+      } else {
+        this.rotation = 0;
       }
 
-      console.log('ghost.OnResponse() :', isLocalClient, response.data.x, response.data.y);
+      console.log('ghost.OnResponse() :', clientCount, isLocalClient, response.data.x, response.data.y);
 
       let newPosition = new PIXI.Point(response.data.x, response.data.y);
 
       //TODO: toGlobal works, but is only needed if the player is on viewport
       //and the ghost is on the stage. If both are on the viewport, remove this
-      newPosition = this._app.viewport.toGlobal(newPosition);
+      //newPosition = this._app.viewport.toGlobal(newPosition);
       this.position = newPosition;
     });
   }

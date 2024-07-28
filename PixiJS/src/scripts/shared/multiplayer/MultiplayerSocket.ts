@@ -43,12 +43,12 @@ export class MultiplayerSocket {
   }
 
   protected onPacket<T extends Packet>(PacketClass: new () => T, onCallback: (t: T) => void): void {
-    this.consoleLog(`onPacket() Init ${PacketClass.name}`);
+    // this.consoleLog(`onPacket() Init ${PacketClass.name}`);
 
     this._socket.on(PacketClass.name, (packetString: string) => {
-      this.consoleLog(`onPacket() Call ${PacketClass.name}`);
+      //this.consoleLog(`onPacket() Call ${PacketClass.name}`);
       const packet = TypeConverter.fromJson(packetString, PacketClass) as T;
-      console.log(packet);
+      //console.log(packet);
       onCallback(packet);
     });
   }

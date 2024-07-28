@@ -3,9 +3,12 @@
  */
 
 export class Client {
-  public socketId: string = '';
+  public get socketId(): string {
+    return this._socketId;
+  }
+  private _socketId: string = '';
   constructor(socketId: string) {
-    this.socketId = socketId;
+    this._socketId = socketId;
   }
 }
 
@@ -40,15 +43,9 @@ export class SessionStartRequest extends PacketRequest {
 }
 
 export class SessionStartResponse extends PacketResponse {
-  constructor();
-  constructor(guid: string);
-  constructor(guid?: string) {
+  constructor(guid: string) {
     super();
-    if (guid !== undefined) {
-      this.data = { guid };
-    } else {
-      this.data = { guid: Guid.createNew() };
-    }
+    this.data = { guid };
   }
 }
 
@@ -59,15 +56,9 @@ export class GameCreateRequest extends PacketRequest {
 }
 
 export class GameCreateResponse extends PacketResponse {
-  constructor();
-  constructor(guid: string);
-  constructor(guid?: string) {
+  constructor(guid: string) {
     super();
-    if (guid !== undefined) {
-      this.data = { guid };
-    } else {
-      this.data = { guid: Guid.createNew() };
-    }
+    this.data = { guid };
   }
 }
 export class GameJoinRequest extends PacketRequest {
@@ -77,34 +68,46 @@ export class GameJoinRequest extends PacketRequest {
 }
 
 export class GameJoinResponse extends PacketResponse {
+  public get clients(): Client[] {
+    return this.data.clients;
+  }
+
+  constructor(clients: Client[] = []) {
+    super();
+    this.data = { clients };
+  }
+}
+
+export class GameLeaveRequest extends PacketRequest {
   constructor() {
     super();
   }
 }
 
-export class GamePacketRequest extends PacketRequest {
-  constructor();
-  constructor(x: number, y: number);
-  constructor(x?: number, y?: number) {
+//The server will call GameLeaveResponse() without any
+//client calling GameLeaveRequest when a client disconnects
+export class GameLeaveResponse extends PacketResponse {
+  public get clients(): Client[] {
+    return this.data.clients;
+  }
+
+  constructor(clients: Client[] = []) {
     super();
-    if (x !== undefined && y !== undefined) {
-      this.data = { x, y };
-    } else {
-      this.data = { x: 0, y: 0 };
-    }
+    this.data = { clients };
+  }
+}
+
+export class GamePacketRequest extends PacketRequest {
+  constructor(x: number, y: number) {
+    super();
+    this.data = { x, y };
   }
 }
 
 export class GamePacketResponse extends PacketResponse {
-  constructor();
-  constructor(socketId: string, x: number, y: number);
-  constructor(socketId?: string, x?: number, y?: number) {
+  constructor(socketId: string, x: number, y: number) {
     super();
-    if (x !== undefined && y !== undefined) {
-      this.data = { socketId, x, y };
-    } else {
-      this.data = { socketId: '-1', x: -1, y: -1 };
-    }
+    this.data = { socketId, x, y };
   }
 }
 

@@ -15,7 +15,6 @@
     "uuid": "^10.0.0"
   },
   "scripts": {
-    "start-client-with-test": "concurrently --kill-others \"npm run watch:test\" \"webpack serve --mode development\"",
     "test": "jest",
     "test:watch": "jest --watch",
     "format": "prettier --config prettier.config.cjs --write .",
@@ -28,11 +27,13 @@
     "compile-tests": "tsc -p src/scripts/tests/tsconfig.json",
     "compile-all": "npm run compile-client && npm run compile-server && npm run compile-shared && npm run compile-tests",
     "build-tests": "npm run compile-all",
-    "start-tests": "npm run test && onchange \"src/scripts/**/*\" \"src/scripts/tests/**/*\" -- npm run test",
+    "start-tests": "npm run test",
+    "start-tests-watch": "npm run start-tests && onchange \"src/scripts/**/*\" \"src/scripts/tests/**/*\" -- npm run start-tests",
     "build-client": "npm run compile-all && webpack --mode production",
-    "start-client": "webpack serve --mode development",
+    "start-client-watch": "webpack serve --mode development",
     "build-server": "npm run compile-all",
-    "start-server": "node --loader ts-node/esm -r tsconfig-paths/register src/scripts/server/server.ts"
+    "start-server": "node --loader ts-node/esm -r tsconfig-paths/register src/scripts/server/server.ts",
+    "start-server-watch": "nodemon --watch src --ext ts,json --exec \"npm run start-server\""
   },
   "devDependencies": {
     "@eslint/js": "^8.2.0",

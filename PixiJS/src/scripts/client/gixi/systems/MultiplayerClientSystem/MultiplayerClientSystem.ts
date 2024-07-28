@@ -2,7 +2,7 @@ import { GixiApplication } from '@client/gixi/GixiApplication';
 import { SystemBase } from '../base/SystemBase';
 import * as PIXI from 'pixi.js';
 import { MultiplayerSocketClient } from './MultiplayerSocketClient';
-import { GamePacketRequest, PacketRequest, PacketResponse } from '@shared/multiplayer/Packet';
+import { Client, GamePacketRequest, PacketRequest, PacketResponse } from '@shared/multiplayer/Packet';
 
 /**
  * Handles keyboard input and maintains the state of keys.
@@ -11,6 +11,10 @@ export class MultiplayerClientSystem extends SystemBase {
   // Properties -----------------------------------
   public get targetLatencyMS(): number {
     return this._multiplayerSocketClient.targetLatencyMS;
+  }
+
+  public get clients(): Client[] {
+    return this._multiplayerSocketClient.clients;
   }
 
   public get targetPacketLoss(): number {
@@ -80,7 +84,7 @@ export class MultiplayerClientSystem extends SystemBase {
   }
 
   // Event Handlers -------------------------------
-  public onResponse<T extends PacketResponse>(ResponseClass: new () => T, onRequestCallback: (request: T) => void): void {
+  public onResponse<T extends PacketResponse>(ResponseClass: new (...args: any[]) => T, onRequestCallback: (request: T) => void): void {
     this._multiplayerSocketClient.onResponse(ResponseClass, onRequestCallback);
   }
 

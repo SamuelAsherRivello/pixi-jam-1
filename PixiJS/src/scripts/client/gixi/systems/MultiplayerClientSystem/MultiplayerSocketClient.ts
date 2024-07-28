@@ -1,10 +1,12 @@
 import { BadConnectionSimulator } from '@shared/multiplayer/BadConnectionSimulator';
 import { io, Socket } from 'socket.io-client';
 import {
+  Client,
   GameCreateRequest,
   GameCreateResponse,
   GameJoinRequest,
   GameJoinResponse,
+  GameLeaveResponse,
   GamePacketRequest,
   GamePacketResponse,
   PacketRequest,
@@ -12,12 +14,16 @@ import {
   SessionStartRequest,
   SessionStartResponse,
 } from '@shared/multiplayer/Packet';
-import { MultiplayerSocket } from '@shared/multiplayer/MultiplayerSocket';
+import { MultiplayerSocket, TypeConverter } from '@shared/multiplayer/MultiplayerSocket';
 
 export class MultiplayerSocketClient extends MultiplayerSocket {
   // Properties -----------------------------------
   public get targetLatencyMS(): number {
     return this._badConnectionSimulator.targetLatencyMS;
+  }
+
+  public get clients(): Client[] {
+    return this._clients;
   }
 
   public get targetPacketLoss(): number {
@@ -52,10 +58,12 @@ export class MultiplayerSocketClient extends MultiplayerSocket {
   private _hasJoinedGame: boolean = false;
   private _isSessionStarted: boolean = false;
   private _isConnected: boolean = false;
+  private _clients: Client[];
   private _badConnectionSimulator: BadConnectionSimulator = new BadConnectionSimulator();
   // Initialization -------------------------------
   constructor() {
     super();
+    this._clients = [];
   }
 
   public override async initializeAsync(): Promise<any> {
@@ -68,9 +76,19 @@ export class MultiplayerSocketClient extends MultiplayerSocket {
     }
 
     // Local
+
     this._isInitialized = true;
 
-    this._socket = io('http://localhost:3001');
+    this._socket = io('http://localhost:3001', {
+      transports: ['websocket'],
+      autoConnect: false,
+    });
+
+    console.log('7777777777777777777:: ' + this._socket.connected);
+
+    if (!this._socket.connected) {
+      this._socket.connect();
+    }
 
     this._socket.on('connect', () => {
       this.consoleLog('Client connected to server');
@@ -99,9 +117,19 @@ export class MultiplayerSocketClient extends MultiplayerSocket {
     });
 
     this.onResponse(GameJoinResponse, (response) => {
+      //
+      console.log('GameJoinResponse: #clients = ' + response.clients.length);
+      this._clients = response.clients;
+      //
       this._hasJoinedGame = true;
       const request = new GamePacketRequest(11, 22);
       this.emitRequest(request);
+    });
+
+    this.onResponse(GameLeaveResponse, (response) => {
+      //
+      console.log('GameLeaveResponse: #clients = ' + response.clients.length);
+      this._clients = response.clients;
     });
 
     this.onResponse(GamePacketResponse, (response) => {});
@@ -111,6 +139,14 @@ export class MultiplayerSocketClient extends MultiplayerSocket {
       this._hasJoinedGame = false;
       this._isConnected = false;
       this.consoleLog(`Client disconnected from server`);
+
+      // Attempt to reconnect after a short delay
+      setTimeout(() => {
+        console.log('!!!!!!reconnetion attempt');
+        if (!this._socket.connected) {
+          this._socket.connect();
+        }
+      }, 5000);
     });
   }
 
@@ -134,8 +170,8 @@ export class MultiplayerSocketClient extends MultiplayerSocket {
     this.emitPacket(request);
   }
 
-  public onResponse<T extends PacketResponse>(ResponseClass: new () => T, onRequestCallback: (request: T) => void): void {
-    this.onPacket(ResponseClass, onRequestCallback);
+  public onResponse<T extends PacketResponse>(ResponseClass: new (...args: any[]) => T, onResponseCallback: (request: T) => void): void {
+    this.onPacket(ResponseClass, onResponseCallback);
   }
 
   // Event Handlers -------------------------------
