@@ -39,8 +39,11 @@ export class PlayerGhost extends ActorStatic {
     }
 
     multiplayerClientSystem.onResponse(GamePacketResponse, (response) => {
-      const isLocalClient = response.data.socketId == multiplayerClientSystem.localClientId;
-      const clientIndex = multiplayerClientSystem.clients.findIndex((c) => c.clientId == response.data.socketId);
+      const isLocalClient = response.clientId == multiplayerClientSystem.localClientId;
+
+      console.log(`r=${response.clientId},l=${multiplayerClientSystem.localClientId}`);
+
+      const clientIndex = multiplayerClientSystem.clients.findIndex((c) => c.clientId == response.clientId);
       const clientCount = multiplayerClientSystem.clients.length;
       if (!isLocalClient) {
         this.rotation = 45;
@@ -48,9 +51,9 @@ export class PlayerGhost extends ActorStatic {
         this.rotation = 0;
       }
 
-      console.log(`[${clientIndex}] ghost.OnResponse() :`, clientCount, isLocalClient, response.data.x, response.data.y);
+      console.log(`[${clientIndex}] ghost.OnResponse() :`, clientCount, isLocalClient, response.x, response.y);
 
-      let newPosition = new PIXI.Point(response.data.x, response.data.y);
+      let newPosition = new PIXI.Point(response.x, response.y);
 
       //TODO: toGlobal works, but is only needed if the player is on viewport
       //and the ghost is on the stage. If both are on the viewport, remove this

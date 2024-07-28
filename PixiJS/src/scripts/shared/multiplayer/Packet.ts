@@ -23,10 +23,16 @@ export class Packet {
 }
 
 export class PacketRequest extends Packet {
+  public get clientId(): string {
+    return this._clientId;
+  }
+  private _clientId: string = '-1'; //will override before sending
+
+  public setClientIdBeforeEmitting(clientId: string) {
+    this._clientId = clientId;
+  }
   constructor() {
     super();
-    //will override before sending
-    this.data = { clientId: -1 };
   }
 }
 
@@ -97,17 +103,44 @@ export class GameLeaveResponse extends PacketResponse {
   }
 }
 
+// The specific x/y nature of this will be removed in the future
+// games will subclass this to send custom objects
 export class GamePacketRequest extends PacketRequest {
+  public get x(): number {
+    return this._x;
+  }
+  public get y(): number {
+    return this._y;
+  }
+  private _x: number = -1;
+  private _y: number = -1;
   constructor(x: number, y: number) {
     super();
-    this.data = { x, y };
+    this._x = x;
+    this._y = y;
   }
 }
 
+// The specific x/y nature of this will be removed in the future
+// games will subclass this to send custom objects
 export class GamePacketResponse extends PacketResponse {
+  public get clientId(): string {
+    return this._clientId;
+  }
+  public get x(): number {
+    return this._x;
+  }
+  public get y(): number {
+    return this._y;
+  }
+  private _clientId: string = '-1';
+  private _x: number = -1;
+  private _y: number = -1;
   constructor(clientId: string, x: number, y: number) {
     super();
-    this.data = { clientId: clientId, x, y };
+    this._clientId = clientId;
+    this._x = x;
+    this._y = y;
   }
 }
 

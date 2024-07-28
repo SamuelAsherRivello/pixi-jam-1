@@ -49,7 +49,7 @@ export class MultiplayerSocket {
     this._socket.on(PacketClass.name, (packetString: string) => {
       //this.consoleLog(`onPacket() Call ${PacketClass.name}`);
       const packet = TypeConverter.fromJson(packetString, PacketClass) as T;
-      console.log(packet);
+      //console.log(packet);
       onCallback(packet);
     });
   }

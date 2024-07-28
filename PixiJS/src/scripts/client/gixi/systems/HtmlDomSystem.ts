@@ -4,12 +4,17 @@ import { SystemBase } from './base/SystemBase';
 
 export class HtmlDomSystem extends SystemBase {
   // Properties -----------------------------------
-  public get isInFocus(): boolean {
-    return this._isInFocus;
+  public get isAppInFocus(): boolean {
+    return this._isAppInFocus;
+  }
+
+  public get isAppDestroyed(): boolean {
+    return this._isAppDestroyed;
   }
 
   // Fields ---------------------------------------
-  private _isInFocus: boolean = true;
+  private _isAppInFocus: boolean = true;
+  private _isAppDestroyed: boolean = false;
   private _container?: HTMLElement;
   public static readonly OnDestroy: string = 'OnDestroy';
 
@@ -43,6 +48,7 @@ export class HtmlDomSystem extends SystemBase {
     this._container.addEventListener('blur', () => this.onInteractionEnd());
 
     // Destroy
+    //TODO: this detects window changes, but not reloading from 1/2/4 games within existing page
     window.onbeforeunload = () => this.onDestroy();
   }
 
@@ -65,17 +71,21 @@ export class HtmlDomSystem extends SystemBase {
   // Event Handlers -------------------------------
 
   public onInteractionStart(): void {
-    this._isInFocus = true;
+    this._isAppInFocus = true;
     //console.log('Focus: ' + this._isInFocus);
   }
 
   public onInteractionEnd(): void {
-    this._isInFocus = false;
+    this._isAppInFocus = false;
     //console.log('Focus: ' + this._isInFocus);
   }
 
   public onDestroy(): void {
-    console.log('onDestroy!!!: ');
+    if (this._isAppDestroyed) {
+      return;
+    }
+    this._isAppDestroyed = true;
+    console.log('Detecting Game.OnDestroy()');
     this.emit(HtmlDomSystem.OnDestroy);
   }
 

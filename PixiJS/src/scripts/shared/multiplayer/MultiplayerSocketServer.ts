@@ -71,14 +71,14 @@ export class MultiplayerSocketServer extends MultiplayerSocket {
 
       this.onRequest(SessionStartRequest, (request) => {
         //
-        console.log('GET SessionStartRequest, id: ' + request.data.socketId);
+        console.log('GET SessionStartRequest, id: ' + request.clientId);
         const response = new SessionStartResponse(Guid.createNew());
         this.emitResponse(response);
       });
 
       this.onRequest(GameCreateRequest, (request) => {
         //
-        console.log('GET GameCreateRequest, id: ' + request.data.socketId);
+        console.log('GET GameCreateRequest, id: ' + request.clientId);
         const response = new GameCreateResponse(Guid.createNew());
         this.emitResponse(response);
       });
@@ -91,7 +91,7 @@ export class MultiplayerSocketServer extends MultiplayerSocket {
 
       this.onRequest(GamePacketRequest, (request) => {
         //
-        const response = new GamePacketResponse(request.data.socketId, request.data.x, request.data.y);
+        const response = new GamePacketResponse(request.clientId, request.x, request.y);
         this.emitResponse(response);
       });
 

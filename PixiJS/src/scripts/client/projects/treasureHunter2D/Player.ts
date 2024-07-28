@@ -234,7 +234,7 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
 
     // Only allow input if *this* window is in focus
     const htmlDomSystem = this._app.systemManager.getItem(HtmlDomSystem);
-    if (!htmlDomSystem || !htmlDomSystem.isInFocus) {
+    if (!htmlDomSystem || !htmlDomSystem.isAppInFocus) {
       return;
     }
 
