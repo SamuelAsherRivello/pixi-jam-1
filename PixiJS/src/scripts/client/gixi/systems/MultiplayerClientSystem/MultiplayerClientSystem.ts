@@ -83,6 +83,22 @@ export class MultiplayerClientSystem extends SystemBase {
     this._multiplayerSocketClient.emitRequest(request);
   }
 
+  public override startRunning() {
+    //Super
+    super.startRunning();
+
+    //Local
+    this._multiplayerSocketClient.Connect();
+  }
+
+  public override stopRunning() {
+    //Super
+    super.stopRunning();
+
+    //Local
+    this._multiplayerSocketClient.Disconnect();
+  }
+
   // Event Handlers -------------------------------
   public onResponse<T extends PacketResponse>(ResponseClass: new (...args: any[]) => T, onRequestCallback: (request: T) => void): void {
     this._multiplayerSocketClient.onResponse(ResponseClass, onRequestCallback);

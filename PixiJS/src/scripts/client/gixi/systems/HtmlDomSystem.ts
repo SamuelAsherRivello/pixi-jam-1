@@ -2,7 +2,7 @@ import { GixiApplication } from '@client/gixi/GixiApplication';
 import { Ticker } from 'pixi.js';
 import { SystemBase } from './base/SystemBase';
 
-export class FocusSystem extends SystemBase {
+export class HtmlDomSystem extends SystemBase {
   // Properties -----------------------------------
   public get isInFocus(): boolean {
     return this._isInFocus;
@@ -11,6 +11,7 @@ export class FocusSystem extends SystemBase {
   // Fields ---------------------------------------
   private _isInFocus: boolean = true;
   private _container?: HTMLElement;
+  public static readonly OnDestroy: string = 'OnDestroy';
 
   // Initialization -------------------------------
   constructor(app: GixiApplication) {
@@ -40,16 +41,42 @@ export class FocusSystem extends SystemBase {
     // Focus events
     this._container.addEventListener('focus', () => this.onInteractionStart());
     this._container.addEventListener('blur', () => this.onInteractionEnd());
+
+    // Destroy
+    window.onbeforeunload = () => this.onDestroy();
   }
+
+  public override startRunning() {
+    //Super
+    super.startRunning();
+
+    //Local
+  }
+
+  public override stopRunning() {
+    //Super
+    super.stopRunning();
+
+    //Local
+  }
+
+  // Methods --------------------------------------
+
+  // Event Handlers -------------------------------
 
   public onInteractionStart(): void {
     this._isInFocus = true;
-    console.log('Focus: ' + this._isInFocus);
+    //console.log('Focus: ' + this._isInFocus);
   }
 
   public onInteractionEnd(): void {
     this._isInFocus = false;
-    console.log('Focus: ' + this._isInFocus);
+    //console.log('Focus: ' + this._isInFocus);
+  }
+
+  public onDestroy(): void {
+    console.log('onDestroy!!!: ');
+    this.emit(HtmlDomSystem.OnDestroy);
   }
 
   public onTick(ticker: Ticker): void {}

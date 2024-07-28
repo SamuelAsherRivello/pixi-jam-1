@@ -45,6 +45,20 @@ export class LocalDiskStorageSystem extends SystemBase {
     return localStorage.getItem(key) !== null;
   }
 
+  public override startRunning() {
+    //Super
+    super.startRunning();
+
+    //Local
+  }
+
+  public override stopRunning() {
+    //Super
+    super.stopRunning();
+
+    //Local
+  }
+
   // Event Handlers -------------------------------
   public override onTick(ticker: PIXI.Ticker): void {
     //Use if desired

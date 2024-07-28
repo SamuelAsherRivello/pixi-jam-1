@@ -64,6 +64,14 @@ export class SystemManagerBase implements ISystemManager {
     this._locator.removeItem(key);
   }
 
+  public startRunning() {
+    //
+  }
+
+  public stopRunning() {
+    //
+  }
+
   // Event Handlers  -------------------------------
   public onTick(ticker: Ticker): void {
     console.log('Method must be overriden');

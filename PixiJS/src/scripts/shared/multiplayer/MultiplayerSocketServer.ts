@@ -85,8 +85,7 @@ export class MultiplayerSocketServer extends MultiplayerSocket {
 
       this.onRequest(GameJoinRequest, (request) => {
         const response = new GameJoinResponse(this._clients);
-        console.log('TODO1 SET GameJoinResponse, clients1 = ' + this._clients.length);
-        console.log('TODO2 SET GameJoinResponse, clients2 = ' + response.clients.length);
+        //console.log('SET GameJoinResponse, clients = ' + this._clients.length);
         this.emitResponse(response);
       });
 

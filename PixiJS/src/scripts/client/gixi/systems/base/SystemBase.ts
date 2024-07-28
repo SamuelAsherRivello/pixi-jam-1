@@ -1,12 +1,13 @@
 import { IInitializableAsync } from '@client/gixi/base/IInitializeAsync';
 import { ITickable } from '@client/gixi/base/ITickable';
 import { GixiApplication } from '@client/gixi/GixiApplication';
+import EventEmitter from 'events';
 import { Ticker } from 'pixi.js';
 
 /**
  *
  */
-export class SystemBase implements IInitializableAsync, ITickable {
+export class SystemBase extends EventEmitter implements IInitializableAsync, ITickable {
   // Properties -----------------------------------
   get isInitialized(): boolean {
     return this._isInitialized;
@@ -18,6 +19,7 @@ export class SystemBase implements IInitializableAsync, ITickable {
 
   // Initialization -------------------------------
   constructor(app: GixiApplication) {
+    super();
     this._app = app;
   }
 
@@ -29,6 +31,14 @@ export class SystemBase implements IInitializableAsync, ITickable {
     if (!this.isInitialized) {
       throw new Error('Systems are not initialized.');
     }
+  }
+
+  public startRunning() {
+    //
+  }
+
+  public stopRunning() {
+    //
   }
 
   // Methods --------------------------------------

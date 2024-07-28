@@ -38,6 +38,20 @@ export class TilemapCollisionSystem extends SystemBase {
     return this._tilemap.isCollision(x, y, width, height);
   }
 
+  public override startRunning() {
+    //Super
+    super.startRunning();
+
+    //Local
+  }
+
+  public override stopRunning() {
+    //Super
+    super.stopRunning();
+
+    //Local
+  }
+
   // Event Handlers -------------------------------
   public override onTick(ticker: PIXI.Ticker): void {
     //Use if desired

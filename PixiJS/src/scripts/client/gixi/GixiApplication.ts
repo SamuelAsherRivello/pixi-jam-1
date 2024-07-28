@@ -6,7 +6,7 @@ import { ActorContainer } from './ActorContainer';
 import { SystemManagerDefault as SystemManagerDefault } from './systemManager/SystemManagerDefault';
 import { ISystemManager } from './systemManager/base/ISystemManager';
 import { ITickable } from './base/ITickable';
-import { FocusSystem } from './systems/FocusSystem';
+import { HtmlDomSystem } from './systems/HtmlDomSystem';
 
 /**
  * Configuration
@@ -129,7 +129,18 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
     this._isInitialized = true;
 
     this._systemManager.App = this;
+
+    //Systems step 1
     await this._systemManager.initializeAsync();
+
+    //Systems setup 2
+    this._systemManager.startRunning();
+
+    //Systems step 3 - in VERY limited cases the GixiApp acceses systems
+    //Any actor is free to access systems as much as desired
+    this._systemManager.getItem(HtmlDomSystem).addListener(HtmlDomSystem.OnDestroy, () => {
+      //this.systemManager.stopRunning();
+    });
 
     try {
       await this.app.init({
@@ -156,6 +167,11 @@ export class GixiApplication extends EventEmitter implements IInitializableAsync
           click: true,
           wheel: false,
         },
+      });
+
+      this.app.stage.addEventListener('onbeforeunload ', () => {
+        console.log('XXX PixiJS Application destroyed');
+        // Cleanup code here
       });
 
       this.app.ticker.minFPS = this.configuration.minFPS;

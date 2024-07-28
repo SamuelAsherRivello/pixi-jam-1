@@ -101,6 +101,20 @@ export class InputSystem extends SystemBase {
     });
   }
 
+  public override startRunning() {
+    //Super
+    super.startRunning();
+
+    //Local
+  }
+
+  public override stopRunning() {
+    //Super
+    super.stopRunning();
+
+    //Local
+  }
+
   // Event Handlers -------------------------------
   public override onTick(ticker: PIXI.Ticker): void {
     //Use if desired

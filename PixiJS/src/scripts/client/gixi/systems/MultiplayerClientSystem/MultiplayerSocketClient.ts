@@ -18,6 +18,11 @@ import { MultiplayerSocket, TypeConverter } from '@shared/multiplayer/Multiplaye
 
 export class MultiplayerSocketClient extends MultiplayerSocket {
   // Properties -----------------------------------
+
+  private get SocketAsClient(): Socket {
+    return this._socket as Socket;
+  }
+
   public get targetLatencyMS(): number {
     return this._badConnectionSimulator.targetLatencyMS;
   }
@@ -86,10 +91,6 @@ export class MultiplayerSocketClient extends MultiplayerSocket {
 
     console.log('7777777777777777777:: ' + this._socket.connected);
 
-    if (!this._socket.connected) {
-      this._socket.connect();
-    }
-
     this._socket.on('connect', () => {
       this.consoleLog('Client connected to server');
 
@@ -151,6 +152,17 @@ export class MultiplayerSocketClient extends MultiplayerSocket {
   }
 
   // Methods ------------------------------
+  public Connect() {
+    if (!this._socket.connected) {
+      this.SocketAsClient.connect();
+    }
+  }
+
+  public Disconnect() {
+    if (this._socket.connected) {
+      this.SocketAsClient.disconnect();
+    }
+  }
 
   public async emitRequest<T extends PacketRequest>(request: T) {
     //Check type

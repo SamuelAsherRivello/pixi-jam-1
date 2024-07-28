@@ -14,7 +14,7 @@ import { Enemy } from './Enemy';
 import { KeyCode } from '../../core/data/types/KeyCode';
 import { MultiplayerClientSystem } from '@client/gixi/systems/MultiplayerClientSystem/MultiplayerClientSystem';
 import { GamePacketRequest, GamePacketResponse } from '@shared/multiplayer/Packet';
-import { FocusSystem } from '@client/gixi/systems/FocusSystem';
+import { HtmlDomSystem } from '@client/gixi/systems/HtmlDomSystem';
 
 /**
  * Configuration
@@ -173,7 +173,7 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
     }
 
     if (multiplayerClientSystem.isConnected && multiplayerClientSystem.isGameJoined) {
-      multiplayerClientSystem.emitGamePacketRequest(new GamePacketRequest(this.x, this.y));
+      multiplayerClientSystem.emitGamePacketRequest(new GamePacketRequest(Math.round(this.x), Math.round(this.y)));
     }
   }
 
@@ -233,8 +233,8 @@ export class Player extends ActorStatic implements ICollisionSystemBody {
     super.onTick(ticker);
 
     // Only allow input if *this* window is in focus
-    const focusSystem = this._app.systemManager.getItem(FocusSystem);
-    if (!focusSystem || !focusSystem.isInFocus) {
+    const htmlDomSystem = this._app.systemManager.getItem(HtmlDomSystem);
+    if (!htmlDomSystem || !htmlDomSystem.isInFocus) {
       return;
     }
 

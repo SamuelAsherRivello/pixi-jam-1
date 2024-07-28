@@ -2,6 +2,7 @@
  * IMPORTANT FOR FILES OUTSIDE OF /CLIENT/: Always import using `.js` even though it's a `.ts` file.
  */
 
+import { Socket } from 'socket.io';
 import { Packet } from './Packet.js';
 
 export class MultiplayerSocket {
@@ -11,7 +12,7 @@ export class MultiplayerSocket {
   }
 
   // Fields ---------------------------------------
-  protected _socket!: any;
+  protected _socket!: any; //This is either a server client or a socket client which are unique types
   protected _isInitialized: boolean = false;
   protected isDebug: boolean = true;
 
@@ -48,7 +49,7 @@ export class MultiplayerSocket {
     this._socket.on(PacketClass.name, (packetString: string) => {
       //this.consoleLog(`onPacket() Call ${PacketClass.name}`);
       const packet = TypeConverter.fromJson(packetString, PacketClass) as T;
-      //console.log(packet);
+      console.log(packet);
       onCallback(packet);
     });
   }

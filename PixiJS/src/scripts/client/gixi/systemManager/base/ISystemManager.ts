@@ -16,4 +16,7 @@ export interface ISystemManager extends IInitializableAsync, ITickable {
   addItem<U extends SystemBase>(key: LocatorContructor<U>, system: U): void;
   getItem<U extends SystemBase>(key: LocatorContructor<U>): U;
   removeItem<U extends SystemBase>(key: LocatorContructor<U>): void;
+
+  startRunning(): any;
+  stopRunning(): any;
 }

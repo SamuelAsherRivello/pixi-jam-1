@@ -8,7 +8,7 @@ import { TilemapCollisionSystem } from '../systems/TilemapCollisionSystem';
 import { ISystemManager } from './base/ISystemManager';
 import { SystemManagerBase } from './base/SystemManagerBase';
 import { SystemBase } from '../systems/base/SystemBase';
-import { FocusSystem } from '../systems/FocusSystem';
+import { HtmlDomSystem } from '../systems/HtmlDomSystem';
 
 /**
  *
@@ -47,7 +47,7 @@ export class SystemManagerDefault extends SystemManagerBase implements ISystemMa
     this._locator.addItem(AudioSystem, new AudioSystem(this._app));
     this._locator.addItem(MultiplayerClientSystem, new MultiplayerClientSystem(this._app));
     this._locator.addItem(LocalDiskStorageSystem, new LocalDiskStorageSystem(this._app));
-    this._locator.addItem(FocusSystem, new FocusSystem(this._app));
+    this._locator.addItem(HtmlDomSystem, new HtmlDomSystem(this._app));
 
     //
     this.systems = [
@@ -57,10 +57,26 @@ export class SystemManagerDefault extends SystemManagerBase implements ISystemMa
       this._locator.getItem(AudioSystem),
       this._locator.getItem(MultiplayerClientSystem),
       this._locator.getItem(LocalDiskStorageSystem),
-      this._locator.getItem(FocusSystem),
+      this._locator.getItem(HtmlDomSystem),
     ];
 
     await Promise.all(this.systems.map((system) => system.initializeAsync()));
+  }
+
+  public override startRunning() {
+    //Super
+    super.startRunning();
+
+    //Local
+    this.systems.map((system) => system.startRunning());
+  }
+
+  public override stopRunning() {
+    //Super
+    super.stopRunning();
+
+    //Local
+    this.systems.map((system) => system.stopRunning());
   }
 
   // Event Handlers  -------------------------------
