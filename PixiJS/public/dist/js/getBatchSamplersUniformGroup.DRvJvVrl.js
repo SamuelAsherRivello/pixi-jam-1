@@ -1,0 +1,1 @@
+import{y as e}from"./localUniformBit.Def9Ba_9.js";var t={};function n(n){let r=t[n];if(r)return r;let i=new Int32Array(n);for(let e=0;e<n;e++)i[e]=e;return r=t[n]=new e({uTextures:{value:i,type:`i32`,size:n}},{isStatic:!0}),r}export{n as t};
