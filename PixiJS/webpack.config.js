@@ -92,12 +92,14 @@ export default (env) => {
         if (!devServer) {
           throw new Error('webpack-dev-server is not defined');
         }
-        devServer.middleware.waitUntilValid(() => {
-          console.log(`
+        devServer.compiler.hooks.done.tap('WdsSuccess', () => {
+          setImmediate(() => {
+            console.log(`
 //- - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Success! Play Via Browser:  http://localhost:${devServer.options.port}/
 //- - - - - - - - - - - - - - - - - - - - - - - - - - -
-          `);
+            `);
+          });
         });
         return middlewares;
       },
